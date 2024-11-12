@@ -29,21 +29,3 @@
   show: true
   external: false
   id: baudelaire
-- title: Reading
-  description: Books I've read and where I read&nbsp;them
-  url: reading
-  show: true
-  external: false
-  id: read
-- title: Anonymous Was A Woman
-  description: Social campaign about implicit bias
-  url: /project/anonymous-was-a-woman
-  show: false
-  external: false
-  id: awaw
-- title: Fine Art
-  description: A collection of my high school fine art
-  url: /project/fine-art
-  show: false
-  external: false
-  id: art
