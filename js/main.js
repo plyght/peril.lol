@@ -39,13 +39,13 @@ function removeClass(element, nameOfClass) {
 // I super got this from stack overflow
 
 var allowedKeys = {
-  65: 'n',
-  77: 'i',
-  78: 'c',
-  68: 'h',
+  65: 'a',
+  77: 'm',
+  78: 'n',
+  68: 'd',
 };
 
-var amanamiCode = ['n', 'i', 'c', 'h', 'o', 'l'. 'a'. 's',];
+var amanamiCode = ['a', 'm', 'a', 'n', 'd', 'a'];
 
 // a variable to remember the 'position' the user has reached so far.
 var amanamiCodePosition = 0;
