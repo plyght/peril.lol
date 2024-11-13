@@ -6,13 +6,13 @@ plugins:
 
 
 
-
-title: Amanda Pinsker
-tagline: Independent Product & Experience Designer
+baseurl: "/new.peril.lol"
+title: Nicholas Jaffer
+tagline: Student & Dev-In-Training
 description: Portfolio and more of Amanda Pinsker, independent product & experience designer.
 Author: Amanda Pinsker
 image: "/img/og-img.png"
-lang: en_GB
+lang: en_US
 twitter:
   username: ampinsk
   card: summary
