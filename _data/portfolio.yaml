@@ -1,6 +1,6 @@
-- title: GitHub Desktop
-  description: Lowering the barrier of entry to git and software development
-  url: http://desktop.github.com
+- title: PandaPlayer
+  description: A mac Pandora player/app built in swift<sup>6</sup>
+  url: https://github.com/plyght/pandaplayer
   show: true
   external: true
   id: desktop

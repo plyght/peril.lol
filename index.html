@@ -20,7 +20,7 @@ image: "/img/og-img.png"
         <h2>Selected work</h2>
         {% for item in site.data.portfolio %}
           {% if item.show %}
-          <a class="project" id="{{ item.id }}" onmouseover="addClass(body, '{{ item.id }}');" onmouseout="removeClass(body, '{{ item.id }}');" href="{{ item.url }}">
+          <a class="project" id="{{ item.id }}" onmouseover="addClass(body, '{{ item.id }}');" onmouseout="removeClass(body, '{{ item.id }}');" href="{{ item.url }}" target="_blank">
             <b>{{ item.title }}</b>—{{ item.description }}{% if item.external%}<span class="accent external-link">&#8599;&#xFE0E;</span>{% endif %}
           </a>
           {% endif %}
