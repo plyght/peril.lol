@@ -1,10 +1,11 @@
 // Scrolling behavior
 
-window.sr = ScrollReveal({
-  duration: 800,
-  distance: '10px',
-  scale: .95
-});
+// window.sr = ScrollReveal({
+//  duration: 800,
+//  distance: '10px',
+//  scale: .95
+// });
+
 
 // Hover states
 
