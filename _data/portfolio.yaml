@@ -6,7 +6,7 @@
   id: desktop
 - title: getloop.dev
   description: A fanmade project website for Loop WM
-  url: https:getloop-dev.vercel.app
+  url: https://getloop-dev.vercel.app
   
   show: true
   external: true
