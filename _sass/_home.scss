@@ -2,8 +2,6 @@
 
 // Base home styles
 
-
-
 .home {
   font-size: 24px;
   line-height: 1.2;
@@ -47,7 +45,7 @@
         width: 48%;
       }
       &.work {
-        width: 47%
+        width: 47%;
       }
     }
   }
@@ -105,7 +103,7 @@ hr.accent {
   }
 }
 
-.note span  {
+.note span {
   transition: 0.15s ease box-shadow;
   box-shadow: inset 0px 0px 0px 0px lighten($red, 30%);
 }
@@ -119,13 +117,13 @@ hr.accent {
   transition: 0.15s ease box-shadow;
 }
 
-
 .external-link {
   font-size: inherit;
   vertical-align: baseline;
 }
 
-.intro, .about {
+.intro,
+.about {
   div {
     margin-bottom: 30px;
   }
@@ -199,3 +197,6 @@ a.project {
     transition: $timing;
   }
 }
+
+// Dynamic Film Grain Effect
+
