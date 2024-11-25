@@ -16,6 +16,7 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  basePath: '/matcha',
   experimental: {
     webpackBuildWorker: true,
     parallelServerBuildTraces: true,
