@@ -16,6 +16,7 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  output : 'export',
   basePath: '/matcha',
   experimental: {
     webpackBuildWorker: true,
