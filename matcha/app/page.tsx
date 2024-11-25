@@ -1,9 +1,19 @@
-import Image from 'next/image'
-import Link from 'next/link'
+"use client";
+
+import Image from 'next/image';
+import Link from 'next/link';
+import { useEffect } from 'react';
 
 export default function Home() {
+  useEffect(() => {
+    const font = document.createElement('link');
+    font.href = 'https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap';
+    font.rel = 'stylesheet';
+    document.head.appendChild(font);
+  }, []);
+
   return (
-    <div className="min-h-screen bg-[#2e322d] text-[#e1ddcf]">
+    <div className="min-h-screen bg-[#2e322d] text-[#e1ddcf]" style={{ fontFamily: "'Roboto', sans-serif" }}>
       <header className="p-6 bg-[#3a3f35]">
         <div className="max-w-4xl mx-auto flex justify-between items-center">
           <div className="flex items-center gap-2">
@@ -63,6 +73,5 @@ export default function Home() {
         </div>
       </footer>
     </div>
-  )
+  );
 }
-
