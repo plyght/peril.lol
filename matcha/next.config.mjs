@@ -16,6 +16,7 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  assetPrefix: '/matcha',
   output : 'export',
   basePath: '/matcha',
   experimental: {
