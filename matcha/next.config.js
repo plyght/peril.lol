@@ -1,10 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export', // Export static files
-  basePath: '/matcha', // Set the base path to "/matcha"
-  assetPrefix: '/matcha/', // Prefix assets with the subpath
+  output: 'export',
+  basePath: '/matcha', // Base path for your subdirectory
+  assetPrefix: '/matcha/', // Prefix for static assets
   images: {
-    unoptimized: true, // Disable Next.js image optimization for static hosting
+    unoptimized: true, // Disable image optimization for GitHub Pages
   },
 };
 
