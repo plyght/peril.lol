@@ -1,60 +1,60 @@
----
-title: Nicholas Jaffer | Student and Dev
-name: home
-layout: base
-image: "/img/og-img.png"
----
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8"/>
+	<meta name="author" content="Nicholas Jaffer"/>
+	<meta name="description" content="Identification website for Malte Müller, principal at WAF GMBH.">
+	<meta name="robots" content="index, follow">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta property="og:type" content="website" />
+	<meta property="og:title" content="Nicholas Jaffer">
+	<meta property="og:site_name" content="peril.lol">
+	<meta property="og:url" content="https://peril.lol">
+	<meta property="og:description" content="Portfolio for Nicholas Jaffer">
+	<title>Nicholas Jaffer</title>
+	<link rel="stylesheet" href="m.css?v=2">
+	<!-- Add Galmuri font from CDN -->
+<link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+</head>
 
-<div class="bg"></div>
-<main class="site-container">
-  <div class="home">
-    <div class="intro">
-      <div>
-        <h1><span class="hint" title="Type my name and see what happens">Nicholas</span> Jaffer</h1> — Student & Dev-In-Training.
-      </div>
-      <div>I'm available for part-time work summer 2025. <a href="mailto:plyght@peril.lol">Reach out</a> if you'd like to work together.</div>
-      <hr class="accent">
-    </div>
-    <div class="flex">
-      <div class="work column">
-        <h2>Selected work</h2>
-        {% for item in site.data.portfolio %}
-          {% if item.show %}
-          <a class="project" id="{{ item.id }}" onmouseover="addClass(body, '{{ item.id }}');" onmouseout="removeClass(body, '{{ item.id }}');" href="{{ item.url }}" target="_blank">
-            <b>{{ item.title }}</b>—{{ item.description }}{% if item.external%}<span class="accent external-link">&#8599;&#xFE0E;</span>{% endif %}
-          </a>
-          {% endif %}
-        {% endfor %}
-      </div>
-      <div class="about column">
-        <div class="collaborators"> 
-          <h2>Recent collaborators</h2>
-          <div>
-            <a href="https://prose.com/">Prose</a><span class="accent external-link">&#8599;&#xFE0E;</span>
-          </div>
-          <div>
-            <a href="https://www.ustwo.com/">ustwo</a><span class="accent external-link">&#8599;&#xFE0E;</span>
-          </div>
-        </div>
-        <h2>A little about me</h2>
-        <div>Right now, I am a sophomore at <a href="https://wl.apsva.us" target="_blank">Washington-Liberty High School</a>. I am focused on school and coding. All of my work is <a href="https://github.com/plyght" target="_blank">open source</a><span class="accent superscript" id="asterisk" onmouseover="addClass(asterisk2, 'footnote-accent');" onmouseout="removeClass(asterisk2, 'footnote-accent');">*</span>.</div>
-       
-        <div>I grew up in Washington, D.C<span class="accent superscript" id="doubledagger" onmouseover="addClass(doubledagger2, 'footnote-accent');" onmouseout="removeClass(doubledagger2, 'footnote-accent');">‡</span>, make a lot of self deprecating jokes<span class="accent superscript" id="section" onmouseover="addClass(section2, 'footnote-accent');" onmouseout="removeClass(section2, 'footnote-accent');">§</span>, and I'm known for being mediocre at my million hobbies:  weightlifting, biking, physics, and computer engineering.<span class="accent superscript" id="paragraph" onmouseover="addClass(paragraph2, 'footnote-accent');" onmouseout="removeClass(paragraph2, 'footnote-accent');">¶</span></div>
-        <div class="notes grid">
-          <span class="accent">*</span><p class="note" id="asterisk2"><span>So is <a href="https://github.com/plyght/peril.lol" target="_blank">this site</a>. And it was built by me.</span></p>
-          <span class="accent">†</span><p class="note" id="dagger2"><span>My <a href="https://peril.lol/resume" target="_blank">resume</a> is "indev", but it’s polished enough...</span></p>
-          <span class="accent">‡</span><p class="note" id="doubledagger2"><span>Technically, Virginia; but D.C. is the general area (at least in my mind)</span></p>
-          <span class="accent">§</span><p class="note" id="section2"><span>I didn't get away with these as well as I'd liked on the West Coast.</span></p>
-          <span class="accent">¶</span><p class="note" id="paragraph2"><span>If you've learned about me and would still like to talk to me, you can do so in these places: <a href="http://x.com/plyght__" target="_blank">Twitter/X</a>, <a href="mailto:plyght@peril.lol">Email</a>, <a href="https://www.linkedin.com/in/nicholasjaffer/" target="_blank">LinkedIn</a>.</span></p>  <span class="accent optically-smaller">&#8599;&#xFE0E;</span><p class="note" id="external2"><span>This means I do not have a public case study yet  and I must send you somewhere else.</span></p>
-        </div>
-      </div>
-    </div>
-  </div>
-  
-  <!-- Footer Section -->
-  <footer class="site-footer">
-    <div class="footer-content">
-      <p>Site inspired by <a href="https://github.com/ampinsk">ampinsk</a>.</p>
-    </div>
-  </footer>
-</main>
+<body>
+	<header>
+		<span>2024</span>
+	</header>
+		
+	<main>
+		<div><h1>Malte Müller</h1> 
+		<p>is a designer, writer and programmer operating from Hamburg and Oporto. He collaborates with diverse clients through his design firm, <a href="https://waf.gmbh">WAF GMBH</a>. Long-term engagements include <a href="https://acrnm.com">ACRONYM®</a>, <a href="https://www.artek.fi">Artek</a>, <a href="https://kikokostadinov.com">Kiko Kostadinov</a> and <a href="http://a-cold-wall.com">A-Cold-Wall*</a>. There is also <a href="https://segment.supply">SEGMENT</a>, an array of resilient equipment.</p></div>
+	</main>
+		
+	<section></section>
+    
+	<nav>
+		<ul>
+			<li><a href="mailto&#x3a;m&#64;%6da&#108;%74e&#109;u&#x25;&#54;5ller&#46;&#x63;&#x25;&#54;f%6d" rel="nofollow">m&#x40;ma&#108;&#x74;em&#x75;eller&#x2e;&#x63;o&#109;</a></li>
+			<li><a href="https://waf.gmbh">WAF GMBH</a></li>
+			<li><a href="https://cv.maltemueller.com">CV</a></li>
+			<li><a href="http://www--arc.com">WWW-ARC</a></li>
+			<li><a href="https://are.na/malte-muller">Are.na</a></li>
+			<li><a rel="me" href="https://mastodon.social/@electricgecko">Mastodon</a></li>
+		</ul>
+		
+		<h2>Recently</h2>
+		<ul>
+			<li><span>Lese/Reading</span><a href="https://www.are.na/malte-muller/lese-reading">are.na/malte-muller/lese-reading</a></li>
+			<li><span>The Center Line</span><a href="http://acrnm.com/LP05-ACR-FW-2425">acrnm.com/LP05-ACR-FW-2425</a></li>
+			<li><span>area</span><a href="https://enjoythearea.com">enjoythearea.com</a></li>
+			<li><span>A-Cold-Wall* SS 2025</span><a href="https://a-cold-wall.com/focus/collection/spring-summer-2025/a-cold-wall-ss25-pink-noise-runway-film">a-cold-wall.com</a></li>
+			<li><span>Opposing Convenience</span><a href="https://www.are.na/malte-muller/opposing-convenience">are.na/opposing-convenience</a></li>
+		</ul>
+		
+		<h2><a href="https://maltemueller.com/photos">Photos</a></h2>
+						
+		<hr/>
+	</nav>
+
+	<footer class="soft">
+		<a href="imprint.html">imprint</a>
+	</footer>
+</body>
+</html>

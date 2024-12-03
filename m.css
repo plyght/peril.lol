@@ -1,0 +1,270 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-weight: normal;
+}
+
+html {
+    font-size: 14pt;
+}
+
+@media screen and (max-width: 700px) {
+    html {
+        font-size: 12pt;
+    }
+}
+
+@font-face {
+    font-family: "Departure Mono";
+    src: url("fonts/DepartureMono-Regular.woff2") format("woff2"),
+         url("fonts/DepartureMono-Regular.woff") format("woff"),
+         url("fonts/DepartureMono-Regular.otf") format("opentype");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+body {
+    font-family: "Departure Mono", monospace;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: 15px; /* Pixel-perfect size */
+    line-height: 1.2em;
+    color: #D0D0D0;
+    background: #080808;
+    padding: 8px 2.5rem;
+}
+
+@media screen and (max-width: 700px) {
+    body {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+}
+
+.invisible {
+    opacity: 0;
+}
+
+.hidden {
+    display: none;
+}
+
+h1, h2, h3, h4 {
+    font-size: 1em;
+    line-break: 1.1em;
+}
+
+header, footer, nav, figcaption, aside span {
+    font-size: .8rem;
+    line-height: 1.2em;
+}
+
+h1 {
+    display: inline;
+    line-height: 1em;
+}
+
+h2 {
+    margin-bottom: .5rem;
+}
+
+@media screen and (max-width: 700px) {
+    h2 {
+        margin-bottom: 1rem;
+    }
+}
+
+a {
+    color: #FFFFFF;
+    text-decoration: underline;
+    text-decoration-thickness: .5px;
+    text-underline-offset: .125rem;
+}
+
+footer a, nav a {
+    text-decoration: none;
+}
+
+footer a:hover, nav a:hover {
+    text-decoration: underline;
+    text-decoration-thickness: .5px;
+    text-underline-offset: .125rem;
+}
+
+p {
+    line-height: 1em;
+    margin: 0 0 1em 0;
+}
+
+ul {
+    list-style: none;
+    margin-bottom: 2rem;
+}
+
+@media screen and (max-width: 700px) {
+    ul:first-of-type {
+        padding-right: 15px;
+    }
+}
+
+nav ul:first-of-type li {
+    text-transform: uppercase;
+    display: inline;
+    white-space: nowrap;
+}
+
+@media screen and (max-width: 700px) {
+    nav ul:first-of-type li {
+        line-height: 1.4rem;
+    }
+}
+
+nav ul:first-of-type li:after {
+    content: " ";
+}
+
+nav ul:first-of-type li:last-child:after {
+    content: "";
+}
+
+nav ul:last-of-type li {
+    display: flex;
+}
+
+nav ul:last-of-type li:nth-child(4) {
+    margin-bottom: .5rem;
+}
+
+@media screen and (max-width: 700px) {
+    nav ul:last-of-type li {
+        margin-bottom: .25rem;
+        word-break: break-word;
+    }
+
+    nav ul:last-of-type li:nth-child(4) {
+        margin-bottom: .25rem;
+    }
+}
+
+nav ul:last-of-type li span {
+    display: inline-block;
+    min-width: 28ch;
+}
+
+@media screen and (max-width: 700px) {
+    nav ul:last-of-type li span {
+        min-width: 24ch;
+    }
+}
+
+header, main, section, nav, footer {
+    max-width: 70vw;
+}
+
+@media screen and (max-width: 1000px) {
+    header, main, section, nav, footer {
+        max-width: 87.5vw;
+    }
+}
+
+@media screen and (max-width: 700px) {
+    header, main, section, nav, footer {
+        max-width: unset;
+    }
+}
+
+header {
+    padding-bottom: 3rem;
+}
+
+@media screen and (max-width: 700px) {
+    header {
+        padding-bottom: 4rem;
+    }
+}
+
+main {
+    padding: 0 90px 1rem 45px;
+    box-sizing: border-box;
+}
+
+main div {
+    max-width: 1120px;
+}
+
+main p {
+    display: inline;
+}
+
+@media screen and (max-width: 700px) {
+    main {
+        padding: 0 15px 1rem 15px;
+    }
+}
+
+section {
+    min-height: 42vw;
+    background: repeating-linear-gradient(to right, #D8D8D8, #D8D8D8 1px, #1E1E1E 1px, #1E1E1E 15px);
+}
+
+@media screen and (max-width: 700px) {
+    section {
+        min-height: 40vh;
+    }
+}
+
+nav {
+    box-sizing: border-box;
+    background: #121212;
+    color: #949494;
+    min-height: 28vw;
+    margin: -6rem 0 1rem 45px;
+    padding: 8px 8px 8px 98px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+@media screen and (max-width: 1000px) {
+    nav {
+        padding-left: 38px;
+    }
+}
+
+@media screen and (max-width: 700px) {
+    nav {
+        margin-left: 15px;
+        margin-bottom: 15px;
+        padding: 8px;
+    }
+}
+
+nav hr {
+    background: #000;
+    height: 3rem;
+    display: block;
+    margin-top: 3rem;
+    border: none;
+    margin-right: 45px;
+}
+
+@media screen and (max-width: 1000px) {
+    nav hr {
+        margin-right: unset;
+    }
+}
+
+nav a {
+    color: #949494;
+    text-decoration: none;
+}
+
+footer {
+    border-top: 1px solid #d8d8d8;
+    padding: 8px 45px 1rem 0;
+}
+
+
+
