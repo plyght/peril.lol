@@ -24,6 +24,12 @@ html {
     font-display: swap;
 }
 
+html, body {
+    height: 100vh; /* Restrict to viewport height */
+    overflow: hidden; /* Prevent scrolling */
+}
+
+
 body {
     font-family: "Departure Mono", monospace;
     text-rendering: optimizeLegibility;
@@ -233,22 +239,7 @@ nav {
     }
 }
 
-@media screen and (max-width: 700px) {
-    nav {
-        margin-left: 15px;
-        margin-bottom: 15px;
-        padding: 8px;
-    }
-}
 
-nav hr {
-    background: #000;
-    height: 3rem;
-    display: block;
-    margin-top: 3rem;
-    border: none;
-    margin-right: 45px;
-}
 
 @media screen and (max-width: 1000px) {
     nav hr {
@@ -261,10 +252,6 @@ nav a {
     text-decoration: none;
 }
 
-footer {
-    border-top: 1px solid #d8d8d8;
-    padding: 8px 45px 1rem 0;
-}
 
 
 
