@@ -29,7 +29,6 @@ html, body {
     overflow: hidden; /* Prevent scrolling */
 }
 
-
 body {
     font-family: "Departure Mono", monospace;
     text-rendering: optimizeLegibility;
@@ -115,54 +114,51 @@ ul {
     }
 }
 
-nav ul:first-of-type li {
-    text-transform: uppercase;
-    display: inline;
-    white-space: nowrap;
+/* New Code: Adjust nav ul for horizontal layout */
+nav ul:first-of-type {
+    display: flex; /* Align items horizontally */
+    gap: 1.5rem; /* Add spacing between items */
+    flex-wrap: wrap; /* Wrap items if space runs out */
+    padding: 0;
+    margin: 0;
+    list-style: none;
 }
 
-@media screen and (max-width: 700px) {
-    nav ul:first-of-type li {
-        line-height: 1.4rem;
-    }
+nav ul:first-of-type li {
+    text-transform: uppercase;
+    white-space: nowrap; /* Prevent line breaks in text */
 }
 
 nav ul:first-of-type li:after {
-    content: " ";
+    content: ""; /* Remove spacing content */
 }
 
-nav ul:first-of-type li:last-child:after {
-    content: "";
-}
-
-nav ul:last-of-type li {
+/* Adjust nav layout */
+nav {
+    box-sizing: border-box;
+    background: #121212;
+    color: #949494;
+    min-height: 28vw;
+    margin: -6rem 0 1rem 45px;
+    padding: 8px 8px 8px 98px;
     display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Align content to the top */
 }
 
-nav ul:last-of-type li:nth-child(4) {
-    margin-bottom: .5rem;
-}
-
-@media screen and (max-width: 700px) {
-    nav ul:last-of-type li {
-        margin-bottom: .25rem;
-        word-break: break-word;
-    }
-
-    nav ul:last-of-type li:nth-child(4) {
-        margin-bottom: .25rem;
+@media screen and (max-width: 1000px) {
+    nav {
+        padding-left: 38px;
     }
 }
 
-nav ul:last-of-type li span {
-    display: inline-block;
-    min-width: 28ch;
+nav ul {
+    margin-bottom: 0; /* Remove extra space under ul */
 }
 
-@media screen and (max-width: 700px) {
-    nav ul:last-of-type li span {
-        min-width: 24ch;
-    }
+nav a {
+    color: #949494;
+    text-decoration: none;
 }
 
 header, main, section, nav, footer {
@@ -220,38 +216,3 @@ section {
         min-height: 40vh;
     }
 }
-
-nav {
-    box-sizing: border-box;
-    background: #121212;
-    color: #949494;
-    min-height: 28vw;
-    margin: -6rem 0 1rem 45px;
-    padding: 8px 8px 8px 98px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-@media screen and (max-width: 1000px) {
-    nav {
-        padding-left: 38px;
-    }
-}
-
-
-
-@media screen and (max-width: 1000px) {
-    nav hr {
-        margin-right: unset;
-    }
-}
-
-nav a {
-    color: #949494;
-    text-decoration: none;
-}
-
-
-
-
