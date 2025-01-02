@@ -1,0 +1,94 @@
+:root {
+  --fg: #000;
+  --bg: #fff;
+  --border: 0.2em solid var(--fg);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fg: #fff;
+    --bg: #000;
+  }
+}
+
+body {
+  color: var(--fg);
+  background-color: var(--bg);
+  fill: var(--fg);
+  margin: 0 auto;
+  max-width: 52em;
+  padding: 1em;
+  font: 1.2em/1.6 monospace;
+  overflow-y: scroll;
+}
+
+h1 {
+  margin: 0;
+}
+
+p {
+  font: 0.8em/1.3 sans-serif;
+  margin: 1em 0;
+}
+
+code {
+  font-size: 1.3em;
+}
+
+a {
+  color: inherit;
+  fill: inherit;
+}
+
+a:hover {
+  color: var(--bg);
+  fill: var(--bg);
+  background-color: var(--fg);
+  text-decoration: none;
+}
+
+span.line {
+  display: inline-block;
+}
+
+span.nowrap {
+  white-space: nowrap;
+}
+
+header nav {
+  display: flex;
+  justify-content: center; /* Centers the entire nav content */
+  align-items: center; /* Vertically centers nav items */
+}
+
+
+
+.nav-home a {
+  border: 0.3em solid var(--bg);
+  margin: 0.7em;
+  display: block;
+}
+
+.nav-home a img {
+  display: block;
+  width: 3em;
+  height: auto;
+  transition: opacity 0.3s ease; /* Smooth transition effect */
+}
+
+.nav-home a:hover img {
+  content: url('/nj-white-bg.png'); /* Path to the hover image */
+}
+
+.nav-items {
+  display: flex;
+  justify-content: center; /* Centers the links horizontally */
+  align-items: center; /* Vertically centers the links */
+  gap: 1em; /* Adds spacing between the "about" and "blog" links */
+  padding: 1em 0; /* Adds vertical padding */
+}
+
+.nav-items a {
+  display: flex;
+  align-items: center; /* Centers text vertically inside links */
+  justify-content: center; /* Centers */
