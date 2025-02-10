@@ -14,17 +14,23 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v1
 
-      - name: Install dependencies with Bun
+      - name: Install Dependencies with Bun
         run: bun install
 
-      - name: Build the site with Bun
+      - name: Build the Site with Bun
         run: bun run build
+
+      - name: Upload Pages Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: github-pages
+          path: _site  # Change this to your output folder if different
 
   deploy:
     needs: build
