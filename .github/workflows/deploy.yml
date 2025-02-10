@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ main ]
+    branches: [ mono-astro ]
   workflow_dispatch:
 
 permissions:
@@ -26,11 +26,14 @@ jobs:
       - name: Build the Site with Bun
         run: bun run build
 
+      - name: Prepare artifact directory (resolve symlinks)
+        run: rsync -aL dist/ resolved-dist/
+
       - name: Upload Pages Artifact
         uses: actions/upload-artifact@v4
         with:
           name: github-pages
-          path: dist  # Use the 'dist' directory as per your build log
+          path: resolved-dist
 
   deploy:
     needs: build
