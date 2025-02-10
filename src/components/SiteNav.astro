@@ -1,7 +1,9 @@
 ---
+import { Astro } from "astro";
 const currentPath = Astro.url.pathname;
 ---
+
 <nav class="site-nav">
-    <a href="/" class:list={[{ active: currentPath == "/"}]}>Home</a>
+    <a href="/" class:list={[{ active: currentPath === "/" }]}>Home</a>
     <a href="/blog" class:list={[{ active: currentPath.startsWith("/blog") }]}>Blog</a>
 </nav>
