@@ -30,7 +30,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: github-pages
-          path: _site  # Change this to your output folder if different
+          path: dist  # Use the 'dist' directory as per your build log
 
   deploy:
     needs: build
