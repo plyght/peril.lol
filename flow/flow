@@ -1,0 +1,42 @@
+#!/bin/sh
+
+set -e
+
+REPO="neurocyte/flow"
+INSTALL_DIR="/usr/local/bin"
+
+# detect os and architecture
+OS="$(uname -s | tr '[:upper:]' '[:lower:]')"
+if [ "$OS" = "darwin" ]; then
+  OS="macos"
+fi
+
+ARCH="$(uname -m)"
+case "$ARCH" in
+  x86_64) ARCH="x86_64" ;;
+  arm64) ARCH="aarch64" ;;
+esac
+
+# get latest version tag
+VERSION=$(curl -s "https://api.github.com/repos/$REPO/releases/latest" | grep '"tag_name":' | cut -d'"' -f4)
+[ -z "$VERSION" ] && { echo "failed to fetch latest version"; exit 1; }
+
+# construct download url
+FILENAME="flow-$VERSION-$OS-$ARCH"
+EXT="tar.gz"
+[ "$OS" = "windows" ] && EXT="zip"
+URL="https://github.com/$REPO/releases/download/$VERSION/$FILENAME.$EXT"
+
+echo "downloading flow $VERSION..."
+curl -L "$URL" -o "/tmp/$FILENAME.$EXT"
+
+echo "installing flow..."
+if [ "$EXT" = "tar.gz" ]; then
+  tar -xzf "/tmp/$FILENAME.$EXT" -C "$INSTALL_DIR"
+else
+  unzip -o "/tmp/$FILENAME.$EXT" -d "$INSTALL_DIR"
+fi
+
+chmod +x "$INSTALL_DIR/flow"
+rm "/tmp/$FILENAME.$EXT"
+echo "flow installed successfully!"
