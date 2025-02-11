@@ -1,11 +1,11 @@
 ---
-title: New Beginnings
-date: 2024-12-26
-description: Welcome to my new blog!
+title: Resume
+date: 2025-2-11
+description: My Resume!
 image: /images/banner_blog.png
 tags:
-  - update
-  - testing
+  - resume
+  - jobs
 ---
 
 Recently, I've put a lot of work into cleaning up my infra & public optics. This
