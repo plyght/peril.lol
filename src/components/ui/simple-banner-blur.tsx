@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 export function SimpleBannerBlur() {
   const [isHover, setIsHover] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
-  
+
   React.useEffect(() => {
     // Mark component as loaded to enable animations after initial render
     setIsLoaded(true);
@@ -44,25 +44,25 @@ export function SimpleBannerBlur() {
           }}
           transition={{ duration: 0.4, ease: 'easeOut' }}
         >
-        <div className="flex flex-col items-start gap-3">
-          <motion.p
-            className="text-2xl font-bold text-white drop-shadow-lg"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: isHover ? 1 : 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-          >
-            plyght
-          </motion.p>
-          <motion.p
-            className="text-base text-white/90 drop-shadow-md max-w-xs"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: isHover ? 1 : 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
-            Student & Full Stack Developer
-          </motion.p>
-        </div>
-      </motion.div>
+          <div className="flex flex-col items-start gap-3">
+            <motion.p
+              className="text-2xl font-bold text-white drop-shadow-lg"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: isHover ? 1 : 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+            >
+              plyght
+            </motion.p>
+            <motion.p
+              className="text-base text-white/90 drop-shadow-md max-w-xs"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: isHover ? 1 : 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
+              Student & Full Stack Developer
+            </motion.p>
+          </div>
+        </motion.div>
       )}
     </div>
   );

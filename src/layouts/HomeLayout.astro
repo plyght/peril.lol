@@ -10,7 +10,10 @@ import '../styles/globals.css';
 <!doctype html>
 <html lang="en" style="margin: 0; padding: 0;">
   <head>
-    <BaseHead title="plyght" description="plyght's personal website - Student & Full Stack Developer" />
+    <BaseHead
+      title="plyght"
+      description="plyght's personal website - Student & Full Stack Developer"
+    />
   </head>
   <body style="margin: 0; padding: 0;">
     <!-- Film grain background effect - double implementation for compatibility -->
@@ -21,17 +24,22 @@ import '../styles/globals.css';
 
     <table class="header" style="border-spacing: 0; margin: 12px 0 0 0; padding: 0;">
       <tr>
-        <td colspan="4" class="banner-cell" style="position: relative; padding: 0; overflow: hidden;">
+        <td
+          colspan="4"
+          class="banner-cell"
+          style="position: relative; padding: 0; overflow: hidden;"
+        >
           <div style="width: 100%; height: 100%;">
             <picture>
-              <source srcset="/images/webp/banner_home.webp" type="image/webp">
+              <source srcset="/images/webp/banner_home_optimized.webp" type="image/webp" />
               <img
-                src="/images/banner_fixed.png"
+                src="/images/banner_home_optimized.png"
                 alt="Banner"
-                width="1200" 
+                width="1200"
                 height="800"
                 loading="eager"
                 fetchpriority="high"
+                decoding="async"
                 style="width: 100%; height: 100%; object-fit: cover; object-position: center center; display: block;"
               />
             </picture>

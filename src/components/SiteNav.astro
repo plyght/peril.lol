@@ -7,7 +7,11 @@ const currentPath = Astro.url.pathname;
 <div class="nav-container">
   <nav class="site-nav">
     <a href="/" class:list={[{ active: currentPath === '/' }]} transition:animate="slide">Home</a>
-    <a href="/blog" class:list={[{ active: currentPath.startsWith('/blog') }]} transition:animate="slide">Blog</a>
+    <a
+      href="/blog"
+      class:list={[{ active: currentPath.startsWith('/blog') }]}
+      transition:animate="slide">Blog</a
+    >
   </nav>
   <button id="theme-toggle" class="theme-toggle-nav" aria-label="Toggle dark/light mode">
     <div class="toggle-icon-container">
@@ -79,10 +83,10 @@ const currentPath = Astro.url.pathname;
     if (document.body.dataset.themeChanging === 'true') {
       return;
     }
-    
+
     // Mark that we're changing theme to prevent multiple rapid changes
     document.body.dataset.themeChanging = 'true';
-    
+
     // Add transition class for smoother color changes
     document.body.classList.add('theme-transition');
     document.documentElement.setAttribute('data-theme', theme);
@@ -90,7 +94,7 @@ const currentPath = Astro.url.pathname;
     // Update icon visibility based on theme - ensure clean class state
     document.documentElement.classList.remove('dark-theme', 'light-theme');
     document.documentElement.classList.add(theme === 'dark' ? 'dark-theme' : 'light-theme');
-    
+
     // Save theme preference
     localStorage.setItem('theme', theme);
 
@@ -123,9 +127,11 @@ const currentPath = Astro.url.pathname;
     // Re-apply theme after page transition with a slight delay for stability
     setTimeout(() => {
       const savedTheme = localStorage.getItem('theme');
-      const theme = savedTheme || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+      const theme =
+        savedTheme ||
+        (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
       applyTheme(theme);
-      
+
       // Ensure the toggle button is initialized correctly after page transition
       const toggleBtn = document.getElementById('theme-toggle');
       if (toggleBtn) {

@@ -13,11 +13,11 @@
   ::view-transition-group(main) {
     animation-duration: var(--animation-duration);
   }
-  
+
   ::view-transition-old(main) {
     animation-duration: var(--animation-duration);
   }
-  
+
   ::view-transition-new(main) {
     animation-duration: var(--animation-duration);
   }
@@ -25,8 +25,9 @@
 
 /* Theme transition */
 .theme-transition {
-  transition: background-color var(--theme-transition-duration) ease,
-              color var(--theme-transition-duration) ease;
+  transition:
+    background-color var(--theme-transition-duration) ease,
+    color var(--theme-transition-duration) ease;
 }
 
 /* Mobile optimizations */
@@ -34,11 +35,11 @@
   html {
     scroll-behavior: smooth;
   }
-  
+
   img {
     content-visibility: auto;
   }
-  
+
   * {
     -webkit-tap-highlight-color: transparent;
   }

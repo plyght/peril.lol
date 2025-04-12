@@ -9,7 +9,10 @@ import '../styles/globals.css';
 <!doctype html>
 <html lang="en">
   <head>
-    <BaseHead title="404 - Page Not Found" description="The page you're looking for doesn't exist." />
+    <BaseHead
+      title="404 - Page Not Found"
+      description="The page you're looking for doesn't exist."
+    />
     <style>
       .error-container {
         display: flex;
@@ -103,7 +106,7 @@ import '../styles/globals.css';
 
       .glitch::before,
       .glitch::after {
-        content: "404";
+        content: '404';
         position: absolute;
         top: 0;
         left: 0;
@@ -122,7 +125,8 @@ import '../styles/globals.css';
       }
 
       @keyframes glitch-1 {
-        0%, 100% { 
+        0%,
+        100% {
           clip-path: inset(80% 0 20% 0);
           transform: translate(-2px, 2px);
         }
@@ -145,7 +149,8 @@ import '../styles/globals.css';
       }
 
       @keyframes glitch-2 {
-        0%, 100% { 
+        0%,
+        100% {
           clip-path: inset(20% 0 60% 0);
           transform: translate(2px, -2px);
         }
@@ -168,14 +173,23 @@ import '../styles/globals.css';
       }
 
       @keyframes textGradient {
-        0% { background-position: 0% 50%; }
-        100% { background-position: 300% 50%; }
+        0% {
+          background-position: 0% 50%;
+        }
+        100% {
+          background-position: 300% 50%;
+        }
       }
-      
+
       /* Red pulse animation for page background */
       @keyframes subtleRedPulse {
-        0%, 100% { background-color: rgba(220, 50, 50, 0.01); }
-        50% { background-color: rgba(220, 50, 50, 0.03); }
+        0%,
+        100% {
+          background-color: rgba(220, 50, 50, 0.01);
+        }
+        50% {
+          background-color: rgba(220, 50, 50, 0.03);
+        }
       }
 
       .lost-text {
@@ -189,10 +203,14 @@ import '../styles/globals.css';
       }
 
       /* Removing particle system */
-      
+
       @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
       }
     </style>
   </head>
@@ -204,16 +222,19 @@ import '../styles/globals.css';
     <div class="grain-overlay"></div>
 
     <!-- Particle system removed -->
-    
+
     <main class="error-container" style="animation: subtleRedPulse 8s infinite ease-in-out;">
       <div class="glitch-container">
         <div class="glitch">404</div>
       </div>
-      
+
       <h1 class="error-message">Page not found</h1>
-      
-      <p class="lost-text">Looks like you've wandered into uncharted territory. The page you're looking for has either been moved, deleted, or never existed in the first place.</p>
-      
+
+      <p class="lost-text">
+        Looks like you've wandered into uncharted territory. The page you're looking for has either
+        been moved, deleted, or never existed in the first place.
+      </p>
+
       <a href="/" class="home-link" id="home-button">Return Home</a>
     </main>
 

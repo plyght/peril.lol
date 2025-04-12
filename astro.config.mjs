@@ -28,20 +28,7 @@ export default defineConfig({
     assetsPrefix: '/_astro'
   },
   
-  // Add caching headers
-  server: {
-    headers: {
-      '/*.{js,css,jpg,jpeg,png,gif,svg,webp,woff,woff2}': [
-        {
-          key: 'Cache-Control',
-          value: 'public, max-age=31536000, immutable'
-        }
-      ]
-    }
-  },
+  // Caching is now configured differently in production builds
   
-  // Enable view transitions for smooth page navigation
-  experimental: {
-    viewTransitions: true
-  },
+  // View transitions are now stable in Astro
 });

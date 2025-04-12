@@ -8,7 +8,11 @@ const { title, description } = Astro.props;
 <meta name="color-scheme" content="dark light" />
 <link rel="icon" href="/images/pfp.png" />
 <meta name="generator" content={Astro.generator} />
-<meta name="description" content={description || "plyght's personal website - Student & Full Stack Developer in the DMV area. Passionate about coding, weightlifting, biking, physics, and computer engineering."} />
+<meta
+  name="description"
+  content={description ||
+    "plyght's personal website - Student & Full Stack Developer in the DMV area. Passionate about coding, weightlifting, biking, physics, and computer engineering."}
+/>
 <title>{title}</title>
 
 <!-- Add View Transitions for smooth navigation -->
@@ -26,15 +30,15 @@ const { title, description } = Astro.props;
 />
 
 <!-- Preload banner image for LCP improvement -->
-<link rel="preload" href="/images/webp/banner_home.webp" as="image" type="image/webp" />
+<link rel="preload" href="/images/webp/banner_home_optimized.webp" as="image" type="image/webp" />
 
 <!-- Stylesheets with critical CSS inlined -->
 <link rel="stylesheet" href="/styles/reset.css" />
 <link
-  rel="stylesheet"
+  rel="preload"
   href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap"
-  media="print" 
-  onload="this.media='all'"
+  as="style"
+  onload="this.onload=null;this.rel='stylesheet'"
 />
 <noscript>
   <link
@@ -47,9 +51,24 @@ const { title, description } = Astro.props;
 <link rel="stylesheet" href="/styles/animations.css" />
 
 <!-- Deferred non-critical CSS -->
-<link rel="stylesheet" href="/styles/grain.css" media="print" onload="this.media='all'" />
-<link rel="stylesheet" href="/styles/cohere-font.css" media="print" onload="this.media='all'" />
-<link rel="stylesheet" href="/styles/index.css" media="print" onload="this.media='all'" />
+<link
+  rel="preload"
+  href="/styles/grain.css"
+  as="style"
+  onload="this.onload=null;this.rel='stylesheet'"
+/>
+<link
+  rel="preload"
+  href="/styles/cohere-font.css"
+  as="style"
+  onload="this.onload=null;this.rel='stylesheet'"
+/>
+<link
+  rel="preload"
+  href="/styles/index.css"
+  as="style"
+  onload="this.onload=null;this.rel='stylesheet'"
+/>
 <noscript>
   <link rel="stylesheet" href="/styles/grain.css" />
   <link rel="stylesheet" href="/styles/cohere-font.css" />
@@ -68,7 +87,7 @@ const { title, description } = Astro.props;
       document.documentElement.classList.remove('no-animations');
     }, 300);
   });
-  
+
   // Defer non-critical JavaScript
   function loadDeferredScript(src) {
     const script = document.createElement('script');
@@ -76,7 +95,7 @@ const { title, description } = Astro.props;
     script.defer = true;
     document.body.appendChild(script);
   }
-  
+
   // Load non-critical scripts after page load
   window.addEventListener('load', () => {
     setTimeout(() => {
