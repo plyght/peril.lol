@@ -80,25 +80,27 @@
 /* Add smoother transitions for theme changes */
 html, body {
     transition: 
-        background-color 0.5s cubic-bezier(0.4, 0.0, 0.2, 1),
-        color 0.5s cubic-bezier(0.4, 0.0, 0.2, 1);
+        background-color 0.8s cubic-bezier(0.25, 0.1, 0.25, 1),
+        color 0.8s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 /* Apply transitions to all elements for smoother theme switch */
 * {
     transition-property: background-color, color, border-color, box-shadow, transform;
-    transition-duration: 0.5s;
-    transition-timing-function: cubic-bezier(0.4, 0.0, 0.2, 1);
+    transition-duration: 0.8s;
+    transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+    backface-visibility: hidden;
+    transform: translateZ(0);
 }
 
 /* Override for specific elements that need different transitions */
 a, button, input, th, td, img, hr, details, .blog-post, .site-nav a, pre, code, blockquote {
     transition: 
-        background-color 0.5s cubic-bezier(0.4, 0.0, 0.2, 1),
-        color 0.5s cubic-bezier(0.4, 0.0, 0.2, 1),
-        border-color 0.5s cubic-bezier(0.4, 0.0, 0.2, 1),
-        transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1),
-        box-shadow 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+        background-color 0.8s cubic-bezier(0.25, 0.1, 0.25, 1),
+        color 0.8s cubic-bezier(0.25, 0.1, 0.25, 1),
+        border-color 0.8s cubic-bezier(0.25, 0.1, 0.25, 1),
+        transform 0.5s cubic-bezier(0.25, 0.1, 0.25, 1),
+        box-shadow 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 * + * {
@@ -277,10 +279,26 @@ img, video {
     width: 100%;
     object-fit: contain;
     overflow: hidden;
+    will-change: filter;
+    transition: filter 0.8s cubic-bezier(0.25, 0.1, 0.25, 1) !important;
+    backface-visibility: hidden;
 }
 img {
     font-style: italic;
     color: var(--text-color-alt);
+    -webkit-filter: brightness(1);
+    filter: brightness(1);
+}
+
+/* Apply different brightness for dark/light mode */
+:root[data-theme="dark"] img {
+    -webkit-filter: brightness(1);
+    filter: brightness(1);
+}
+
+:root[data-theme="light"] img {
+    -webkit-filter: brightness(0.97);
+    filter: brightness(0.97);
 }
 
 details {
@@ -598,39 +616,24 @@ label input {
 
 /* Special transition class for smoother theme switching */
 html {
-    transition: background-color 0.5s ease;
+    transition: background-color 0.8s cubic-bezier(0.25, 0.1, 0.25, 1);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 .theme-transition {
     pointer-events: none; /* Prevent clicking during transition */
 }
 
-.theme-transition::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: var(--background-color);
-    z-index: 9999;
-    opacity: 0;
-    animation: fadeInOut 1.2s ease-in-out forwards;
-    pointer-events: none;
-}
-
-@keyframes fadeInOut {
-    0% { opacity: 0; }
-    50% { opacity: 0.15; }
-    100% { opacity: 0; }
-}
-
-/* Apply smoother transitions to all elements */
+/* Apply smoother transitions to all elements with hardware acceleration */
 .theme-transition * {
     transition: 
-        background-color 0.7s ease,
-        color 0.7s ease,
-        border-color 0.7s ease !important;
+        background-color 0.8s cubic-bezier(0.25, 0.1, 0.25, 1),
+        color 0.8s cubic-bezier(0.25, 0.1, 0.25, 1),
+        border-color 0.8s cubic-bezier(0.25, 0.1, 0.25, 1) !important;
+    will-change: auto;
+    transform: translateZ(0);
+    backface-visibility: hidden;
 }
 
 @media screen and (max-width: 480px) {
