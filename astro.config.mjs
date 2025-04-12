@@ -20,10 +20,24 @@ export default defineConfig({
 
   integrations: [react()],
   
-  // Optimize image performance
+  // Optimize performance
   compressHTML: true,
   build: {
-    inlineStylesheets: 'auto'
+    inlineStylesheets: 'auto',
+    assets: 'assets',
+    assetsPrefix: '/_astro'
+  },
+  
+  // Add caching headers
+  server: {
+    headers: {
+      '/*.{js,css,jpg,jpeg,png,gif,svg,webp,woff,woff2}': [
+        {
+          key: 'Cache-Control',
+          value: 'public, max-age=31536000, immutable'
+        }
+      ]
+    }
   },
   
   // Enable view transitions for smooth page navigation

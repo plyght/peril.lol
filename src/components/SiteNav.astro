@@ -73,20 +73,31 @@ const currentPath = Astro.url.pathname;
     return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
   };
 
-  // Apply theme to document
+  // Apply theme to document with improved handling
   const applyTheme = (theme) => {
+    // Prevent rapid transitions by debouncing
+    if (document.body.dataset.themeChanging === 'true') {
+      return;
+    }
+    
+    // Mark that we're changing theme to prevent multiple rapid changes
+    document.body.dataset.themeChanging = 'true';
+    
     // Add transition class for smoother color changes
     document.body.classList.add('theme-transition');
     document.documentElement.setAttribute('data-theme', theme);
 
-    // Update icon visibility based on theme
-    document.documentElement.classList.toggle('dark-theme', theme === 'dark');
-    document.documentElement.classList.toggle('light-theme', theme === 'light');
+    // Update icon visibility based on theme - ensure clean class state
+    document.documentElement.classList.remove('dark-theme', 'light-theme');
+    document.documentElement.classList.add(theme === 'dark' ? 'dark-theme' : 'light-theme');
+    
+    // Save theme preference
     localStorage.setItem('theme', theme);
 
     // Remove transition class after animation completes - reduced from 800ms to 400ms for mobile
     setTimeout(() => {
       document.body.classList.remove('theme-transition');
+      document.body.dataset.themeChanging = 'false';
     }, 400);
   };
 
@@ -109,8 +120,21 @@ const currentPath = Astro.url.pathname;
 
   // Properly handle view transitions when theme changes
   document.addEventListener('astro:after-swap', () => {
-    // Re-apply theme after page transition
-    applyTheme(localStorage.getItem('theme') || 
-      (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'));
+    // Re-apply theme after page transition with a slight delay for stability
+    setTimeout(() => {
+      const savedTheme = localStorage.getItem('theme');
+      const theme = savedTheme || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+      applyTheme(theme);
+      
+      // Ensure the toggle button is initialized correctly after page transition
+      const toggleBtn = document.getElementById('theme-toggle');
+      if (toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+          const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+          const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+          applyTheme(newTheme);
+        });
+      }
+    }, 50); // Small delay for stability
   });
 </script>

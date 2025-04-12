@@ -8,30 +8,33 @@ import '../styles/globals.css';
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" style="margin: 0; padding: 0;">
   <head>
     <BaseHead title="plyght" description="plyght's personal website - Student & Full Stack Developer" />
   </head>
-  <body>
+  <body style="margin: 0; padding: 0;">
     <!-- Film grain background effect - double implementation for compatibility -->
     <div class="grain-container">
       <div class="grain"></div>
     </div>
     <div class="grain-overlay"></div>
 
-    <table class="header">
+    <table class="header" style="border-spacing: 0; margin: 12px 0 0 0; padding: 0;">
       <tr>
         <td colspan="4" class="banner-cell" style="position: relative; padding: 0; overflow: hidden;">
           <div style="width: 100%; height: 100%;">
-            <img
-              src="/images/banner_fixed.png"
-              alt="Banner"
-              width="2944" 
-              height="2768"
-              loading="eager"
-              fetchpriority="high"
-              style="width: 100%; height: 100%; object-fit: cover; object-position: center center; display: block;"
-            />
+            <picture>
+              <source srcset="/images/webp/banner_home.webp" type="image/webp">
+              <img
+                src="/images/banner_fixed.png"
+                alt="Banner"
+                width="1200" 
+                height="800"
+                loading="eager"
+                fetchpriority="high"
+                style="width: 100%; height: 100%; object-fit: cover; object-position: center center; display: block;"
+              />
+            </picture>
           </div>
           <!-- SimpleBannerBlur removed -->
           <div class="nav-bottom-container">

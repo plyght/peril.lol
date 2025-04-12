@@ -587,26 +587,32 @@ label input {
     left: 50%;
     transform: translate(-50%, -50%);
     transition: opacity 0.3s ease, transform 0.3s ease;
+    will-change: opacity, transform;
 }
 
+/* Improved icon state management */
 .dark-theme .moon-icon {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
+    visibility: visible;
 }
 
 .dark-theme .sun-icon {
     opacity: 0;
     transform: translate(-50%, -50%) scale(0.5);
+    visibility: hidden;
 }
 
 .light-theme .sun-icon {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
+    visibility: visible;
 }
 
 .light-theme .moon-icon {
     opacity: 0;
     transform: translate(-50%, -50%) scale(0.5);
+    visibility: hidden;
 }
 
 .theme-toggle-nav:active {
