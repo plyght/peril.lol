@@ -1,7 +1,7 @@
 ---
 import { ViewTransitions } from 'astro:transitions';
-import { Analytics } from '@vercel/analytics/react';
-import { SpeedInsights } from '@vercel/speed-insights/react';
+import Analytics from '@vercel/analytics/astro';
+import SpeedInsights from '@vercel/speed-insights/astro';
 const { title, description } = Astro.props;
 ---
 
@@ -106,5 +106,5 @@ const { title, description } = Astro.props;
   });
 </script>
 
-<Analytics client:load />
-<SpeedInsights client:load />
+<Analytics />
+<SpeedInsights />
