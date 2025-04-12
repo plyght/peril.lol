@@ -6,6 +6,12 @@ import { cn } from '@/lib/utils';
 
 export function SimpleBannerBlur() {
   const [isHover, setIsHover] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
+  
+  React.useEffect(() => {
+    // Mark component as loaded to enable animations after initial render
+    setIsLoaded(true);
+  }, []);
 
   return (
     <div
@@ -28,15 +34,16 @@ export function SimpleBannerBlur() {
       />
 
       {/* Text content that appears on hover */}
-      <motion.div
-        className="absolute bottom-0 left-0 w-full p-6"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{
-          opacity: isHover ? 1 : 0,
-          y: isHover ? 0 : 20,
-        }}
-        transition={{ duration: 0.4, ease: 'easeOut' }}
-      >
+      {isLoaded && (
+        <motion.div
+          className="absolute bottom-0 left-0 w-full p-6"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{
+            opacity: isHover ? 1 : 0,
+            y: isHover ? 0 : 20,
+          }}
+          transition={{ duration: 0.4, ease: 'easeOut' }}
+        >
         <div className="flex flex-col items-start gap-3">
           <motion.p
             className="text-2xl font-bold text-white drop-shadow-lg"
@@ -56,6 +63,7 @@ export function SimpleBannerBlur() {
           </motion.p>
         </div>
       </motion.div>
+      )}
     </div>
   );
 }

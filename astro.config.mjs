@@ -19,4 +19,10 @@ export default defineConfig({
   },
 
   integrations: [react()],
+  
+  // Optimize image performance
+  compressHTML: true,
+  build: {
+    inlineStylesheets: 'auto'
+  },
 });

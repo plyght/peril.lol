@@ -1,7 +1,7 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
 import SiteNav from '../components/SiteNav.astro';
-import { SimpleBannerBlur } from '@/components/ui/simple-banner-blur';
+// import { SimpleBannerBlur } from '@/components/ui/simple-banner-blur'; // Removed
 
 // Import Tailwind CSS globally
 import '../styles/globals.css';
@@ -10,7 +10,7 @@ import '../styles/globals.css';
 <!doctype html>
 <html lang="en">
   <head>
-    <BaseHead title="plyght" />
+    <BaseHead title="plyght" description="plyght's personal website - Student & Full Stack Developer" />
   </head>
   <body>
     <!-- Film grain background effect - double implementation for compatibility -->
@@ -21,13 +21,19 @@ import '../styles/globals.css';
 
     <table class="header">
       <tr>
-        <td colspan="4" class="banner-cell" style="position: relative;">
-          <img
-            src="/images/banner_home.png"
-            alt="Banner"
-            style="width: 100%; height: 100%; object-fit: cover; object-position: center; z-index: 0; display: block;"
-          />
-          <SimpleBannerBlur client:load />
+        <td colspan="4" class="banner-cell" style="position: relative; padding: 0; overflow: hidden;">
+          <div style="width: 100%; height: 100%;">
+            <img
+              src="/images/banner_fixed.png"
+              alt="Banner"
+              width="2944" 
+              height="2768"
+              loading="eager"
+              fetchpriority="high"
+              style="width: 100%; height: 100%; object-fit: cover; object-position: center center; display: block;"
+            />
+          </div>
+          <!-- SimpleBannerBlur removed -->
           <div class="nav-bottom-container">
             <SiteNav />
           </div>
