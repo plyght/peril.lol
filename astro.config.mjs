@@ -25,4 +25,9 @@ export default defineConfig({
   build: {
     inlineStylesheets: 'auto'
   },
+  
+  // Enable view transitions for smooth page navigation
+  experimental: {
+    viewTransitions: true
+  },
 });

@@ -2,19 +2,44 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Fix for z-index stacking context */
-.banner-cell {
-  position: relative !important;
-  isolation: isolate;
+:root {
+  /* Core theme durations - reduced for mobile */
+  --theme-transition-duration: 400ms;
+  --animation-duration: 300ms;
 }
 
-/* Ensure images are below overlays */
-.banner-cell img {
-  position: relative;
-  z-index: 0;
+/* View transition styles */
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-group(main) {
+    animation-duration: var(--animation-duration);
+  }
+  
+  ::view-transition-old(main) {
+    animation-duration: var(--animation-duration);
+  }
+  
+  ::view-transition-new(main) {
+    animation-duration: var(--animation-duration);
+  }
 }
 
-/* Add more space for text in blur overlay */
-.motion-div {
-  padding-bottom: 1.5rem;
+/* Theme transition */
+.theme-transition {
+  transition: background-color var(--theme-transition-duration) ease,
+              color var(--theme-transition-duration) ease;
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  img {
+    content-visibility: auto;
+  }
+  
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
 }

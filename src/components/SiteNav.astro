@@ -1,12 +1,13 @@
 ---
 import { Astro } from 'astro';
+import { fade } from 'astro:transitions';
 const currentPath = Astro.url.pathname;
 ---
 
 <div class="nav-container">
   <nav class="site-nav">
-    <a href="/" class:list={[{ active: currentPath === '/' }]}>Home</a>
-    <a href="/blog" class:list={[{ active: currentPath.startsWith('/blog') }]}>Blog</a>
+    <a href="/" class:list={[{ active: currentPath === '/' }]} transition:animate="slide">Home</a>
+    <a href="/blog" class:list={[{ active: currentPath.startsWith('/blog') }]} transition:animate="slide">Blog</a>
   </nav>
   <button id="theme-toggle" class="theme-toggle-nav" aria-label="Toggle dark/light mode">
     <div class="toggle-icon-container">
@@ -83,10 +84,10 @@ const currentPath = Astro.url.pathname;
     document.documentElement.classList.toggle('light-theme', theme === 'light');
     localStorage.setItem('theme', theme);
 
-    // Remove transition class after animation completes
+    // Remove transition class after animation completes - reduced from 800ms to 400ms for mobile
     setTimeout(() => {
       document.body.classList.remove('theme-transition');
-    }, 800);
+    }, 400);
   };
 
   // Initialize theme
@@ -104,5 +105,12 @@ const currentPath = Astro.url.pathname;
     if (!localStorage.getItem('theme')) {
       applyTheme(e.matches ? 'light' : 'dark');
     }
+  });
+
+  // Properly handle view transitions when theme changes
+  document.addEventListener('astro:after-swap', () => {
+    // Re-apply theme after page transition
+    applyTheme(localStorage.getItem('theme') || 
+      (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'));
   });
 </script>

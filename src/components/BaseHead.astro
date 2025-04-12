@@ -1,4 +1,5 @@
 ---
+import { ViewTransitions } from 'astro:transitions';
 const { title, description } = Astro.props;
 ---
 
@@ -9,6 +10,9 @@ const { title, description } = Astro.props;
 <meta name="generator" content={Astro.generator} />
 <meta name="description" content={description || "plyght's personal website - Student & Full Stack Developer"} />
 <title>{title}</title>
+
+<!-- Add View Transitions for smooth navigation -->
+<ViewTransitions fallback="swap" />
 
 <!-- Preload critical assets -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
