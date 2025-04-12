@@ -1,0 +1,224 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import GrainOverlay from '../components/GrainOverlay';
+
+// Import Tailwind CSS globally
+import '../styles/globals.css';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title="404 - Page Not Found" description="The page you're looking for doesn't exist." />
+    <style>
+      .error-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        text-align: center;
+        padding: 2rem;
+      }
+
+      .error-code {
+        font-size: clamp(6rem, 15vw, 12rem);
+        font-weight: bold;
+        font-family: var(--font-family-mono);
+        margin: 0;
+        line-height: 1;
+        background: linear-gradient(90deg, var(--text-color), var(--accent), var(--text-color));
+        background-size: 300% auto;
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
+        animation: textGradient 8s linear infinite;
+      }
+
+      .error-message {
+        font-size: clamp(1.5rem, 4vw, 2.5rem);
+        margin: 9rem 0 4rem;
+        font-weight: var(--font-weight-medium);
+        opacity: 0;
+        animation: fadeIn 0.8s ease-out 0.3s forwards;
+        position: relative;
+      }
+
+      .home-link {
+        position: relative;
+        font-family: var(--font-family-mono);
+        font-size: 1.2rem;
+        padding: 0.85rem 2.5rem;
+        border: var(--border-thickness) solid var(--text-color);
+        background-color: transparent;
+        color: var(--text-color);
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        opacity: 0;
+        animation: fadeIn 0.8s ease-out 0.6s forwards;
+        overflow: hidden;
+        background-color: rgba(220, 50, 50, 0.04);
+      }
+
+      .home-link::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(220, 50, 50, 0.15);
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        z-index: -1;
+      }
+
+      .home-link:hover {
+        transform: translateY(-3px);
+        box-shadow: 3px 3px 0 rgba(220, 50, 50, 0.6);
+        border-color: rgba(220, 50, 50, 0.8);
+        color: rgb(220, 50, 50);
+      }
+
+      .home-link:hover::before {
+        opacity: 1;
+      }
+
+      .glitch-container {
+        position: relative;
+        margin-bottom: 0;
+        margin-top: -5rem;
+        opacity: 0;
+        animation: fadeIn 0.8s ease-out forwards;
+      }
+
+      .glitch {
+        position: relative;
+        font-size: clamp(6rem, 15vw, 12rem);
+        font-weight: bold;
+        font-family: var(--font-family-mono);
+        color: var(--text-color);
+      }
+
+      .glitch::before,
+      .glitch::after {
+        content: "404";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .glitch::before {
+        color: rgba(220, 50, 50, 0.7);
+        animation: glitch-1 2s infinite linear alternate-reverse;
+      }
+
+      .glitch::after {
+        color: var(--text-color);
+        animation: glitch-2 3s infinite linear alternate-reverse;
+      }
+
+      @keyframes glitch-1 {
+        0%, 100% { 
+          clip-path: inset(80% 0 20% 0);
+          transform: translate(-2px, 2px);
+        }
+        20% {
+          clip-path: inset(20% 0 40% 0);
+          transform: translate(2px, -2px);
+        }
+        40% {
+          clip-path: inset(40% 0 60% 0);
+          transform: translate(1px, 1px);
+        }
+        60% {
+          clip-path: inset(60% 0 80% 0);
+          transform: translate(-1px, -1px);
+        }
+        80% {
+          clip-path: inset(10% 0 90% 0);
+          transform: translate(2px, -2px);
+        }
+      }
+
+      @keyframes glitch-2 {
+        0%, 100% { 
+          clip-path: inset(20% 0 60% 0);
+          transform: translate(2px, -2px);
+        }
+        20% {
+          clip-path: inset(30% 0 70% 0);
+          transform: translate(-2px, 2px);
+        }
+        40% {
+          clip-path: inset(10% 0 50% 0);
+          transform: translate(-1px, 1px);
+        }
+        60% {
+          clip-path: inset(50% 0 30% 0);
+          transform: translate(1px, -1px);
+        }
+        80% {
+          clip-path: inset(70% 0 10% 0);
+          transform: translate(-2px, 2px);
+        }
+      }
+
+      @keyframes textGradient {
+        0% { background-position: 0% 50%; }
+        100% { background-position: 300% 50%; }
+      }
+      
+      /* Red pulse animation for page background */
+      @keyframes subtleRedPulse {
+        0%, 100% { background-color: rgba(220, 50, 50, 0.01); }
+        50% { background-color: rgba(220, 50, 50, 0.03); }
+      }
+
+      .lost-text {
+        font-family: var(--font-family-mono);
+        margin-bottom: 3rem;
+        max-width: 600px;
+        line-height: 1.6;
+        opacity: 0;
+        animation: fadeIn 0.8s ease-out 0.9s forwards;
+        font-size: 1.1rem;
+      }
+
+      /* Removing particle system */
+      
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Film grain background effect -->
+    <div class="grain-container">
+      <div class="grain"></div>
+    </div>
+    <div class="grain-overlay"></div>
+
+    <!-- Particle system removed -->
+    
+    <main class="error-container" style="animation: subtleRedPulse 8s infinite ease-in-out;">
+      <div class="glitch-container">
+        <div class="glitch">404</div>
+      </div>
+      
+      <h1 class="error-message">Page not found</h1>
+      
+      <p class="lost-text">Looks like you've wandered into uncharted territory. The page you're looking for has either been moved, deleted, or never existed in the first place.</p>
+      
+      <a href="/" class="home-link" id="home-button">Return Home</a>
+    </main>
+
+    <script>
+      // Particles removed
+    </script>
+  </body>
+</html>
