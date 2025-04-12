@@ -1,67 +1,108 @@
 ---
-import { Astro } from "astro";
+import { Astro } from 'astro';
 const currentPath = Astro.url.pathname;
 ---
 
 <div class="nav-container">
-    <nav class="site-nav">
-        <a href="/" class:list={[{ active: currentPath === "/" }]}>Home</a>
-        <a href="/blog" class:list={[{ active: currentPath.startsWith("/blog") }]}>Blog</a>
-    </nav>
-    <button id="theme-toggle" class="theme-toggle-nav" aria-label="Toggle dark/light mode">
-        <div class="toggle-icon-container">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="sun-icon"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="moon-icon" style="transform: translateY(-30px) translateX(-8px);">
-                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-        </div>
-    </button>
+  <nav class="site-nav">
+    <a href="/" class:list={[{ active: currentPath === '/' }]}>Home</a>
+    <a href="/blog" class:list={[{ active: currentPath.startsWith('/blog') }]}>Blog</a>
+  </nav>
+  <button id="theme-toggle" class="theme-toggle-nav" aria-label="Toggle dark/light mode">
+    <div class="toggle-icon-container">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="sun-icon"
+        ><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line
+          x1="12"
+          y1="21"
+          x2="12"
+          y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line
+          x1="18.36"
+          y1="18.36"
+          x2="19.78"
+          y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line
+          x1="21"
+          y1="12"
+          x2="23"
+          y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line
+          x1="18.36"
+          y1="5.64"
+          x2="19.78"
+          y2="4.22"></line></svg
+      >
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        class="moon-icon"
+        style="transform: translateY(-30px) translateX(-8px);"
+      >
+        <path
+          d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"></path>
+      </svg>
+    </div>
+  </button>
 </div>
 
 <script>
-    // Theme toggle functionality
-    const toggleBtn = document.getElementById('theme-toggle');
-    
-    // Check for saved theme preference or use OS preference
-    const getTheme = () => {
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme) {
-            return savedTheme;
-        }
-        return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
-    };
-    
-    // Apply theme to document
-    const applyTheme = (theme) => {
-        // Add transition class for smoother color changes
-        document.body.classList.add('theme-transition');
-        document.documentElement.setAttribute('data-theme', theme);
-        
-        // Update icon visibility based on theme
-        document.documentElement.classList.toggle('dark-theme', theme === 'dark');
-        document.documentElement.classList.toggle('light-theme', theme === 'light');
-        localStorage.setItem('theme', theme);
-        
-        // Remove transition class after animation completes
-        setTimeout(() => {
-            document.body.classList.remove('theme-transition');
-        }, 800);
-    };
-    
-    // Initialize theme
-    applyTheme(getTheme());
-    
-    // Toggle theme when button is clicked
-    toggleBtn.addEventListener('click', () => {
-        const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        applyTheme(newTheme);
-    });
-    
-    // Listen for OS theme changes
-    window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', (e) => {
-        if (!localStorage.getItem('theme')) {
-            applyTheme(e.matches ? 'light' : 'dark');
-        }
-    });
+  // Theme toggle functionality
+  const toggleBtn = document.getElementById('theme-toggle');
+
+  // Check for saved theme preference or use OS preference
+  const getTheme = () => {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      return savedTheme;
+    }
+    return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+  };
+
+  // Apply theme to document
+  const applyTheme = (theme) => {
+    // Add transition class for smoother color changes
+    document.body.classList.add('theme-transition');
+    document.documentElement.setAttribute('data-theme', theme);
+
+    // Update icon visibility based on theme
+    document.documentElement.classList.toggle('dark-theme', theme === 'dark');
+    document.documentElement.classList.toggle('light-theme', theme === 'light');
+    localStorage.setItem('theme', theme);
+
+    // Remove transition class after animation completes
+    setTimeout(() => {
+      document.body.classList.remove('theme-transition');
+    }, 800);
+  };
+
+  // Initialize theme
+  applyTheme(getTheme());
+
+  // Toggle theme when button is clicked
+  toggleBtn.addEventListener('click', () => {
+    const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    applyTheme(newTheme);
+  });
+
+  // Listen for OS theme changes
+  window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', (e) => {
+    if (!localStorage.getItem('theme')) {
+      applyTheme(e.matches ? 'light' : 'dark');
+    }
+  });
 </script>

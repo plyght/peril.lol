@@ -21,11 +21,11 @@ function Noise({
 
   useEffect(() => {
     if (!grainRef.current) return;
-    
+
     const canvas = grainRef.current;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
-    
+
     let frame = 0;
 
     const patternCanvas = document.createElement('canvas');
@@ -33,7 +33,7 @@ function Noise({
     patternCanvas.height = patternSize;
     const patternCtx = patternCanvas.getContext('2d');
     if (!patternCtx) return;
-    
+
     const patternData = patternCtx.createImageData(patternSize, patternSize);
     const patternPixelDataLength = patternSize * patternSize * 4;
 
@@ -80,6 +80,6 @@ function Noise({
   }, [patternSize, patternScaleX, patternScaleY, patternRefreshInterval, patternAlpha]);
 
   return <canvas className={`absolute inset-0 w-full h-full ${className}`} ref={grainRef} />;
-};
+}
 
 export { Noise };

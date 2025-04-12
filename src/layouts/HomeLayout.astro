@@ -1,69 +1,84 @@
 ---
-import BaseHead from "../components/BaseHead.astro";
-import SiteNav from "../components/SiteNav.astro";
-import { SimpleBannerBlur } from "@/components/ui/simple-banner-blur";
+import BaseHead from '../components/BaseHead.astro';
+import SiteNav from '../components/SiteNav.astro';
+import { SimpleBannerBlur } from '@/components/ui/simple-banner-blur';
 
 // Import Tailwind CSS globally
-import "../styles/globals.css";
+import '../styles/globals.css';
 ---
+
 <!doctype html>
 <html lang="en">
-	<head>
-		<BaseHead title="plyght" />
-	</head>
-	<body>
-		<!-- Film grain background effect - double implementation for compatibility -->
-		<div class="grain-container">
-			<div class="grain"></div>
-		</div>
-		<div class="grain-overlay"></div>
+  <head>
+    <BaseHead title="plyght" />
+  </head>
+  <body>
+    <!-- Film grain background effect - double implementation for compatibility -->
+    <div class="grain-container">
+      <div class="grain"></div>
+    </div>
+    <div class="grain-overlay"></div>
 
-		<table class="header">
-			<tr>
-				<td colspan="4" class="banner-cell" style="position: relative;">
-					<img src="/images/banner_home.png" alt="Banner" style="width: 100%; height: 100%; object-fit: cover; object-position: center; z-index: 0; display: block;">
-					<SimpleBannerBlur client:load />
-					<div class="nav-bottom-container">
-						<SiteNav />
-					</div>
-				</td>
-			</tr>
-			<tr>
-				<td colspan="2" rowspan="2" class="width-auto">
-					<div class="title-wrap">
-						<!--            <img src="images/pfp.png" alt="Profile Pic">-->
-						<div>
-							<h1 class="title">plyght</h1>
-							<span class="subtitle">Student & Part Time Full Stack Dev</span>
-						</div>
-					</div>
-				</td>
-				<th>Pronouns</th>
-				<td class="width-min">he/him</td>
-			</tr>
-			<tr>
-				<th>School</th>
-				<td class="width-min"><time style="white-space: pre;">WLHS</time></td>
-			</tr>
-			<tr>
-				<th class="width-min" colspan="1">Links</th>
-				<td class="width-auto" colspan="3" class="social-links">
-					<a href="https://x.com/plyght__" target="_blank" class="animated-link">Twitter</a>
-					<a href="https://bsky.app/profile/peril.lol" target="_blank" class="animated-link">Bluesky</a>
-					<a href="https://github.com/plyght" target="_blank" class="animated-link">GitHub</a>
-					<a href="https://discord.gg/Dps8HnDBpw" target="_blank" class="animated-link">Discord</a>
-					<a href="https://www.youtube.com/@plyght_" target="_blank" class="animated-link">Youtube</a>
-					<a href="/blog/resume" class="animated-link">Resume</a>
-				</td>
-			</tr>
-		</table>
+    <table class="header">
+      <tr>
+        <td colspan="4" class="banner-cell" style="position: relative;">
+          <img
+            src="/images/banner_home.png"
+            alt="Banner"
+            style="width: 100%; height: 100%; object-fit: cover; object-position: center; z-index: 0; display: block;"
+          />
+          <SimpleBannerBlur client:load />
+          <div class="nav-bottom-container">
+            <SiteNav />
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2" rowspan="2" class="width-auto">
+          <div class="title-wrap">
+            <!--            <img src="images/pfp.png" alt="Profile Pic">-->
+            <div>
+              <h1 class="title">plyght</h1>
+              <span class="subtitle">Student & Part Time Full Stack Dev</span>
+            </div>
+          </div>
+        </td>
+        <th>Pronouns</th>
+        <td class="width-min">he/him</td>
+      </tr>
+      <tr>
+        <th>School</th>
+        <td class="width-min"><time style="white-space: pre;">WLHS</time></td>
+      </tr>
+      <tr>
+        <td colspan="4" class="width-auto">
+          <div class="links-container">
+            <div class="links-title">Links</div>
+            <div class="links-row">
+              <a href="https://x.com/plyght__" target="_blank" class="animated-link">Twitter</a>
+              <a href="https://bsky.app/profile/peril.lol" target="_blank" class="animated-link"
+                >Bluesky</a
+              >
+              <a href="https://github.com/plyght" target="_blank" class="animated-link">GitHub</a>
+              <a href="https://discord.gg/Dps8HnDBpw" target="_blank" class="animated-link"
+                >Discord</a
+              >
+              <a href="https://www.youtube.com/@plyght_" target="_blank" class="animated-link"
+                >Youtube</a
+              >
+              <a href="/blog/resume" class="animated-link">Resume</a>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </table>
 
-		<div class="scroll-indicator">
-			<div class="scroll-arrow"></div>
-		</div>
+    <div class="scroll-indicator">
+      <div class="scroll-arrow"></div>
+    </div>
 
-		<main class="stagger-fade-in">
-			<slot />
-		</main>
-	</body>
+    <main class="stagger-fade-in">
+      <slot />
+    </main>
+  </body>
 </html>

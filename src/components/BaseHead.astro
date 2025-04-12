@@ -4,31 +4,40 @@ const { title, description } = Astro.props;
 
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width" />
-<meta name="color-scheme" content="dark light">
+<meta name="color-scheme" content="dark light" />
 <link rel="icon" href="/images/pfp.png" />
 <meta name="generator" content={Astro.generator} />
 <title>{title}</title>
 
 <!-- Preload critical assets -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" href="/fonts/cohere/CohereHeadline-Regular.ttf" as="font" type="font/ttf" crossorigin />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  rel="preload"
+  href="/fonts/cohere/CohereHeadline-Regular.ttf"
+  as="font"
+  type="font/ttf"
+  crossorigin
+/>
 
 <!-- Stylesheets -->
-<link rel="stylesheet" href="/styles/reset.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="/styles/ibm-plex-mono.css">
-<link rel="stylesheet" href="/styles/mono.css">
-<link rel="stylesheet" href="/styles/animations.css">
-<link rel="stylesheet" href="/styles/grain.css">
-<link rel="stylesheet" href="/styles/cohere-font.css">
-<link rel="stylesheet" href="/styles/index.css">
+<link rel="stylesheet" href="/styles/reset.css" />
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap"
+/>
+<link rel="stylesheet" href="/styles/ibm-plex-mono.css" />
+<link rel="stylesheet" href="/styles/mono.css" />
+<link rel="stylesheet" href="/styles/animations.css" />
+<link rel="stylesheet" href="/styles/grain.css" />
+<link rel="stylesheet" href="/styles/cohere-font.css" />
+<link rel="stylesheet" href="/styles/index.css" />
 
 <!-- Performance optimizations -->
 <script>
   // Add 'js-enabled' class to html element for progressive enhancement
   document.documentElement.classList.add('js-enabled');
-  
+
   // Disable animations on page load, then enable after page is loaded
   document.documentElement.classList.add('no-animations');
   window.addEventListener('load', () => {

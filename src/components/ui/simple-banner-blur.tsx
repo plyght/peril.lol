@@ -6,19 +6,19 @@ import { cn } from '@/lib/utils';
 
 export function SimpleBannerBlur() {
   const [isHover, setIsHover] = useState(false);
-  
+
   return (
-    <div 
+    <div
       className="absolute inset-0 w-full h-full z-10"
       onMouseEnter={() => setIsHover(true)}
       onMouseLeave={() => setIsHover(false)}
       style={{ pointerEvents: 'auto' }}
     >
       {/* Semi-transparent gradient overlay */}
-      <div 
+      <div
         className={cn(
-          "absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent",
-          "transition-all duration-500 ease-in-out"
+          'absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent',
+          'transition-all duration-500 ease-in-out'
         )}
         style={{
           opacity: isHover ? 0.8 : 0.4,
@@ -26,19 +26,19 @@ export function SimpleBannerBlur() {
           WebkitBackdropFilter: `blur(${isHover ? '2px' : '0px'})`,
         }}
       />
-      
+
       {/* Text content that appears on hover */}
       <motion.div
         className="absolute bottom-0 left-0 w-full p-6"
         initial={{ opacity: 0, y: 20 }}
-        animate={{ 
+        animate={{
           opacity: isHover ? 1 : 0,
-          y: isHover ? 0 : 20
+          y: isHover ? 0 : 20,
         }}
         transition={{ duration: 0.4, ease: 'easeOut' }}
       >
         <div className="flex flex-col items-start gap-3">
-          <motion.p 
+          <motion.p
             className="text-2xl font-bold text-white drop-shadow-lg"
             initial={{ opacity: 0 }}
             animate={{ opacity: isHover ? 1 : 0 }}
@@ -46,7 +46,7 @@ export function SimpleBannerBlur() {
           >
             plyght
           </motion.p>
-          <motion.p 
+          <motion.p
             className="text-base text-white/90 drop-shadow-md max-w-xs"
             initial={{ opacity: 0 }}
             animate={{ opacity: isHover ? 1 : 0 }}

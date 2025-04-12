@@ -4,9 +4,9 @@ const url = `${Astro.site.protocol}://${Astro.site.hostname}`;
 const { title, type, description, image } = Astro.props;
 ---
 
-<meta property="og:title" content={title}>
-<meta property="og:site_name" content="plyght">
-<meta property="og:url" content={url}>
-{description && <meta property="og:description" content={description}>}
-<meta property="og:type" content={type ?? "website"}>
-{image && <meta property="og:image" content={image}>}
+<meta property="og:title" content={title} />
+<meta property="og:site_name" content="plyght" />
+<meta property="og:url" content={url} />
+{description && <meta property="og:description" content={description} />}
+<meta property="og:type" content={type ?? 'website'} />
+{image && <meta property="og:image" content={image} />}

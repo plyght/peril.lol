@@ -18,23 +18,23 @@ export function BannerBlur() {
         direction="bottom"
         blurLayers={12}
         blurIntensity={isHover ? 1.2 : 0.3}
-        animate={{ 
-          opacity: isHover ? 1 : 0.7
+        animate={{
+          opacity: isHover ? 1 : 0.7,
         }}
         transition={{ duration: 0.5, ease: 'easeOut' }}
       />
-      
+
       <motion.div
         className="absolute bottom-0 left-0 w-full p-4"
         initial={{ opacity: 0 }}
-        animate={{ 
+        animate={{
           opacity: isHover ? 1 : 0,
-          y: isHover ? 0 : 10
+          y: isHover ? 0 : 10,
         }}
         transition={{ duration: 0.3, ease: 'easeOut' }}
       >
         <div className="flex flex-col items-start gap-2">
-          <motion.p 
+          <motion.p
             className="text-xl font-bold text-white drop-shadow-md"
             initial={{ opacity: 0 }}
             animate={{ opacity: isHover ? 1 : 0 }}
@@ -42,7 +42,7 @@ export function BannerBlur() {
           >
             plyght
           </motion.p>
-          <motion.p 
+          <motion.p
             className="text-sm text-white/90 drop-shadow-sm max-w-xs"
             initial={{ opacity: 0 }}
             animate={{ opacity: isHover ? 1 : 0 }}

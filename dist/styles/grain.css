@@ -1,0 +1,49 @@
+/* Film grain background animation - simplified */
+
+/* Base CSS-only grain effect */
+.grain-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  pointer-events: none;
+  
+  /* Use noise pattern with very low opacity */
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAAUVBMVEWFhYWDg4N3d3dtbW17e3t1dXWBgYGHh4d5eXlzc3OLi4ubm5uVlZWPj4+NjY19fX2JiYl/f39ra2uRkZGZmZlpaWmXl5dvb29xcXGTk5NnZ2c4zIhaAAAFDklEQVR4AY3TxXZrMBCE0TGzgZn5/z91JbdJbNuruK2zw/jk8Xhi7bqurJNx4ojo8DGTMPTslixP/QyNgTB1JqxQOdCZnhIIkbDTpR9zfG/RnT1NAYDyIN9jRs5hpiiPjiTX6MwKMkFhhoji5yQxiHnwGujSiYlJ6MqCStdQ6KPTjEwMiBDB9YmIXRut958gWzLUEQDxC8TDt8TdMwxIwNCYimzLAu4S8YpMAQipUbEOlmSJI8AZMAQwDYGOJPScjKBj6Tj3WAxkiQgY/9M+WZLp3AioyqlJBIADatnIiIhfAD2Kjm0XaIgJsOtCBWQfQN5CZjyR3XumuK5IA8j34ZTqvQP5AYc4tiRQ7XnQOjKBnFLVNaaXECtQJ8iU7e3Qm82U9ndfqGJv79jhopZ1cOdGwJDMGu64RZ5C6ngF6oE8h7yHlnF/DWRJ2tqn0P2HrIux3uXOl3iwYxL9JBD6m84TEN2X0mIVjxx81/8RxJrcXnVXSbvzW+cauRGZgKc0ZII8A71oYWc+7MdYlnwlaOgECVZEXdO5M8GeBLAvpRkL7wSEgJYkAhC8a2QA7NkpeScJZJKFgpwQnUm1F6ANxNQYXVs5K4synFG6QjgK7H+GbPaMHMiRzBiNFJnZu0gm9tKCshAgO/NE5qtIE8QEs4Zb5TS3SB1FmkIr3EszmN0PxBYydCQsMMYtEpCKf7ZQxP9cZKI/1/GQpRJHyGUQIKkfJRJGJB8grxgwCbzB5fiS6bTeQFIHOhJVrSIkCCXwCuIoK9KiCXy9WFz3FCEPikQCQQAGl5EM4ikNSKCSQSQDRCREAgkuIm4JlaUKJAKlIq6QVu0ReWvwImUUzQxp67YWUCVJJAwIf1sBpJJ0JKiIqUUUkS0QhafJOCMrRVJJqvlmiDRpjEhGvIiko6ZKZFdKLCLpCikS5lekqyJdNdGd3it/qRFZ1GqRqhKpQ2YJDfGePCOrSOAVCZBEUks1k6hV3nt5pVLUkNQ4ErUyI9Ktkaowffu3qAXFWp9+vPq13/iCXvNLm6tz/J6uOaiaU+lCt/rBHcTRrzpw9wa7/p1dF6b3ksYbAS59ffkBnfzrpbCEv/v17kGun9/shz8l5in7Y/qwA0dNBRSJf/fje1T/vr4fX5xXs/Up7R+Fz9tFNdV5+vHWB32dXT++0763n9+c8ZTeH79x5OoHXffv6N5fe3a1v8/zhx9RcaSXvj3KDHN7DPH1tin97q83R2jfktfn9fbp0tX3T1f8fX3G5f39dmbe9in/fH+0tVzfH3+ce3D1eZt1+PTjHXS/PW+3UZ+f1wnXpBLL/f35Nd3Zff1B/fSAu47vTN9/vd8eb09XPx6yxZdTuI7v8yPv/n7c+x/vhfYFRNEW0eTiO5/fRi+P7/39cfxyz/f+fc5egLrnfXnOzOv2eXnzNT8+qJJHsD2/fbzO0Y/5e3t9N1Xvz8+36+3z6x0Z9P2DTPEXX8Dl83bjuRrPx8zF/Jq/3nTO9f4/QXzYm1aBaMkAAAAASUVORK5CYII=");
+  background-repeat: repeat;
+  opacity: 0.075;
+  
+  /* Add very subtle animation */
+  animation: grain 8s steps(10) infinite;
+}
+
+[data-theme="light"] .grain-overlay {
+  opacity: 0.035;
+}
+
+@keyframes grain {
+  0%, 100% { transform: translate(0, 0) }
+  10% { transform: translate(-1%, -1%) }
+  20% { transform: translate(1%, 1%) }
+  30% { transform: translate(-2%, -1%) }
+  40% { transform: translate(2%, -2%) }
+  50% { transform: translate(-1%, 2%) }
+  60% { transform: translate(3%, -2%) }
+  70% { transform: translate(0%, 3%) }
+  80% { transform: translate(-3%, 0%) }
+  90% { transform: translate(1%, -1%) }
+}
+
+/* Remove old grain container */
+.grain-container {
+  display: none;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .grain-overlay {
+    animation: none;
+  }
+}

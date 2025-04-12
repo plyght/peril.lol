@@ -14,6 +14,4 @@ known for my humor and boundless curiosity, i'm available for part-time work in 
 
 ## Skills
 
-
-
 Just go look at [my GitHub](https://github.com/plyght) lol

@@ -1,0 +1,44 @@
+/* Cohere Headline Font */
+@font-face {
+  font-family: 'Cohere Headline';
+  src: url('/fonts/cohere/CohereHeadline-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Apply Cohere font to all headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Cohere Headline', var(--font-family);
+  letter-spacing: -0.02em;
+  font-weight: 400 !important; /* Override bold styling */
+  text-transform: none !important; /* Override text transform */
+}
+
+/* Custom styling for the main title */
+.title {
+  font-family: 'Cohere Headline', var(--font-family);
+  letter-spacing: -0.035em;
+  font-weight: 400 !important; /* Override bold styling */
+  font-size: 2.5rem !important;
+  margin-bottom: calc(var(--line-height) * 0.5) !important;
+}
+
+/* Scale other headings appropriately */
+h2 {
+  font-size: 1.4rem !important;
+  margin-top: calc(var(--line-height) * 2.5) !important;
+}
+
+h3 {
+  font-size: 1.2rem !important;
+}
+
+/* Add slight animation to titles for visual interest */
+.title, h2, h3 {
+  transition: color 0.3s ease;
+}
+
+.title:hover, h2:hover, h3:hover {
+  color: var(--accent);
+}

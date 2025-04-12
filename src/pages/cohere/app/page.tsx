@@ -1,16 +1,16 @@
-import type { Metadata } from "next"
-import localFont from "next/font/local"
+import type { Metadata } from 'next';
+import localFont from 'next/font/local';
 
 const fliegeMono = localFont({
-  src: "./FliegeMonoVF.woff2",
-  display: "swap",
-  variable: "--font-fliege-mono",
-})
+  src: './FliegeMonoVF.woff2',
+  display: 'swap',
+  variable: '--font-fliege-mono',
+});
 
 export const metadata: Metadata = {
-  title: "Cohere CLI",
-  description: "A powerful command-line interface for Cohere AI services",
-}
+  title: 'Cohere CLI',
+  description: 'A powerful command-line interface for Cohere AI services',
+};
 
 export default function Home() {
   return (
@@ -39,8 +39,12 @@ export default function Home() {
               <li className="before:content-['>'] before:text-[#B088FF] before:mr-2">
                 /chat - Start an AI conversation
               </li>
-              <li className="before:content-['>'] before:text-[#B088FF] before:mr-2">/clear - Clear the terminal</li>
-              <li className="before:content-['>'] before:text-[#B088FF] before:mr-2">:q - Quit the current session</li>
+              <li className="before:content-['>'] before:text-[#B088FF] before:mr-2">
+                /clear - Clear the terminal
+              </li>
+              <li className="before:content-['>'] before:text-[#B088FF] before:mr-2">
+                :q - Quit the current session
+              </li>
             </ul>
           </div>
 
@@ -58,7 +62,9 @@ export default function Home() {
           </div>
 
           <div className="text-[#4AF626] mb-2">$ cohere /chat</div>
-          <div className="mb-4">AI: Hello! I'm your Cohere AI assistant. How can I help you today?</div>
+          <div className="mb-4">
+            AI: Hello! I'm your Cohere AI assistant. How can I help you today?
+          </div>
 
           <div className="text-[#4AF626] flex items-center">
             $ <span className="w-2 h-4 bg-[#4AF626] ml-1 animate-blink"></span>
@@ -70,6 +76,5 @@ export default function Home() {
         </div>
       </div>
     </main>
-  )
+  );
 }
-
