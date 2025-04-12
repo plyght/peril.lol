@@ -1,0 +1,33 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import SiteNav from '../components/SiteNav.astro';
+import { ProgressiveBlurHover } from '../components/ui/progressive-blur-demo';
+---
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<BaseHead title="Progressive Blur Demo" description="Demo of the Progressive Blur component" />
+		<link rel="stylesheet" href="../styles/globals.css" />
+	</head>
+	<body>
+		<SiteNav />
+		<main class="max-w-4xl mx-auto px-4 py-12">
+			<h1 class="text-3xl font-bold mb-6">Progressive Blur Component Demo</h1>
+			<p class="mb-8">Hover over the image below to see the progressive blur effect in action:</p>
+			
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+				<ProgressiveBlurHover client:load />
+				<div>
+					<h2 class="text-xl font-semibold mb-4">How it works</h2>
+					<ul class="list-disc pl-5 space-y-2">
+						<li>Creates multiple overlapping layers with increasing blur intensity</li>
+						<li>Uses gradient masks to create a smooth blur transition</li>
+						<li>Applies motion animations for hover effects</li>
+						<li>Supports different directions and intensities</li>
+					</ul>
+				</div>
+			</div>
+		</main>
+	</body>
+</html>

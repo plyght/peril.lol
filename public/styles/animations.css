@@ -1,0 +1,154 @@
+/* Advanced animations for website components */
+
+/* Page transition animations */
+@keyframes pageIn {
+    0% { 
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    100% { 
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pageOut {
+    0% { 
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% { 
+        opacity: 0;
+        transform: translateY(-15px);
+    }
+}
+
+/* Text highlight animation */
+@keyframes textHighlight {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Border animation */
+@keyframes borderFlash {
+    0% { border-color: var(--text-color); }
+    25% { border-color: var(--accent); }
+    50% { border-color: var(--text-color); }
+    75% { border-color: var(--accent); }
+    100% { border-color: var(--text-color); }
+}
+
+/* Hover lift effect */
+.hover-lift {
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.hover-lift:hover {
+    transform: translateY(-3px);
+}
+
+/* Text gradient animation */
+.animated-text {
+    background: linear-gradient(90deg, var(--text-color), var(--accent), var(--text-color));
+    background-size: 200% auto;
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    animation: textHighlight 3s linear infinite;
+}
+
+/* Focal point zoom */
+.zoom-on-hover {
+    transition: transform 0.3s ease;
+    overflow: hidden;
+}
+
+.zoom-on-hover img {
+    transition: transform 0.5s ease;
+}
+
+.zoom-on-hover:hover img {
+    transform: scale(1.05);
+}
+
+/* Staggered entrance animations for lists */
+.stagger-fade-in > * {
+    opacity: 0;
+    animation: fadeIn 0.5s ease forwards;
+}
+
+/* Apply to all direct children with increasing delays */
+.stagger-fade-in > *:nth-child(1) { animation-delay: 0.1s; }
+.stagger-fade-in > *:nth-child(2) { animation-delay: 0.2s; }
+.stagger-fade-in > *:nth-child(3) { animation-delay: 0.3s; }
+.stagger-fade-in > *:nth-child(4) { animation-delay: 0.4s; }
+.stagger-fade-in > *:nth-child(5) { animation-delay: 0.5s; }
+.stagger-fade-in > *:nth-child(n+6) { animation-delay: 0.6s; }
+
+/* Border flash animation */
+.border-flash {
+    animation: borderFlash 2s infinite;
+}
+
+/* Page transitions for content */
+main {
+    animation: pageIn 0.4s ease-out forwards;
+}
+
+/* Interactive button animation */
+button, .button {
+    position: relative;
+    overflow: hidden;
+}
+
+button:after, .button:after {
+    content: "";
+    background: rgba(255, 255, 255, 0.1);
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    transform: translateX(-100%);
+    transition: transform 0.2s ease-out;
+}
+
+button:active:after, .button:active:after {
+    transform: translateX(0);
+}
+
+/* Link underline animation */
+a.animated-link {
+    position: relative;
+    text-decoration: none;
+}
+
+a.animated-link::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: var(--border-thickness);
+    bottom: -2px;
+    left: 0;
+    background-color: var(--accent);
+    transform: scaleX(0);
+    transform-origin: bottom right;
+    transition: transform 0.3s ease-out;
+}
+
+a.animated-link:hover::before {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+}
+
+/* Optimizations for reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.001ms !important;
+        transition-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+    }
+}

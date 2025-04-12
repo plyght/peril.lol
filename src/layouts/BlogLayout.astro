@@ -31,13 +31,28 @@ const url = Astro.url
         />
     </head>
     <body class="blog-content">
-        <SiteNav />
+        <!-- Film grain background effect - double implementation for compatibility -->
+        <div class="grain-container">
+            <div class="grain"></div>
+        </div>
+        <div class="grain-overlay"></div>
 
         <table class="header">
             {image && (
                 <tr>
-                    <td colspan="4" class="banner-cell">
+                    <td colspan="4" class="banner-cell" style="position: relative;">
                         <img src={image} alt="Banner">
+                        <div class="nav-bottom-container">
+                            <SiteNav />
+                        </div>
+                    </td>
+                </tr>
+            ) || (
+                <tr>
+                    <td colspan="4" style="position: relative;">
+                        <div class="nav-bottom-container no-banner">
+                            <SiteNav />
+                        </div>
                     </td>
                 </tr>
             )}
@@ -71,6 +86,8 @@ const url = Astro.url
             </tr>
         </table>
 
-        <slot />
+        <main class="blog-content stagger-fade-in">
+            <slot />
+        </main>
     </body>
 </html>

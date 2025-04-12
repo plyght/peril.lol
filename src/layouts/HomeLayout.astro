@@ -1,6 +1,10 @@
 ---
 import BaseHead from "../components/BaseHead.astro";
 import SiteNav from "../components/SiteNav.astro";
+import { SimpleBannerBlur } from "@/components/ui/simple-banner-blur";
+
+// Import Tailwind CSS globally
+import "../styles/globals.css";
 ---
 <!doctype html>
 <html lang="en">
@@ -8,12 +12,20 @@ import SiteNav from "../components/SiteNav.astro";
 		<BaseHead title="plyght" />
 	</head>
 	<body>
-		<SiteNav />
+		<!-- Film grain background effect - double implementation for compatibility -->
+		<div class="grain-container">
+			<div class="grain"></div>
+		</div>
+		<div class="grain-overlay"></div>
 
 		<table class="header">
 			<tr>
-				<td colspan="4" class="banner-cell">
-					<img src="/images/banner_home.png" alt="Banner">
+				<td colspan="4" class="banner-cell" style="position: relative;">
+					<img src="/images/banner_home.png" alt="Banner" style="width: 100%; height: 100%; object-fit: cover; object-position: center; z-index: 0; display: block;">
+					<SimpleBannerBlur client:load />
+					<div class="nav-bottom-container">
+						<SiteNav />
+					</div>
 				</td>
 			</tr>
 			<tr>
@@ -35,17 +47,23 @@ import SiteNav from "../components/SiteNav.astro";
 			</tr>
 			<tr>
 				<th class="width-min" colspan="1">Links</th>
-				<td class="width-auto" colspan="3">
-					<a href="https://x.com/plyght__ target="_blank">Twitter</a>
-					<a href="https://bsky.app/profile/peril.lol" target="_blank">Bluesky</a>
-					<a href="https://github.com/plyght" target="_blank">GitHub</a>
-					<a href="https://discord.gg/Dps8HnDBpw" target="_blank">Discord</a>
-					<a href="https://www.youtube.com/@plyght_" target="_blank">Youtube</a>
-<a href="/blog/resume">Resume</a>
+				<td class="width-auto" colspan="3" class="social-links">
+					<a href="https://x.com/plyght__" target="_blank" class="animated-link">Twitter</a>
+					<a href="https://bsky.app/profile/peril.lol" target="_blank" class="animated-link">Bluesky</a>
+					<a href="https://github.com/plyght" target="_blank" class="animated-link">GitHub</a>
+					<a href="https://discord.gg/Dps8HnDBpw" target="_blank" class="animated-link">Discord</a>
+					<a href="https://www.youtube.com/@plyght_" target="_blank" class="animated-link">Youtube</a>
+					<a href="/blog/resume" class="animated-link">Resume</a>
 				</td>
 			</tr>
 		</table>
 
-		<slot />
+		<div class="scroll-indicator">
+			<div class="scroll-arrow"></div>
+		</div>
+
+		<main class="stagger-fade-in">
+			<slot />
+		</main>
 	</body>
 </html>

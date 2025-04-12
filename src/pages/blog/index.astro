@@ -22,12 +22,19 @@ const tags = [...new Set(posts.flatMap(({ data: { tags } }) => tags))];
         <BaseHead title="plyght" />
     </head>
     <body>
-        <SiteNav />
+        <!-- Film grain background effect - double implementation for compatibility -->
+        <div class="grain-container">
+            <div class="grain"></div>
+        </div>
+        <div class="grain-overlay"></div>
 
         <table class="header">
             <tr>
-                <td colspan="4" class="banner-cell">
+                <td colspan="4" class="banner-cell" style="position: relative;">
                     <img src="/images/banner_blog.png" alt="Banner">
+                    <div class="nav-bottom-container">
+                        <SiteNav />
+                    </div>
                 </td>
             </tr>
             <tr>
