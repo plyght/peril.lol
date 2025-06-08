@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Photo</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { 
+            margin: 40px; 
+            max-width: 800px; 
+        }
+        .photo-container { 
+            text-align: center; 
+            margin: 20px 0; 
+        }
+        .photo-container img { 
+            max-width: 100%; 
+            height: auto; 
+            border-radius: 5px; 
+        }
+        .photo-info { 
+            margin-top: 20px; 
+            text-align: left; 
+        }
+        .photo-info h1 { 
+            margin-bottom: 10px; 
+        }
+        .photo-info p { 
+            margin: 5px 0; 
+            color: #666; 
+        }
+        .back-link { 
+            margin-bottom: 20px; 
+        }
+        @media (prefers-color-scheme: dark) {
+            body { 
+                background-color: #1a1a1a; 
+                color: #e0e0e0; 
+            }
+            a { 
+                color: #66b3ff; 
+            }
+            .photo-info p { 
+                color: #aaa; 
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="back-link">
+        <a href="/photos">← Back to Photos</a>
+    </div>
+    
+    <div class="photo-container" id="photo-container">
+        <!-- Photo loaded dynamically -->
+    </div>
+    
+    <div class="photo-info" id="photo-info">
+        <!-- Photo info loaded dynamically -->
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const photoId = urlParams.get('id');
+        
+        if (photoId) {
+            fetch('photos.json')
+                .then(response => response.json())
+                .then(photos => {
+                    const photo = photos.find(p => p.id === photoId);
+                    if (photo) {
+                        document.title = photo.title;
+                        
+                        const container = document.getElementById('photo-container');
+                        const img = document.createElement('img');
+                        img.src = photo.filename;
+                        img.alt = photo.title;
+                        container.appendChild(img);
+                        
+                        const info = document.getElementById('photo-info');
+                        info.innerHTML = `
+                            <h1>${photo.title}</h1>
+                            ${photo.subtitle ? `<p><strong>Subtitle:</strong> ${photo.subtitle}</p>` : ''}
+                            ${photo.location ? `<p><strong>Location:</strong> ${photo.location}</p>` : ''}
+                            ${photo.date ? `<p><strong>Date:</strong> ${photo.date}</p>` : ''}
+                        `;
+                    } else {
+                        document.getElementById('photo-info').innerHTML = '<p>Photo not found.</p>';
+                    }
+                })
+                .catch(() => {
+                    document.getElementById('photo-info').innerHTML = '<p>Error loading photo.</p>';
+                });
+        } else {
+            document.getElementById('photo-info').innerHTML = '<p>No photo specified.</p>';
+        }
+    </script>
+</body>
+</html>
