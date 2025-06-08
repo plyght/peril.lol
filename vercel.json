@@ -3,8 +3,24 @@
   "trailingSlash": false,
   "rewrites": [
     {
+      "source": "/photos",
+      "destination": "/photos.html"
+    },
+    {
       "source": "/photo/(.*)",
       "destination": "/photo.html?id=$1"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/photos",
+      "destination": "/photos.html",
+      "permanent": false
+    },
+    {
+      "source": "/photo",
+      "destination": "/photo.html",
+      "permanent": false
     }
   ]
 }
