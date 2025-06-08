@@ -44,6 +44,24 @@
         .skills { 
             margin-top: 30px; 
         }
+        @media (max-width: 768px) {
+            body {
+                margin: 20px;
+            }
+            .header {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+            .hero-image img {
+                width: 150px;
+            }
+            .links a {
+                margin-right: 15px;
+                margin-bottom: 10px;
+                display: inline-block;
+            }
+        }
         @media (prefers-color-scheme: dark) {
             body { 
                 background-color: #1a1a1a; 
