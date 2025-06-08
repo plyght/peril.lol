@@ -1,0 +1,17 @@
+{
+  "rewrites": [
+    {
+      "source": "/photos",
+      "destination": "/photos.html"
+    },
+    {
+      "source": "/photo/(.*)",
+      "destination": "/photo.html?id=$1"
+    },
+    {
+      "source": "/photo",
+      "destination": "/photo.html"
+    }
+  ],
+  "errorPage": "/404.html"
+}
