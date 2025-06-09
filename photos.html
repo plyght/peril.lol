@@ -85,10 +85,34 @@
         .lightbox.active {
             display: flex;
         }
-        .lightbox img {
+        .lightbox-content {
+            display: flex;
             max-width: 90%;
             max-height: 90%;
+            gap: 20px;
+            align-items: center;
+        }
+        .lightbox img {
+            max-width: 70%;
+            max-height: 90%;
             object-fit: contain;
+        }
+        .lightbox-info {
+            color: white;
+            max-width: 300px;
+            padding: 20px;
+        }
+        .lightbox-info h2 {
+            margin: 0 0 10px 0;
+            font-size: 24px;
+        }
+        .lightbox-info p {
+            margin: 5px 0;
+            color: #ccc;
+            font-size: 14px;
+        }
+        .lightbox-info strong {
+            color: white;
         }
         .lightbox-close {
             position: absolute;
@@ -118,9 +142,19 @@
                 grid-template-columns: 1fr;
                 gap: 15px;
             }
-            .lightbox img {
+            .lightbox-content {
+                flex-direction: column;
                 max-width: 95%;
-                max-height: 85%;
+                max-height: 90%;
+            }
+            .lightbox img {
+                max-width: 100%;
+                max-height: 60%;
+            }
+            .lightbox-info {
+                max-width: 100%;
+                padding: 15px;
+                text-align: center;
             }
             .lightbox-close {
                 top: 10px;
@@ -159,7 +193,12 @@
 
     <div class="lightbox" id="lightbox">
         <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
-        <img id="lightbox-img" src="" alt="">
+        <div class="lightbox-content">
+            <img id="lightbox-img" src="" alt="">
+            <div class="lightbox-info" id="lightbox-info">
+                <!-- Photo info loaded dynamically -->
+            </div>
+        </div>
         <button class="view-full-btn" onclick="viewFullResolution()">View Full Resolution</button>
     </div>
 
@@ -170,9 +209,18 @@
             currentPhoto = photo;
             const lightbox = document.getElementById('lightbox');
             const lightboxImg = document.getElementById('lightbox-img');
+            const lightboxInfo = document.getElementById('lightbox-info');
             
             lightboxImg.src = photo.filename;
             lightboxImg.alt = photo.title;
+            
+            lightboxInfo.innerHTML = `
+                <h2>${photo.title}</h2>
+                ${photo.subtitle ? `<p><strong>Subtitle:</strong> ${photo.subtitle}</p>` : ''}
+                ${photo.location ? `<p><strong>Location:</strong> ${photo.location}</p>` : ''}
+                ${photo.date ? `<p><strong>Date:</strong> ${photo.date}</p>` : ''}
+            `;
+            
             lightbox.classList.add('active');
         }
 
