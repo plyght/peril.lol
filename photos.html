@@ -12,30 +12,35 @@
             src: url('fonts/SF-Pro-Text-Regular.woff2') format('woff2');
             font-weight: 400;
             font-style: normal;
+            font-display: swap;
         }
         @font-face {
             font-family: 'SF Pro Text';
             src: url('fonts/SF-Pro-Text-Bold.woff2') format('woff2');
             font-weight: 700;
             font-style: normal;
+            font-display: swap;
         }
         @font-face {
             font-family: 'SF Pro Text';
             src: url('fonts/SF-Pro-Text-RegularItalic.woff2') format('woff2');
             font-weight: 400;
             font-style: italic;
+            font-display: swap;
         }
         @font-face {
             font-family: 'SF Pro Display';
             src: url('fonts/SF-Pro-Display-Regular.woff2') format('woff2');
             font-weight: 400;
             font-style: normal;
+            font-display: swap;
         }
         @font-face {
             font-family: 'SF Pro Display';
             src: url('fonts/SF-Pro-Display-Bold.woff2') format('woff2');
             font-weight: 700;
             font-style: normal;
+            font-display: swap;
         }
         body { 
             margin: 40px;
@@ -46,7 +51,7 @@
         }
         .gallery { 
             display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
             gap: 20px; 
             margin-top: 20px; 
         }
@@ -56,12 +61,78 @@
         }
         .gallery img { 
             width: 100%; 
-            height: auto; 
+            height: auto;
+            max-width: 300px;
             border-radius: 5px; 
             transition: opacity 0.2s; 
+            cursor: pointer;
         }
         .gallery img:hover { 
             opacity: 0.8; 
+        }
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .lightbox.active {
+            display: flex;
+        }
+        .lightbox img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+        }
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 40px;
+            cursor: pointer;
+            z-index: 1001;
+        }
+        .view-full-btn {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        @media (max-width: 768px) {
+            body {
+                margin: 20px;
+            }
+            .gallery {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            .lightbox img {
+                max-width: 95%;
+                max-height: 85%;
+            }
+            .lightbox-close {
+                top: 10px;
+                right: 15px;
+                font-size: 30px;
+            }
+            .view-full-btn {
+                bottom: 15px;
+                right: 15px;
+                padding: 6px 12px;
+                font-size: 12px;
+            }
         }
         .back-link { margin-bottom: 20px; }
         @media (prefers-color-scheme: dark) {
@@ -86,21 +157,58 @@
         <!-- Photos loaded dynamically -->
     </div>
 
+    <div class="lightbox" id="lightbox">
+        <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+        <img id="lightbox-img" src="" alt="">
+        <button class="view-full-btn" onclick="viewFullResolution()">View Full Resolution</button>
+    </div>
+
     <script>
+        let currentPhoto = null;
+
+        function openLightbox(photo) {
+            currentPhoto = photo;
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightbox-img');
+            
+            lightboxImg.src = photo.filename;
+            lightboxImg.alt = photo.title;
+            lightbox.classList.add('active');
+        }
+
+        function closeLightbox() {
+            const lightbox = document.getElementById('lightbox');
+            lightbox.classList.remove('active');
+        }
+
+        function viewFullResolution() {
+            if (currentPhoto) {
+                window.open(currentPhoto.filename, '_blank');
+            }
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeLightbox();
+            }
+        });
+
         fetch('photos.json')
             .then(response => response.json())
             .then(photos => {
                 const gallery = document.getElementById('gallery');
                 photos.forEach(photo => {
-                    const link = document.createElement('a');
-                    link.href = `photo.html?id=${photo.id}`;
+                    const container = document.createElement('div');
+                    container.style.position = 'relative';
                     
                     const img = document.createElement('img');
                     img.src = photo.filename;
                     img.alt = photo.title;
+                    img.loading = 'lazy';
+                    img.onclick = () => openLightbox(photo);
                     
-                    link.appendChild(img);
-                    gallery.appendChild(link);
+                    container.appendChild(img);
+                    gallery.appendChild(container);
                 });
             });
     </script>

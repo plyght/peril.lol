@@ -8,36 +8,42 @@
     <meta name="author" content="peril.lol">
     <link rel="preload" href="fonts/SF-Pro-Text-Regular.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="fonts/SF-Pro-Display-Regular.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="nature-knows-no-kings.png" as="image">
     <style>
         @font-face {
             font-family: 'SF Pro Text';
             src: url('fonts/SF-Pro-Text-Regular.woff2') format('woff2');
             font-weight: 400;
             font-style: normal;
+            font-display: swap;
         }
         @font-face {
             font-family: 'SF Pro Text';
             src: url('fonts/SF-Pro-Text-Bold.woff2') format('woff2');
             font-weight: 700;
             font-style: normal;
+            font-display: swap;
         }
         @font-face {
             font-family: 'SF Pro Text';
             src: url('fonts/SF-Pro-Text-RegularItalic.woff2') format('woff2');
             font-weight: 400;
             font-style: italic;
+            font-display: swap;
         }
         @font-face {
             font-family: 'SF Pro Display';
             src: url('fonts/SF-Pro-Display-Regular.woff2') format('woff2');
             font-weight: 400;
             font-style: normal;
+            font-display: swap;
         }
         @font-face {
             font-family: 'SF Pro Display';
             src: url('fonts/SF-Pro-Display-Bold.woff2') format('woff2');
             font-weight: 700;
             font-style: normal;
+            font-display: swap;
         }
         body { 
             margin: 40px; 
@@ -112,7 +118,7 @@
 <body>
     <div class="header">
         <div class="hero-image">
-            <img src="nature-knows-no-kings.png" alt="Nature knows no kings">
+            <img src="nature-knows-no-kings.png" alt="Nature knows no kings" loading="lazy">
         </div>
         
         <div class="intro">
