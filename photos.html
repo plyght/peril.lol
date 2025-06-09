@@ -4,51 +4,12 @@
     <title>Photos</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
     <link rel="preload" href="fonts/SF-Pro-Text-Regular.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="fonts/SF-Pro-Text-Bold.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="fonts/SF-Pro-Display-Regular.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="fonts/SF-Pro-Display-Bold.woff2" as="font" type="font/woff2" crossorigin>
     <style>
-        @font-face {
-            font-family: 'SF Pro Text';
-            src: url('fonts/SF-Pro-Text-Regular.woff2') format('woff2');
-            font-weight: 400;
-            font-style: normal;
-            font-display: swap;
-        }
-        @font-face {
-            font-family: 'SF Pro Text';
-            src: url('fonts/SF-Pro-Text-Bold.woff2') format('woff2');
-            font-weight: 700;
-            font-style: normal;
-            font-display: swap;
-        }
-        @font-face {
-            font-family: 'SF Pro Text';
-            src: url('fonts/SF-Pro-Text-RegularItalic.woff2') format('woff2');
-            font-weight: 400;
-            font-style: italic;
-            font-display: swap;
-        }
-        @font-face {
-            font-family: 'SF Pro Display';
-            src: url('fonts/SF-Pro-Display-Regular.woff2') format('woff2');
-            font-weight: 400;
-            font-style: normal;
-            font-display: swap;
-        }
-        @font-face {
-            font-family: 'SF Pro Display';
-            src: url('fonts/SF-Pro-Display-Bold.woff2') format('woff2');
-            font-weight: 700;
-            font-style: normal;
-            font-display: swap;
-        }
-        body { 
-            margin: 40px;
-            font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-        }
-        h1, h2, h3, h4, h5, h6 {
-            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-        }
         .gallery { 
             display: grid; 
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
@@ -135,9 +96,6 @@
             font-size: 14px;
         }
         @media (max-width: 768px) {
-            body {
-                margin: 20px;
-            }
             .gallery {
                 grid-template-columns: 1fr;
                 gap: 15px;
@@ -169,15 +127,6 @@
             }
         }
         .back-link { margin-bottom: 20px; }
-        @media (prefers-color-scheme: dark) {
-            body { 
-                background-color: #1a1a1a; 
-                color: #e0e0e0; 
-            }
-            a { 
-                color: #66b3ff; 
-            }
-        }
     </style>
 </head>
 <body>
@@ -202,63 +151,7 @@
         <button class="view-full-btn" onclick="viewFullResolution()">View Full Resolution</button>
     </div>
 
-    <script>
-        let currentPhoto = null;
-
-        function openLightbox(photo) {
-            currentPhoto = photo;
-            const lightbox = document.getElementById('lightbox');
-            const lightboxImg = document.getElementById('lightbox-img');
-            const lightboxInfo = document.getElementById('lightbox-info');
-            
-            lightboxImg.src = photo.filename;
-            lightboxImg.alt = photo.title;
-            
-            lightboxInfo.innerHTML = `
-                <h2>${photo.title}</h2>
-                ${photo.subtitle ? `<p><strong>Subtitle:</strong> ${photo.subtitle}</p>` : ''}
-                ${photo.location ? `<p><strong>Location:</strong> ${photo.location}</p>` : ''}
-                ${photo.date ? `<p><strong>Date:</strong> ${photo.date}</p>` : ''}
-            `;
-            
-            lightbox.classList.add('active');
-        }
-
-        function closeLightbox() {
-            const lightbox = document.getElementById('lightbox');
-            lightbox.classList.remove('active');
-        }
-
-        function viewFullResolution() {
-            if (currentPhoto) {
-                window.open(currentPhoto.filename, '_blank');
-            }
-        }
-
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closeLightbox();
-            }
-        });
-
-        fetch('photos.json')
-            .then(response => response.json())
-            .then(photos => {
-                const gallery = document.getElementById('gallery');
-                photos.forEach(photo => {
-                    const container = document.createElement('div');
-                    container.style.position = 'relative';
-                    
-                    const img = document.createElement('img');
-                    img.src = photo.filename;
-                    img.alt = photo.title;
-                    img.loading = 'lazy';
-                    img.onclick = () => openLightbox(photo);
-                    
-                    container.appendChild(img);
-                    gallery.appendChild(container);
-                });
-            });
-    </script>
+    <script src="js/photo-utils.js"></script>
+    <script src="js/gallery.js"></script>
 </body>
 </html>

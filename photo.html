@@ -4,46 +4,14 @@
     <title>Photo</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
     <link rel="preload" href="fonts/SF-Pro-Text-Regular.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="fonts/SF-Pro-Text-Bold.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="fonts/SF-Pro-Display-Regular.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="fonts/SF-Pro-Display-Bold.woff2" as="font" type="font/woff2" crossorigin>
     <style>
-        @font-face {
-            font-family: 'SF Pro Text';
-            src: url('fonts/SF-Pro-Text-Regular.woff2') format('woff2');
-            font-weight: 400;
-            font-style: normal;
-        }
-        @font-face {
-            font-family: 'SF Pro Text';
-            src: url('fonts/SF-Pro-Text-Bold.woff2') format('woff2');
-            font-weight: 700;
-            font-style: normal;
-        }
-        @font-face {
-            font-family: 'SF Pro Text';
-            src: url('fonts/SF-Pro-Text-RegularItalic.woff2') format('woff2');
-            font-weight: 400;
-            font-style: italic;
-        }
-        @font-face {
-            font-family: 'SF Pro Display';
-            src: url('fonts/SF-Pro-Display-Regular.woff2') format('woff2');
-            font-weight: 400;
-            font-style: normal;
-        }
-        @font-face {
-            font-family: 'SF Pro Display';
-            src: url('fonts/SF-Pro-Display-Bold.woff2') format('woff2');
-            font-weight: 700;
-            font-style: normal;
-        }
         body { 
-            margin: 40px; 
             max-width: 800px;
-            font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-        }
-        h1, h2, h3, h4, h5, h6 {
-            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
         }
         .photo-container { 
             text-align: center; 
@@ -69,13 +37,6 @@
             margin-bottom: 20px; 
         }
         @media (prefers-color-scheme: dark) {
-            body { 
-                background-color: #1a1a1a; 
-                color: #e0e0e0; 
-            }
-            a { 
-                color: #66b3ff; 
-            }
             .photo-info p { 
                 color: #aaa; 
             }
@@ -95,41 +56,9 @@
         <!-- Photo info loaded dynamically -->
     </div>
 
+    <script src="js/photo-utils.js"></script>
     <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const photoId = urlParams.get('id');
-        
-        if (photoId) {
-            fetch('photos.json')
-                .then(response => response.json())
-                .then(photos => {
-                    const photo = photos.find(p => p.id === photoId);
-                    if (photo) {
-                        document.title = photo.title;
-                        
-                        const container = document.getElementById('photo-container');
-                        const img = document.createElement('img');
-                        img.src = photo.filename;
-                        img.alt = photo.title;
-                        container.appendChild(img);
-                        
-                        const info = document.getElementById('photo-info');
-                        info.innerHTML = `
-                            <h1>${photo.title}</h1>
-                            ${photo.subtitle ? `<p><strong>Subtitle:</strong> ${photo.subtitle}</p>` : ''}
-                            ${photo.location ? `<p><strong>Location:</strong> ${photo.location}</p>` : ''}
-                            ${photo.date ? `<p><strong>Date:</strong> ${photo.date}</p>` : ''}
-                        `;
-                    } else {
-                        document.getElementById('photo-info').innerHTML = '<p>Photo not found.</p>';
-                    }
-                })
-                .catch(() => {
-                    document.getElementById('photo-info').innerHTML = '<p>Error loading photo.</p>';
-                });
-        } else {
-            document.getElementById('photo-info').innerHTML = '<p>No photo specified.</p>';
-        }
+        const u=new URLSearchParams(window.location.search),p=u.get('id'),c=document.getElementById('photo-container'),i=document.getElementById('photo-info');if(p){showLoading(i);fetchPhotos().then(photos=>{const photo=photos.find(ph=>ph.id===p);if(photo){document.title=photo.title;const img=document.createElement('img');img.src=photo.filename;img.alt=photo.title;img.loading='lazy';c.appendChild(img);i.innerHTML=generatePhotoInfoHTML(photo)}else showError(i,'Photo not found.')}).catch(()=>showError(i,'Error loading photo.'))}else showError(i,'No photo specified.')
     </script>
 </body>
 </html>
