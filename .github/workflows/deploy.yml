@@ -29,9 +29,20 @@ jobs:
         uses: actions/configure-pages@v4
       
       - name: Configure Last.fm API
+        env:
+          LASTFM_API_KEY: ${{ secrets.LASTFM_API_KEY }}
+          LASTFM_USERNAME: ${{ secrets.LASTFM_USERNAME }}
         run: |
-          sed -i "s/YOUR_API_KEY_HERE/${{ secrets.LASTFM_API_KEY }}/g" js/config.js
-          sed -i "s/YOUR_LASTFM_USERNAME/${{ secrets.LASTFM_USERNAME }}/g" js/config.js
+          echo "Configuring Last.fm API..."
+          echo "Before replacement:"
+          grep -A 3 -B 3 "YOUR_API_KEY_HERE\|YOUR_LASTFM_USERNAME" js/config.js || true
+          
+          # Replace placeholders with environment variables
+          sed -i "s/YOUR_API_KEY_HERE/${LASTFM_API_KEY}/g" js/config.js
+          sed -i "s/YOUR_LASTFM_USERNAME/${LASTFM_USERNAME}/g" js/config.js
+          
+          echo "After replacement:"
+          grep -A 3 -B 3 "apiKey:\|username:" js/config.js || true
       
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
