@@ -1,6 +1,6 @@
 /**
  * Last.fm Configuration
- * 
+ *
  * For local development:
  * 1. Get a Last.fm API key at https://www.last.fm/api/account/create
  * 2. Replace 'YOUR_API_KEY_HERE' with your actual API key
