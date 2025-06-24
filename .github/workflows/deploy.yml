@@ -28,6 +28,11 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v4
       
+      - name: Configure Last.fm API
+        run: |
+          sed -i "s/YOUR_API_KEY_HERE/${{ secrets.LASTFM_API_KEY }}/g" js/config.js
+          sed -i "s/YOUR_LASTFM_USERNAME/${{ secrets.LASTFM_USERNAME }}/g" js/config.js
+      
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

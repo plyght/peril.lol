@@ -1,0 +1,13 @@
+# Local development config with API keys
+js/config.local.js
+
+# macOS
+.DS_Store
+
+# Editor files
+.vscode/
+.idea/
+
+# Temporary files
+*.tmp
+*.log
