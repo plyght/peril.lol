@@ -58,9 +58,10 @@ class NowPlaying {
 
         // Handle album artwork
         if (track.image && track.image.length > 0) {
-            // Find the medium size image (index 1) or fallback to largest available
-            const artwork = track.image.find(img => img.size === 'medium') || 
+            // Prefer larger sizes for better quality: extralarge > large > medium
+            const artwork = track.image.find(img => img.size === 'extralarge') || 
                            track.image.find(img => img.size === 'large') || 
+                           track.image.find(img => img.size === 'medium') ||
                            track.image[track.image.length - 1];
             
             if (artwork && artwork['#text']) {
