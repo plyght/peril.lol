@@ -28,10 +28,13 @@ jobs:
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
       
-      - name: Install ImageMagick and tools for photo conversion
+      - name: Install ImageMagick, VIPS and tools for photo conversion
         run: |
           sudo apt-get update
-          sudo apt-get install -y imagemagick libheif-dev exiftool
+          sudo apt-get install -y imagemagick libheif-dev exiftool libvips-tools
+          echo "✓ ImageMagick version: $(convert -version | head -1)"
+          echo "✓ VIPS version: $(vips --version)"
+          echo "✓ ExifTool version: $(exiftool -ver)"
       
       - name: Convert photos to web-compatible formats
         run: |
