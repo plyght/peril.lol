@@ -1,5 +1,6 @@
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
+use std::collections::HashMap;
 use std::fs;
 use std::io::BufReader;
 use std::path::Path;
@@ -26,8 +27,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let output_file = "../photos.json";
 
     let mut photos = Vec::new();
+    let mut photo_groups: HashMap<String, Vec<std::path::PathBuf>> = HashMap::new();
 
-    // Walk through media directory
+    // Walk through media directory and group files by stem
     for entry in WalkDir::new(media_dir)
         .into_iter()
         .filter_map(|e| e.ok())
@@ -42,14 +44,44 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 ext.as_str(),
                 "jpg" | "jpeg" | "png" | "webp" | "tiff" | "heic" | "avif" | "bmp" | "gif"
             ) {
-                // Skip converted files if original still exists to avoid duplicates
-                if should_skip_converted_file(path) {
-                    continue;
+                // Group files by their stem (filename without extension)
+                if let Some(stem) = path.file_stem() {
+                    let key = format!(
+                        "{}/{}",
+                        path.parent().unwrap_or_else(|| Path::new("")).display(),
+                        stem.to_string_lossy()
+                    );
+                    photo_groups
+                        .entry(key)
+                        .or_default()
+                        .push(path.to_path_buf());
                 }
+            }
+        }
+    }
 
-                if let Ok(photo) = process_image(path, media_dir) {
-                    photos.push(photo);
-                }
+    // Process each group and pick the best file
+    for (_group_name, files) in photo_groups {
+        if let Some(best_file) = select_best_file_from_group(&files) {
+            println!(
+                "Processing {} (selected from {} candidates)",
+                best_file.display(),
+                files.len()
+            );
+            if files.len() > 1 {
+                println!(
+                    "  Skipped: {}",
+                    files
+                        .iter()
+                        .filter(|f| *f != &best_file)
+                        .map(|f| f.file_name().unwrap_or_default().to_string_lossy())
+                        .collect::<Vec<_>>()
+                        .join(", ")
+                );
+            }
+
+            if let Ok(photo) = process_image(&best_file, media_dir) {
+                photos.push(photo);
             }
         }
     }
@@ -68,6 +100,63 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     println!("Generated photos.json with {} photos", photos.len());
     Ok(())
+}
+
+fn select_best_file_from_group(files: &[std::path::PathBuf]) -> Option<std::path::PathBuf> {
+    if files.is_empty() {
+        return None;
+    }
+
+    if files.len() == 1 {
+        return Some(files[0].clone());
+    }
+
+    // Format priority: web-compatible formats first, then original formats
+    let format_priority = |ext: &str| -> i32 {
+        match ext {
+            // Web-compatible formats (highest priority)
+            "webp" => 100,
+            "jpg" | "jpeg" => 90,
+            "png" => 80,
+            "gif" => 70,
+
+            // Original formats that need conversion (lower priority)
+            "heic" => 60,
+            "tiff" | "tif" => 50,
+            "avif" => 40,
+            "bmp" => 30,
+
+            // Unknown formats (lowest priority)
+            _ => 0,
+        }
+    };
+
+    // Find the best file based on format priority and modification time
+    let mut best_file = &files[0];
+    let mut best_priority = 0;
+    let mut best_modified = std::time::SystemTime::UNIX_EPOCH;
+
+    for file in files {
+        let priority = if let Some(ext) = file.extension() {
+            format_priority(&ext.to_string_lossy().to_lowercase())
+        } else {
+            0
+        };
+
+        let modified = file
+            .metadata()
+            .and_then(|m| m.modified())
+            .unwrap_or(std::time::SystemTime::UNIX_EPOCH);
+
+        // Prefer higher priority, then newer files
+        if priority > best_priority || (priority == best_priority && modified > best_modified) {
+            best_file = file;
+            best_priority = priority;
+            best_modified = modified;
+        }
+    }
+
+    Some(best_file.clone())
 }
 
 fn process_image(path: &Path, media_dir: &str) -> Result<Photo, Box<dyn std::error::Error>> {
@@ -160,50 +249,6 @@ fn check_format_conversion(path: &Path) -> (bool, &'static str, &'static str) {
     } else {
         (false, "", "")
     }
-}
-
-fn should_skip_converted_file(path: &Path) -> bool {
-    // Check if this file is a converted version of another file that still exists
-    if let Some(extension) = path.extension() {
-        let ext = extension.to_string_lossy().to_lowercase();
-        let parent = path.parent().unwrap_or(Path::new(""));
-        let stem = path.file_stem().unwrap_or_default();
-
-        match ext.as_str() {
-            // If this is a JPEG, check for original HEIC, TIFF, or BMP
-            "jpg" | "jpeg" => {
-                let heic_path = parent.join(format!("{}.heic", stem.to_string_lossy()));
-                let tiff_path = parent.join(format!("{}.tiff", stem.to_string_lossy()));
-                let tif_path = parent.join(format!("{}.tif", stem.to_string_lossy()));
-                let bmp_path = parent.join(format!("{}.bmp", stem.to_string_lossy()));
-
-                if heic_path.exists()
-                    || tiff_path.exists()
-                    || tif_path.exists()
-                    || bmp_path.exists()
-                {
-                    println!(
-                        "Skipping converted JPEG: {} (original exists)",
-                        path.display()
-                    );
-                    return true;
-                }
-            }
-            // If this is a WebP, check for original AVIF
-            "webp" => {
-                let avif_path = parent.join(format!("{}.avif", stem.to_string_lossy()));
-                if avif_path.exists() {
-                    println!(
-                        "Skipping converted WebP: {} (original AVIF exists)",
-                        path.display()
-                    );
-                    return true;
-                }
-            }
-            _ => {}
-        }
-    }
-    false
 }
 
 fn extract_exif_data(path: &Path) -> (Option<String>, Option<String>, Option<String>) {
