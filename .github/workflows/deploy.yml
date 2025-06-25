@@ -17,10 +17,10 @@ concurrency:
 
 jobs:
   deploy:
+    runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -29,17 +29,27 @@ jobs:
         uses: actions/configure-pages@v4
       
       - name: Configure Last.fm API
-        env:
-          LASTFM_API_KEY: ${{ secrets.LASTFM_API_KEY }}
-          LASTFM_USERNAME: ${{ secrets.LASTFM_USERNAME }}
         run: |
           echo "Configuring Last.fm API..."
+          echo "Checking if secrets are available..."
+          if [ -z "${{ secrets.LASTFM_API_KEY }}" ]; then
+            echo "ERROR: LASTFM_API_KEY secret is not set"
+          else
+            echo "LASTFM_API_KEY secret is available"
+          fi
+          
+          if [ -z "${{ secrets.LASTFM_USERNAME }}" ]; then
+            echo "ERROR: LASTFM_USERNAME secret is not set"
+          else
+            echo "LASTFM_USERNAME secret is available"
+          fi
+          
           echo "Before replacement:"
           grep -A 3 -B 3 "YOUR_API_KEY_HERE\|YOUR_LASTFM_USERNAME" js/config.js || true
           
-          # Replace placeholders with environment variables
-          sed -i "s/YOUR_API_KEY_HERE/${LASTFM_API_KEY}/g" js/config.js
-          sed -i "s/YOUR_LASTFM_USERNAME/${LASTFM_USERNAME}/g" js/config.js
+          # Replace placeholders directly with secrets
+          sed -i "s/YOUR_API_KEY_HERE/${{ secrets.LASTFM_API_KEY }}/g" js/config.js
+          sed -i "s/YOUR_LASTFM_USERNAME/${{ secrets.LASTFM_USERNAME }}/g" js/config.js
           
           echo "After replacement:"
           grep -A 3 -B 3 "apiKey:\|username:" js/config.js || true
