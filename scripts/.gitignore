@@ -1,0 +1,17 @@
+# Rust build artifacts
+/target/
+Cargo.lock
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# macOS
+.DS_Store
+
+# Backup files
+*~
+*.bak
+*.orig

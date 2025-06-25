@@ -36,8 +36,27 @@
         .back-link { 
             margin-bottom: 20px; 
         }
+        .exif-info { 
+            margin: 8px 0; 
+            padding: 6px 0; 
+            border-bottom: 1px solid rgba(128, 128, 128, 0.2);
+        }
+        .exif-info:last-child { 
+            border-bottom: none; 
+        }
+        .exif-info p { 
+            margin: 2px 0; 
+            font-size: 14px; 
+            color: #666;
+        }
         @media (prefers-color-scheme: dark) {
             .photo-info p { 
+                color: #aaa; 
+            }
+            .exif-info { 
+                border-color: rgba(255, 255, 255, 0.1); 
+            }
+            .exif-info p { 
                 color: #aaa; 
             }
         }
