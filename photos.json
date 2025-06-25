@@ -1,7 +1,8 @@
 [
   {
     "id": "sample",
-    "filename": "nature-knows-no-kings.png",
+    "filename": "media/misc/nature-knows-no-kings.png",
+    "folder": "misc",
     "title": "Nature Knows No Kings",
     "subtitle": "A philosophical statement",
     "location": "Somewhere",

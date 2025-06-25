@@ -127,6 +127,41 @@
             }
         }
         .back-link { margin-bottom: 20px; }
+        .folder-nav { 
+            margin: 20px 0; 
+            display: flex; 
+            gap: 10px; 
+            flex-wrap: wrap; 
+        }
+        .folder-nav button { 
+            padding: 8px 16px; 
+            border: 1px solid #ddd; 
+            background: white; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            font-size: 14px; 
+        }
+        .folder-nav button.active { 
+            background: #007AFF; 
+            color: white; 
+            border-color: #007AFF; 
+        }
+        .folder-nav button:hover { 
+            background: #f0f0f0; 
+        }
+        .folder-nav button.active:hover { 
+            background: #0056b3; 
+        }
+        @media (prefers-color-scheme: dark) {
+            .folder-nav button { 
+                background: #333; 
+                color: white; 
+                border-color: #555; 
+            }
+            .folder-nav button:hover { 
+                background: #444; 
+            }
+        }
     </style>
 </head>
 <body>
@@ -135,6 +170,10 @@
     </div>
     
     <h1>Photos</h1>
+    
+    <div class="folder-nav" id="folder-nav">
+        <!-- Folder navigation loaded dynamically -->
+    </div>
     
     <div class="gallery" id="gallery">
         <!-- Photos loaded dynamically -->
