@@ -132,11 +132,11 @@ find "$MEDIA_DIR" -type f \( -iname "*.heic" -o -iname "*.tiff" -o -iname "*.tif
     if [ "$VIPS_AVAILABLE" = true ] && [ $conversion_result -ne 0 ]; then
         echo "    Trying VIPS (memory-efficient)..."
         if [ "$output_format" = "jpg" ]; then
-            vips copy "$image_file" "$output_file[Q=$quality]" 2>/dev/null
+            vips jpegsave "$image_file" "$output_file" --Q="$quality" --keep=all 2>/dev/null
             conversion_result=$?
             [ $conversion_result -eq 0 ] && conversion_method="VIPS"
         elif [ "$output_format" = "webp" ]; then
-            vips copy "$image_file" "$output_file[Q=$quality]" 2>/dev/null
+            vips webpsave "$image_file" "$output_file" --Q="$quality" --keep=all 2>/dev/null
             conversion_result=$?
             [ $conversion_result -eq 0 ] && conversion_method="VIPS"
         fi
@@ -196,6 +196,17 @@ find "$MEDIA_DIR" -type f \( -iname "*.heic" -o -iname "*.tiff" -o -iname "*.tif
     
     if [ $conversion_result -eq 0 ] && [ -n "$conversion_method" ]; then
         echo "    ✓ Conversion succeeded using $conversion_method"
+    fi
+    
+    # Copy metadata from original to converted file for all formats and conversion methods
+    if [ $conversion_result -eq 0 ] && [ "$EXIFTOOL_AVAILABLE" = true ]; then
+        echo "    Copying metadata from original file..."
+        if exiftool -tagsfromfile "$image_file" -all:all -unsafe "$output_file" -overwrite_original &>/dev/null; then
+            echo "    ✓ Metadata copied successfully"
+            conversion_method="${conversion_method} + ExifTool"
+        else
+            echo "    ⚠ Metadata copying failed (but conversion succeeded)"
+        fi
     fi
     
     # Verify metadata was preserved if exiftool is available
