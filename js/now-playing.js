@@ -1,53 +1,36 @@
 class NowPlaying {
     constructor() {
-        console.log('NowPlaying constructor called');
-        console.log('window.LASTFM_CONFIG:', window.LASTFM_CONFIG ? 'Found' : 'Not found');
         this.config = window.LASTFM_CONFIG || {};
         this.apiKey = this.config.apiKey || 'YOUR_API_KEY_HERE';
         this.username = this.config.username || 'YOUR_LASTFM_USERNAME';
         this.apiUrl = 'https://ws.audioscrobbler.com/2.0/';
-        console.log('Config loaded - API key present:', !!this.apiKey && this.apiKey !== 'YOUR_API_KEY_HERE');
-        console.log('Config loaded - Username present:', !!this.username && this.username !== 'YOUR_LASTFM_USERNAME');
         this.init();
     }
 
     async init() {
-        console.log('Now Playing widget initializing...');
-        console.log('API Key configured:', this.apiKey !== 'YOUR_API_KEY_HERE' ? 'Yes' : 'No');
-        console.log('Username configured:', this.username !== 'YOUR_LASTFM_USERNAME' ? 'Yes' : 'No');
-        
         if (this.apiKey === 'YOUR_API_KEY_HERE' || this.username === 'YOUR_LASTFM_USERNAME') {
-            console.error('Configuration missing - API key or username not set');
             this.showError('Configuration needed');
             return;
         }
         
-        console.log('Configuration valid, fetching now playing...');
         try {
             await this.fetchNowPlaying();
             setInterval(() => this.fetchNowPlaying(), 30000);
         } catch (error) {
-            console.error('Failed to initialize now playing:', error);
             this.showError('Failed to load');
         }
     }
 
     async fetchNowPlaying() {
         const url = `${this.apiUrl}?method=user.getrecenttracks&user=${this.username}&api_key=${this.apiKey}&format=json&limit=1`;
-        console.log('Fetching Last.fm data...');
-        console.log('Request URL constructed (API key hidden):', url.replace(this.apiKey, '[HIDDEN]'));
         
         try {
-            console.log('Making fetch request...');
             const response = await fetch(url);
-            console.log('Response status:', response.status);
-            
             if (!response.ok) {
                 throw new Error(`HTTP ${response.status}`);
             }
             
             const data = await response.json();
-            console.log('Last.fm data received:', data);
             this.updateDisplay(data);
         } catch (error) {
             console.error('Error fetching Last.fm data:', error);
