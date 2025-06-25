@@ -113,14 +113,14 @@ find "$MEDIA_DIR" -type f \( -iname "*.heic" -o -iname "*.tiff" -o -iname "*.tif
     # Convert using ImageMagick while preserving EXIF metadata
     conversion_result=1
     
-    # Try primary conversion method
+    # Try primary conversion method with CI-appropriate limits
     if command -v magick &> /dev/null; then
-        # Use ImageMagick 7+ syntax with safer options for TIFF
-        magick "$image_file" -limit memory 256MB -limit disk 1GB -quality "$quality" "$output_file" 2>/dev/null
+        # Use ImageMagick 7+ syntax with CI-safe limits
+        magick "$image_file" -limit memory 768MB -limit disk 2GB -quality "$quality" "$output_file" 2>/dev/null
         conversion_result=$?
     elif command -v convert &> /dev/null; then
-        # Use ImageMagick 6 syntax with safer options for TIFF  
-        convert "$image_file" -limit memory 512MB -limit disk 2GB -quality "$quality" "$output_file" 2>/dev/null
+        # Use ImageMagick 6 syntax with CI-safe limits  
+        convert "$image_file" -limit memory 768MB -limit disk 2GB -quality "$quality" "$output_file" 2>/dev/null
         conversion_result=$?
     fi
     
@@ -128,15 +128,31 @@ find "$MEDIA_DIR" -type f \( -iname "*.heic" -o -iname "*.tiff" -o -iname "*.tif
     if [ $conversion_result -ne 0 ]; then
         echo "    Primary conversion failed, trying fallback method..."
         if command -v magick &> /dev/null; then
-            magick "$image_file" -strip -limit memory 512MB -limit disk 2GB -quality "$quality" "$output_file" 2>/dev/null
+            magick "$image_file" -strip -limit memory 768MB -limit disk 2GB -quality "$quality" "$output_file" 2>/dev/null
             conversion_result=$?
         elif command -v convert &> /dev/null; then
-            convert "$image_file" -strip -limit memory 512MB -limit disk 2GB -quality "$quality" "$output_file" 2>/dev/null
+            convert "$image_file" -strip -limit memory 768MB -limit disk 2GB -quality "$quality" "$output_file" 2>/dev/null
             conversion_result=$?
         fi
         
         if [ $conversion_result -eq 0 ]; then
             echo "    ✓ Fallback conversion succeeded (metadata stripped for compatibility)"
+        fi
+    fi
+    
+    # If still failing, try with depth reduction for 16-bit TIFFs
+    if [ $conversion_result -ne 0 ] && [[ "$extension" =~ ^(tiff|tif|TIFF|TIF)$ ]]; then
+        echo "    Trying 16-bit to 8-bit depth conversion for large TIFF..."
+        if command -v magick &> /dev/null; then
+            magick "$image_file" -strip -depth 8 -limit memory 768MB -limit disk 2GB -quality "$quality" "$output_file" 2>/dev/null
+            conversion_result=$?
+        elif command -v convert &> /dev/null; then
+            convert "$image_file" -strip -depth 8 -limit memory 768MB -limit disk 2GB -quality "$quality" "$output_file" 2>/dev/null
+            conversion_result=$?
+        fi
+        
+        if [ $conversion_result -eq 0 ]; then
+            echo "    ✓ Depth reduction conversion succeeded (16-bit → 8-bit)"
         fi
     fi
     
