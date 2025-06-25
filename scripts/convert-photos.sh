@@ -120,7 +120,7 @@ find "$MEDIA_DIR" -type f \( -iname "*.heic" -o -iname "*.tiff" -o -iname "*.tif
         conversion_result=$?
     elif command -v convert &> /dev/null; then
         # Use ImageMagick 6 syntax with safer options for TIFF  
-        convert "$image_file" -limit memory 256MB -limit disk 1GB -quality "$quality" "$output_file" 2>/dev/null
+        convert "$image_file" -limit memory 512MB -limit disk 2GB -quality "$quality" "$output_file" 2>/dev/null
         conversion_result=$?
     fi
     
@@ -128,10 +128,10 @@ find "$MEDIA_DIR" -type f \( -iname "*.heic" -o -iname "*.tiff" -o -iname "*.tif
     if [ $conversion_result -ne 0 ]; then
         echo "    Primary conversion failed, trying fallback method..."
         if command -v magick &> /dev/null; then
-            magick "$image_file" -strip -limit memory 256MB -limit disk 1GB -quality "$quality" "$output_file" 2>/dev/null
+            magick "$image_file" -strip -limit memory 512MB -limit disk 2GB -quality "$quality" "$output_file" 2>/dev/null
             conversion_result=$?
         elif command -v convert &> /dev/null; then
-            convert "$image_file" -strip -limit memory 256MB -limit disk 1GB -quality "$quality" "$output_file" 2>/dev/null
+            convert "$image_file" -strip -limit memory 512MB -limit disk 2GB -quality "$quality" "$output_file" 2>/dev/null
             conversion_result=$?
         fi
         
