@@ -1,11 +1,32 @@
 [
   {
-    "id": "sample",
+    "id": "379ff31c",
     "filename": "media/misc/nature-knows-no-kings.png",
     "folder": "misc",
-    "title": "Nature Knows No Kings",
-    "subtitle": "A philosophical statement",
-    "location": "Somewhere",
-    "date": "2024"
+    "title": "nature knows no kings"
+  },
+  {
+    "id": "b4fb6153",
+    "filename": "media/misc/nature-knows-no-kings.webp",
+    "folder": "misc",
+    "title": "nature knows no kings"
+  },
+  {
+    "id": "62604d7a",
+    "filename": "media/misc/nature-knows-no-kings-200w.webp",
+    "folder": "misc",
+    "title": "nature knows no kings 200w"
+  },
+  {
+    "id": "21d54c76",
+    "filename": "media/misc/nature-knows-no-kings-300w.webp",
+    "folder": "misc",
+    "title": "nature knows no kings 300w"
+  },
+  {
+    "id": "e5727016",
+    "filename": "media/misc/nature-knows-no-kings-600w.webp",
+    "folder": "misc",
+    "title": "nature knows no kings 600w"
   }
 ]

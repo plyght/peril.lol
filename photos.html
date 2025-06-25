@@ -127,39 +127,70 @@
             }
         }
         .back-link { margin-bottom: 20px; }
-        .folder-nav { 
+        .album-cards { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+            gap: 20px; 
             margin: 20px 0; 
-            display: flex; 
-            gap: 10px; 
-            flex-wrap: wrap; 
         }
-        .folder-nav button { 
-            padding: 8px 16px; 
-            border: 1px solid #ddd; 
-            background: white; 
-            border-radius: 4px; 
-            cursor: pointer; 
-            font-size: 14px; 
+        .album-card { 
+            position: relative;
+            height: 200px;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s ease;
         }
-        .folder-nav button.active { 
-            background: #007AFF; 
-            color: white; 
-            border-color: #007AFF; 
+        .album-card:hover {
+            transform: scale(1.02);
         }
-        .folder-nav button:hover { 
-            background: #f0f0f0; 
+        .album-card-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            filter: blur(2px);
+            transform: scale(1.1);
         }
-        .folder-nav button.active:hover { 
-            background: #0056b3; 
+        .album-card-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .album-card-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            text-shadow: 0 1px 3px rgba(255, 255, 255, 0.8);
+            text-transform: capitalize;
         }
         @media (prefers-color-scheme: dark) {
-            .folder-nav button { 
-                background: #333; 
-                color: white; 
-                border-color: #555; 
+            .album-card-overlay {
+                background: rgba(0, 0, 0, 0.4);
             }
-            .folder-nav button:hover { 
-                background: #444; 
+            .album-card-title {
+                color: white;
+                text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+            }
+        }
+        @media (max-width: 768px) {
+            .album-cards {
+                grid-template-columns: 1fr;
+            }
+            .album-card {
+                height: 150px;
+            }
+            .album-card-title {
+                font-size: 20px;
             }
         }
     </style>
@@ -171,11 +202,11 @@
     
     <h1>Photos</h1>
     
-    <div class="folder-nav" id="folder-nav">
-        <!-- Folder navigation loaded dynamically -->
+    <div class="album-cards" id="album-cards">
+        <!-- Album cards loaded dynamically -->
     </div>
     
-    <div class="gallery" id="gallery">
+    <div class="gallery" id="gallery" style="display: none;">
         <!-- Photos loaded dynamically -->
     </div>
 
