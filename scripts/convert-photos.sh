@@ -54,6 +54,7 @@ else
 fi
 
 conversion_count=0
+failed_conversions=0
 
 # Find all image files recursively
 find "$MEDIA_DIR" -type f \( -iname "*.heic" -o -iname "*.tiff" -o -iname "*.tif" -o -iname "*.bmp" -o -iname "*.avif" \) | while read -r image_file; do
@@ -110,15 +111,34 @@ find "$MEDIA_DIR" -type f \( -iname "*.heic" -o -iname "*.tiff" -o -iname "*.tif
     fi
     
     # Convert using ImageMagick while preserving EXIF metadata
+    conversion_result=1
+    
+    # Try primary conversion method
     if command -v magick &> /dev/null; then
-        # Use ImageMagick 7+ syntax
-        magick "$image_file" -quality "$quality" "$output_file"
+        # Use ImageMagick 7+ syntax with safer options for TIFF
+        magick "$image_file" -limit memory 256MB -limit disk 1GB -quality "$quality" "$output_file" 2>/dev/null
+        conversion_result=$?
     elif command -v convert &> /dev/null; then
-        # Use ImageMagick 6 syntax
-        convert "$image_file" -quality "$quality" "$output_file"
+        # Use ImageMagick 6 syntax with safer options for TIFF  
+        convert "$image_file" -limit memory 256MB -limit disk 1GB -quality "$quality" "$output_file" 2>/dev/null
+        conversion_result=$?
     fi
     
-    conversion_result=$?
+    # If primary conversion failed, try fallback method (strip problematic metadata)
+    if [ $conversion_result -ne 0 ]; then
+        echo "    Primary conversion failed, trying fallback method..."
+        if command -v magick &> /dev/null; then
+            magick "$image_file" -strip -limit memory 256MB -limit disk 1GB -quality "$quality" "$output_file" 2>/dev/null
+            conversion_result=$?
+        elif command -v convert &> /dev/null; then
+            convert "$image_file" -strip -limit memory 256MB -limit disk 1GB -quality "$quality" "$output_file" 2>/dev/null
+            conversion_result=$?
+        fi
+        
+        if [ $conversion_result -eq 0 ]; then
+            echo "    ✓ Fallback conversion succeeded (metadata stripped for compatibility)"
+        fi
+    fi
     
     # Verify metadata was preserved if exiftool is available
     if [ "$EXIFTOOL_AVAILABLE" = true ] && [ $conversion_result -eq 0 ]; then
@@ -163,11 +183,29 @@ find "$MEDIA_DIR" -type f \( -iname "*.heic" -o -iname "*.tiff" -o -iname "*.tif
         # Original files are preserved (not deleted)
     else
         echo "  ❌ Failed to convert: $image_file"
+        failed_conversions=$((failed_conversions + 1))
+        
+        # Log the failure for debugging
+        echo "    Error: ImageMagick conversion failed for $image_file" >&2
     fi
 done
 
 echo ""
-echo "Photo conversion complete! Converted $conversion_count files."
+if [ $failed_conversions -gt 0 ]; then
+    echo "⚠️  Photo conversion completed with errors!"
+    echo "   Successful: $conversion_count files"
+    echo "   Failed: $failed_conversions files"
+    echo ""
+    echo "Check the logs above for specific error details."
+    echo "Failed conversions may be due to:"
+    echo "  • Corrupted image files"
+    echo "  • Unsupported TIFF variants"
+    echo "  • Memory limitations"
+    echo ""
+    exit 1
+else
+    echo "✅ Photo conversion complete! Converted $conversion_count files."
+fi
 echo ""
 echo "Format conversion summary:"
 echo "  • HEIC/HEIF → JPEG (universal browser support)"

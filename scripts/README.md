@@ -51,14 +51,18 @@ Scans the media directory and generates `photos.json` with metadata. **Does NOT 
   - HEIC/BMP → JPEG (85% quality)
   - TIFF → JPEG (90% quality for professional files)
   - AVIF → WebP (85% quality)
-- **Preserves all EXIF metadata** including:
+- **Robust error handling** with fallback conversion methods:
+  - Primary: Preserves EXIF metadata with memory limits
+  - Fallback: Strips problematic metadata if primary fails
+  - Exits with error code if conversions fail (fails CI/CD)
+- **Preserves all EXIF metadata** when possible including:
   - 📅 Date/time information (DateTimeOriginal)
   - 📍 GPS coordinates (latitude/longitude)
   - 📷 Camera information (make/model)
 - Detailed metadata verification before and after conversion
 - **Smart skip logic** - only converts if output doesn't exist or is older
 - Preserves original files (not deleted)
-- Reports on metadata preservation success/failure
+- **Memory-safe processing** - prevents ImageMagick crashes on large files
 
 ## Usage
 
@@ -74,10 +78,12 @@ cargo run --bin generate-photos
 ### Automated (GitHub Actions)
 The workflow automatically:
 1. Installs ImageMagick, libheif, and ExifTool
-2. **Converts photos** using `convert-photos.sh` with full metadata preservation
+2. **Converts photos** using `convert-photos.sh` with robust error handling
 3. **Generates metadata** using Rust script with smart duplicate prevention
 4. Commits converted photos and updated photos.json
 5. Deploys to GitHub Pages
+
+**Error Handling**: Workflow fails if any photo conversions fail, preventing broken deployments.
 
 ## Workflow & Roles
 

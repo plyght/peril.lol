@@ -37,7 +37,10 @@ jobs:
         run: |
           cd scripts
           chmod +x convert-photos.sh
-          ./convert-photos.sh
+          if ! ./convert-photos.sh; then
+            echo "❌ Photo conversion failed! Check logs above for details."
+            exit 1
+          fi
       
       - name: Generate photo metadata
         run: |
