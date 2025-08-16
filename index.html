@@ -110,6 +110,9 @@
             .now-playing {
                 border-color: rgba(255, 255, 255, 0.1);
             }
+            .now-playing::before {
+                background: rgba(255, 255, 255, 0.1);
+            }
             .now-playing-artwork {
                 background: rgba(255, 255, 255, 0.05);
             }
@@ -119,34 +122,56 @@
                 align-items: center;
                 justify-content: flex-start;
                 min-height: auto;
-                padding: 20px;
+                padding: 15px 15px 120px 15px;
             }
             .header {
                 flex-direction: column;
-                gap: 20px;
+                gap: 10px;
+                margin-bottom: 20px;
             }
             .hero-image img {
                 width: 150px;
                 height: 52px;
             }
+            .links {
+                margin: 10px 0;
+            }
             .links a {
-                margin-right: 15px;
-                margin-bottom: 10px;
+                margin-right: 12px;
+                margin-bottom: 5px;
                 display: inline-block;
+            }
+            .about {
+                margin-bottom: 15px;
+            }
+            .skills {
+                margin-top: 15px;
             }
             .now-playing-status-wrapper {
-                margin: 20px 0 0;
+                position: fixed;
+                bottom: 120px;
+                left: 0;
+                right: 0;
+                padding: 0;
+                box-sizing: border-box;
+                background: inherit;
                 text-align: center;
-                width: 100%;
             }
             .now-playing {
-                margin: 10px 0 20px;
+                position: fixed;
+                bottom: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                padding: 15px 15px 0;
+                border-top: 1px solid rgba(128, 128, 128, 0.2);
                 text-align: center;
-                display: inline-block;
+                background: inherit;
+                box-sizing: border-box;
+                max-width: 280px;
             }
             .now-playing-content {
-                flex-direction: column;
-                gap: 12px;
+                flex-direction: row;
+                gap: 8px;
                 align-items: center;
                 justify-content: center;
             }
