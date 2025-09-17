@@ -106,6 +106,15 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
+        .scrambled-text {
+            display: inline-block;
+            position: relative;
+            font-family: monospace;
+            width: 4ch;
+            text-align: center;
+            filter: blur(0.3px);
+            transition: all 0.1s ease;
+        }
         @media (prefers-color-scheme: dark) {
             .now-playing {
                 border-color: rgba(255, 255, 255, 0.1);
@@ -272,7 +281,7 @@
         <p>i write software and think about how to make tools that stay out of your way.</p>
         <p>i build bare websites, contribute to open projects, and solve real problems without unnecessary abstraction.</p>
         <p>when not coding, i'm lifting, biking, or thinking through physics and engineering problems.</p>
-        <p>open to part-time work or collaboration in summer 2025.</p>
+        <p>currently working at <span class="scrambled-text" data-length="4">****</span> and <span class="scrambled-text" data-length="4">****</span></p>
     </div>
     
     <div class="now-playing-status-wrapper">
@@ -291,5 +300,25 @@
     
     <script src="js/config.js"></script>
     <script src="js/now-playing.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const scrambledElements = document.querySelectorAll('.scrambled-text');
+            
+            scrambledElements.forEach(element => {
+                const length = parseInt(element.getAttribute('data-length'));
+                const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+                
+                function scrambleText() {
+                    let scrambled = '';
+                    for (let i = 0; i < length; i++) {
+                        scrambled += chars[Math.floor(Math.random() * chars.length)];
+                    }
+                    element.textContent = scrambled;
+                }
+                
+                setInterval(scrambleText, 150);
+            });
+        });
+    </script>
 </body>
 </html>
