@@ -4,9 +4,9 @@
     <title>Music Access</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="preload" href="fonts/SF-Pro-Text-Regular.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="fonts/SF-Pro-Display-Regular.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="preload" href="/fonts/SF-Pro-Text-Regular.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/fonts/SF-Pro-Display-Regular.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="/styles.css">
     <style>
         body { 
             max-width: 800px;
@@ -27,7 +27,7 @@
         input[type="password"] {
             padding: 8px 12px;
             border: none;
-            border-bottom: 1px solid rgba(128, 128, 128, 0.3);
+            border-bottom: 1px solid;
             background: transparent;
             font-size: 16px;
             font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
@@ -38,14 +38,13 @@
         }
         input[type="password"]:focus {
             outline: none;
-            border-bottom-color: rgba(128, 128, 128, 0.6);
         }
         input[type="password"]::placeholder {
             opacity: 0.5;
         }
         button {
             background: none;
-            border: 1px solid rgba(128, 128, 128, 0.3);
+            border: 1px solid;
             padding: 8px 20px;
             cursor: pointer;
             font-size: 14px;
@@ -61,15 +60,39 @@
             font-size: 13px;
             font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
             font-weight: 400;
-            opacity: 0.6;
-            margin-top: 20px;
             opacity: 0;
+            margin-top: 20px;
             transition: opacity 0.3s ease;
         }
         .error.show {
             opacity: 0.6;
         }
+        
+        /* Light mode (default) */
+        body {
+            color: #000;
+        }
+        input[type="password"] {
+            color: #000;
+            border-bottom-color: rgba(0, 0, 0, 0.4);
+        }
+        input[type="password"]:focus {
+            border-bottom-color: rgba(0, 0, 0, 0.7);
+        }
+        button {
+            color: #000;
+            border-color: rgba(0, 0, 0, 0.4);
+        }
+        .error {
+            color: rgba(0, 0, 0, 0.6);
+        }
         @media (prefers-color-scheme: dark) {
+            body {
+                color: #fff;
+            }
+            h2 {
+                color: #fff;
+            }
             input[type="password"] {
                 color: #fff;
                 border-bottom-color: rgba(255, 255, 255, 0.2);
@@ -80,6 +103,9 @@
             button {
                 color: #fff;
                 border-color: rgba(255, 255, 255, 0.2);
+            }
+            .error {
+                color: rgba(255, 255, 255, 0.6);
             }
         }
     </style>
