@@ -15,38 +15,49 @@
     <link rel="preload" href="media/misc/nature-knows-no-kings-200w.webp" as="image">
     <style>
         body { 
-            max-width: 800px;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            text-align: center;
+            max-width: 780px;
+            margin: 60px auto;
+            padding: 0 40px;
+            min-height: auto;
+            text-align: left;
         }
         .header { 
-            display: flex; 
-            flex-direction: column;
-            align-items: center; 
-            gap: 20px; 
-            margin-bottom: 40px; 
+            border-bottom: 1px solid #000;
+            padding-bottom: 25px;
+            margin-bottom: 35px; 
+        }
+        .hero-image { 
+            text-align: center;
+            margin-bottom: 25px;
         }
         .hero-image img { 
-            width: 200px; 
-            height: 70px; 
-            filter: contrast(1.1) brightness(0.95); 
+            width: 180px; 
+            height: 63px; 
         }
         .header h1 { 
-            margin: 0; 
+            font-size: 1.75em;
+            margin: 20px 0 15px 0;
+            text-align: center;
+            font-weight: normal;
+        }
+        .intro {
+            text-align: center;
         }
         .links { 
-            margin: 20px 0; 
+            margin: 20px 0 0 0;
+            text-align: center;
+            border-top: 1px solid rgba(0, 0, 0, 0.15);
+            padding-top: 15px;
         }
         .links a { 
-            margin-right: 20px; 
+            margin: 0 12px;
+            font-size: 0.95em;
         }
         .about { 
-            margin-bottom: 30px; 
+            margin: 35px 0;
+        }
+        .about p {
+            text-align: left;
         }
         .skills { 
             margin-top: 30px; 
@@ -57,9 +68,9 @@
             width: 100%;
         }
         .now-playing {
-            margin: 20px 0 20px;
+            margin: 30px 0 20px;
             padding: 0;
-            border-top: 1px solid rgba(128, 128, 128, 0.2);
+            border-top: 1px solid rgba(0, 0, 0, 0.15);
             padding-top: 20px;
             text-align: center;
         }
@@ -73,7 +84,7 @@
             width: 48px;
             height: 48px;
             flex-shrink: 0;
-            border-radius: 6px;
+            border-radius: 0;
             overflow: hidden;
             background: rgba(128, 128, 128, 0.1);
         }
@@ -86,15 +97,14 @@
             min-width: 0;
         }
         .now-playing-status {
-            font-size: 12px;
+            font-size: 13px;
             opacity: 0.6;
-            margin-bottom: 2px;
+            margin-bottom: 3px;
             text-transform: lowercase;
         }
         .now-playing-track {
             font-size: 14px;
-            font-weight: 500;
-            margin-bottom: 1px;
+            margin-bottom: 2px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -109,17 +119,23 @@
         .scrambled-text {
             display: inline-block;
             position: relative;
-            font-family: monospace;
+            font-family: Georgia, 'Times New Roman', Times, serif;
             width: 4ch;
             text-align: center;
             transition: all 0.1s ease;
         }
         @media (prefers-color-scheme: dark) {
+            .header {
+                border-color: #e0e0e0;
+            }
+            .links {
+                border-color: rgba(224, 224, 224, 0.2);
+            }
             .now-playing {
-                border-color: rgba(255, 255, 255, 0.1);
+                border-color: rgba(224, 224, 224, 0.2);
             }
             .now-playing::before {
-                background: rgba(255, 255, 255, 0.1);
+                background: rgba(224, 224, 224, 0.2);
             }
             .now-playing-artwork {
                 background: rgba(255, 255, 255, 0.05);
@@ -127,20 +143,17 @@
         }
         @media (max-width: 768px) {
             body {
-                align-items: center;
-                justify-content: flex-start;
                 min-height: auto;
-                padding: 20px 20px 140px 20px;
-                font-size: 15px;
-                line-height: 1.4;
+                padding: 30px 20px 140px 20px;
+                font-size: 16px;
+                line-height: 1.7;
             }
             .header {
-                flex-direction: column;
-                gap: 15px;
-                margin-bottom: 10px;
+                margin-bottom: 25px;
+                padding-bottom: 20px;
             }
             .header h1 {
-                font-size: 26px;
+                font-size: 1.65em;
             }
             .intro p {
                 font-size: 15px;

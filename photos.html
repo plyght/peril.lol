@@ -148,13 +148,19 @@
                 font-size: 12px;
             }
         }
-        .back-link { margin-bottom: 20px; }
-        h1 { 
-            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+        .back-link { 
+            margin-bottom: 20px;
         }
-        h1 a { 
-            text-decoration: underline; 
-            color: #66b3ff; 
+        h1 { 
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            border-bottom: 1px solid #000;
+            padding-bottom: 0.25em;
+            font-weight: normal;
+        }
+        @media (prefers-color-scheme: dark) {
+            h1 {
+                border-color: #e0e0e0;
+            }
         }
         .album-cards { 
             display: grid; 
@@ -165,13 +171,14 @@
         .album-card { 
             position: relative;
             height: 200px;
-            border-radius: 8px;
+            border-radius: 0;
             overflow: hidden;
             cursor: pointer;
-            transition: transform 0.2s ease;
+            transition: opacity 0.2s ease;
+            border: 1px solid #ccc;
         }
         .album-card:hover {
-            transform: scale(1.02);
+            opacity: 0.9;
         }
         .album-card-bg {
             position: absolute;
@@ -196,9 +203,10 @@
             justify-content: center;
         }
         .album-card-title {
-            font-size: 24px;
-            font-weight: bold;
-            color: #333;
+            font-size: 22px;
+            font-weight: normal;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            color: #000;
             text-shadow: 0 1px 3px rgba(255, 255, 255, 0.8);
             text-transform: capitalize;
         }
