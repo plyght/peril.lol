@@ -13,11 +13,17 @@
   border: 1px solid var(--border-color);
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  transition: width 0.3s ease, height 0.3s ease, padding 0.3s ease, border-radius 0.3s ease, box-shadow 0.3s ease;
+  transition: width 0.3s ease, height 0.3s ease, padding 0.3s ease, border-radius 0.3s ease, box-shadow 0.3s ease, opacity 0.2s ease;
   cursor: pointer;
   z-index: 1000;
   overflow: hidden;
   font-family: 'STIX Two Text', 'Times New Roman', serif;
+  opacity: 1;
+}
+
+.np-widget.hidden {
+  opacity: 0;
+  pointer-events: none;
 }
 
 

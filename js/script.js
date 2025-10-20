@@ -20,11 +20,22 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    let photosLoaded = false;
+    
     navLinks.forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
             const targetId = link.getAttribute('href').substring(1);
             showSection(targetId);
+            
+            if (targetId === 'photos' && !photosLoaded) {
+                const images = document.querySelectorAll('.photo-grid img[data-src]');
+                images.forEach(img => {
+                    img.src = img.getAttribute('data-src');
+                    img.removeAttribute('data-src');
+                });
+                photosLoaded = true;
+            }
         });
     });
 
@@ -134,4 +145,25 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     updateProjectStars();
+
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = lightbox.querySelector('img');
+    const photoGrid = document.querySelector('.photo-grid');
+
+    if (photoGrid) {
+        photoGrid.addEventListener('click', (e) => {
+            if (e.target.tagName === 'IMG') {
+                lightboxImg.src = e.target.src;
+                lightbox.classList.add('active');
+                const widget = document.querySelector('.np-widget');
+                if (widget) widget.classList.add('hidden');
+            }
+        });
+    }
+
+    lightbox.addEventListener('click', () => {
+        lightbox.classList.remove('active');
+        const widget = document.querySelector('.np-widget');
+        if (widget) widget.classList.remove('hidden');
+    });
 });
