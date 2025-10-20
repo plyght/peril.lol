@@ -1,0 +1,441 @@
+:root {
+    --bg-primary: #f6f3ea;
+    --bg-secondary: #fffdf7;
+    --text-primary: #1c1b17;
+    --text-secondary: #4b473f;
+    --border-color: #d8d2c4;
+    --accent-color: #2a2a28;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-primary: #121211;
+        --bg-secondary: #181817;
+        --text-primary: #e6e4df;
+        --text-secondary: #a8a398;
+        --border-color: #2a2926;
+        --accent-color: #d8d2c4;
+    }
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'STIX Two Text', 'Times New Roman', serif;
+    color: var(--text-primary);
+    background: var(--bg-primary);
+    line-height: 1.6;
+    font-size: 17px;
+    text-rendering: optimizeLegibility;
+    font-kerning: normal;
+    font-variant-ligatures: common-ligatures;
+    font-variant-numeric: oldstyle-nums proportional-nums;
+    counter-reset: section publication;
+    position: relative;
+    overflow: hidden;
+    height: 100vh;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        linear-gradient(var(--border-color) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border-color) 1px, transparent 1px);
+    background-size: 24px 24px;
+    opacity: 0.08;
+    pointer-events: none;
+    z-index: 0;
+}
+
+::selection {
+    background: var(--text-primary);
+    color: var(--bg-primary);
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 0 2rem;
+}
+
+header {
+    flex-shrink: 0;
+    background: transparent;
+    border-bottom: 0.5px solid var(--border-color);
+    z-index: 10;
+    position: relative;
+    padding: 40px 0 20px;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.title-block {
+    flex: 1;
+}
+
+h1 {
+    font-family: 'EB Garamond', serif;
+    font-size: 2.5rem;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    margin-bottom: 4px;
+    position: relative;
+    display: inline-block;
+    cursor: default;
+    transition: filter 0.15s ease, letter-spacing 0.15s ease;
+}
+
+h1.scrambling {
+    filter: blur(1.2px);
+    letter-spacing: 0.02em;
+}
+
+.subtitle {
+    font-family: 'EB Garamond', serif;
+    font-size: 0.95rem;
+    font-style: italic;
+    color: var(--text-secondary);
+    margin-bottom: 0;
+}
+
+nav {
+    display: flex;
+    gap: 0;
+    align-items: baseline;
+}
+
+nav a {
+    font-family: 'STIX Two Text', serif;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    text-decoration-thickness: 0.06em;
+    text-underline-offset: 2px;
+    padding: 0 10px;
+    border-right: 1px solid var(--border-color);
+    transition: all 0.2s ease;
+}
+
+nav a:first-child {
+    padding-left: 0;
+}
+
+nav a:last-child {
+    border-right: none;
+}
+
+nav a:hover,
+nav a.active {
+    color: var(--text-primary);
+    text-decoration-style: solid;
+}
+
+main {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    padding: 40px 0;
+}
+
+.section {
+    position: absolute;
+    top: 40px;
+    left: 0;
+    right: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s;
+    overflow-y: auto;
+    max-height: calc(100vh - 140px);
+    padding-right: 10px;
+}
+
+.section.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.section::-webkit-scrollbar {
+    width: 6px;
+}
+
+.section::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.section::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 3px;
+}
+
+.section::-webkit-scrollbar-thumb:hover {
+    background: var(--text-secondary);
+}
+
+h2 {
+    font-family: 'EB Garamond', serif;
+    font-size: 1.35rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    margin: 0 0 6px;
+}
+
+.ornament {
+    display: block;
+    width: 60px;
+    height: 12px;
+    margin: 12px 0 24px;
+    position: relative;
+}
+
+.ornament::before {
+    content: '—';
+    font-size: 1rem;
+    color: var(--text-secondary);
+    letter-spacing: 0.3em;
+}
+
+p {
+    margin: 0;
+    text-align: justify;
+    hyphens: auto;
+}
+
+.section p + p {
+    text-indent: 1.5em;
+    margin-top: 0.45em;
+}
+
+.research-list {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 6px;
+}
+
+.research-list li {
+    margin: 6px 0;
+    padding-left: 1em;
+    position: relative;
+    text-align: left;
+    hyphens: manual;
+}
+
+.research-list li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: var(--text-secondary);
+}
+
+.work-item {
+    margin: 28px 0;
+}
+
+.work-item h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: var(--text-primary);
+}
+
+.work-meta {
+    display: block;
+    font-style: normal;
+    font-size: 0.95em;
+    color: var(--text-secondary);
+    margin: 2px 0 12px 0;
+}
+
+.publication {
+    margin: 28px 0;
+    padding-left: 2em;
+    text-indent: -2em;
+    position: relative;
+    counter-increment: publication;
+}
+
+.publication::before {
+    content: '[' counter(publication) ']';
+    position: absolute;
+    left: 0;
+    font-variant-numeric: lining-nums;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.publication h3 {
+    display: inline;
+    font-size: 1rem;
+    font-style: italic;
+    font-weight: 500;
+}
+
+.publication p {
+    margin-top: 0.25em;
+    text-align: left;
+    hyphens: manual;
+}
+
+.pub-meta {
+    display: block;
+    font-style: normal;
+    font-size: 0.95em;
+    color: var(--text-secondary);
+    margin: 2px 0 6px 0;
+}
+
+.email {
+    font-family: ui-monospace, 'SFMono-Regular', 'Courier New', monospace;
+    font-size: 0.9em;
+    color: var(--text-secondary);
+}
+
+
+
+a {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    text-decoration-thickness: 0.06em;
+    text-underline-offset: 2px;
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: var(--text-primary);
+}
+
+@media (max-width: 768px) {
+    html, body {
+        height: auto;
+        min-height: 100vh;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+    body::before {
+        background-size: 18px 18px;
+    }
+
+    .container {
+        padding: 0 1.25rem;
+        height: auto;
+        min-height: 100vh;
+    }
+
+    header {
+        padding: 30px 0 15px;
+    }
+
+    .header-content {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .title-block {
+        margin-bottom: 15px;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    h2 {
+        font-size: 1.25rem;
+    }
+
+    nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 6px 0;
+        align-items: flex-start;
+    }
+
+    nav a {
+        padding: 0 8px;
+        border-right: 1px solid var(--border-color);
+        border-left: none;
+        font-size: 0.85rem;
+    }
+
+    nav a:first-child {
+        padding-left: 0;
+    }
+
+    nav a.active {
+        color: var(--text-primary);
+    }
+    
+    main {
+        padding: 30px 0;
+        overflow: visible;
+        flex: initial;
+    }
+
+    .section {
+        position: static;
+        top: auto;
+        left: auto;
+        right: auto;
+        display: none;
+        opacity: 1;
+        visibility: visible;
+        height: auto;
+        max-height: none;
+        overflow: visible;
+        padding-right: 0;
+        transition: none;
+    }
+    
+    .section.active {
+        display: block;
+    }
+}
+
+@media print {
+    :root {
+        --bg-primary: #ffffff;
+        --text-primary: #000;
+        --text-secondary: #444;
+    }
+
+    body {
+        background: #fff;
+        font-size: 11pt;
+    }
+
+    .container {
+        max-width: none;
+        padding: 0;
+    }
+
+    nav, footer {
+        display: none;
+    }
+
+    header {
+        position: static;
+    }
+
+    a[href^="http"]::after {
+        content: " (" attr(href) ")";
+        font-size: 0.9em;
+    }
+}

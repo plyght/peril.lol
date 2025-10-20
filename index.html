@@ -1,94 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>About Me</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="High school junior passionate about coding and open-source development in the DMV area">
-    <meta name="author" content="peril.lol">
+    <title>plyght · peril.lol</title>
+    <meta name="description" content="High school junior building clean, simple software. Physics, Rust, and open-source projects.">
+    
+    <meta property="og:title" content="plyght · peril.lol">
+    <meta property="og:description" content="High school junior building clean, simple software. Physics, Rust, and open-source projects.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://peril.lol">
+    <meta property="og:image" content="https://peril.lol/og-image.png">
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="plyght · peril.lol">
+    <meta name="twitter:description" content="High school junior building clean, simple software. Physics, Rust, and open-source projects.">
+    <meta name="twitter:image" content="https://peril.lol/og-image.png">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="prefetch" href="photos.json">
-    <link rel="preload" href="media/misc/nature-knows-no-kings-200w.webp" as="image">
+    <link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,600;1,400&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/now-playing-widget.css">
 </head>
-<body class="layout-titlepage">
-    <div class="folio-page">
-        <div class="running-head">
-            <div class="page-title">peril.lol</div>
-            <div class="folio-number">i</div>
-        </div>
-
-        <main class="text-column">
-            <div class="incipit">
-                <h1 class="rubric-title">hey there!</h1>
-                <div class="rubric-rule"></div>
-                <figure class="seal-block">
-                    <picture>
-                        <source srcset="media/misc/nature-knows-no-kings-200w.webp 1x, media/misc/nature-knows-no-kings-300w.webp 2x" type="image/webp">
-                        <img src="media/misc/nature-knows-no-kings-200w.webp" alt="Seal" width="120" height="42">
-                    </picture>
-                </figure>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <div class="title-block">
+                    <h1>plyght</h1>
+                    <p class="subtitle">High school junior · Physics · Software</p>
+                </div>
+                <nav>
+                    <a href="#about">About</a>
+                    <a href="#work">Work</a>
+                    <a href="#projects">Projects</a>
+                    <a href="#contact">Contact</a>
+                </nav>
             </div>
+        </header>
 
-            <p class="lede">i'm a high school junior from the d.c. area building clean, simple software that stays out of your way.</p>
+        <main>
+            <section id="about" class="section">
+                <h2>About</h2>
+                <div class="ornament"></div>
+                <p>I'm a high school junior from the D.C. area building clean, simple software that stays out of your way.</p>
+                <p>I write code and think about how to make tools that feel natural. I build bare websites, contribute to open projects, and solve real problems without unnecessary abstraction.</p>
+                <p>When not coding, I'm lifting, biking, or working through physics and engineering problems.</p>
+            </section>
 
-            <section class="player-banner gloss now-playing-gloss">
-                <div class="gloss-label" id="playingStatus">now playing</div>
-                <div class="now-playing-content" id="nowPlaying">
-                    <div class="now-playing-artwork" id="albumArt"></div>
-                    <div class="now-playing-info">
-                        <div class="now-playing-track" id="trackInfo"></div>
-                        <div class="now-playing-artist" id="artistInfo"></div>
-                    </div>
+            <section id="work" class="section">
+                <h2>Work</h2>
+                <div class="ornament"></div>
+                <div class="work-item">
+                    <h3>Software Engineer</h3>
+                    <p class="work-meta">[stealth] · 2024–present</p>
+                    <p>Building infrastructure for the future. Details under wraps.</p>
                 </div>
             </section>
 
-            <nav class="navigation">
-                <a href="https://github.com/plyght">GitHub</a> ·
-                <a href="mailto:plyght@peril.lol">Email</a> ·
-                <a href="/">Resume</a> ·
-                <a href="/photos">Photos</a> ·
-                <a href="https://x.com/inaplight">X</a>
-            </nav>
-
-            <div class="ornament">❦</div>
-
-            <section class="about">
-                <p class="dropcap">i write software and think about how to make tools that stay out of your way.</p>
-                <p>i build bare websites, contribute to open projects, and solve real problems without unnecessary abstraction.</p>
-                <p>when not coding, i'm lifting, biking, or thinking through physics and engineering problems.</p>
-                <p>currently working at <span class="scrambled-text" data-length="4">****</span></p>
+            <section id="projects" class="section">
+                <h2>Projects</h2>
+                <div class="ornament"></div>
+                <div class="publication">
+                    <h3><a href="https://github.com/plyght/spine">spine</a></h3>
+                    <p class="pub-meta">Rust · 46 stars</p>
+                    <p>A meta package manager for any *nix system.</p>
+                </div>
+                <div class="publication">
+                    <h3><a href="https://github.com/plyght/skew">skew</a></h3>
+                    <p class="pub-meta">Rust · 27 stars</p>
+                    <p>A tiling window manager for macOS, written in Rust.</p>
+                </div>
+                <div class="publication">
+                    <h3><a href="https://github.com/plyght/VeRA">VeRA</a></h3>
+                    <p class="pub-meta">Rust · 2 stars</p>
+                    <p>VeRA (Vector-Raster Architecture) is a new image format, built in Rust.</p>
+                </div>
+                <div class="publication">
+                    <h3><a href="https://github.com/plyght/cedar">cedar</a></h3>
+                    <p class="pub-meta">Rust</p>
+                    <p>A rust daemon that bridges Google Docs and local plaintext editors.</p>
+                </div>
             </section>
 
-            <div class="colophon">
-                <div class="printer-mark">⚘</div>
-                <div class="colophon-text">mmxxv</div>
-            </div>
+            <section id="contact" class="section">
+                <h2>Contact</h2>
+                <div class="ornament"></div>
+                <p>D.C. area</p>
+                <p class="email">plyght@peril.lol</p>
+                <p><a href="https://github.com/plyght">GitHub</a> · <a href="https://x.com/inaplight">X</a></p>
+            </section>
         </main>
     </div>
 
-    <script src="js/config.js"></script>
-    <script src="js/now-playing.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const scrambledElements = document.querySelectorAll('.scrambled-text');
-            
-            scrambledElements.forEach(element => {
-                const length = parseInt(element.getAttribute('data-length'));
-                const chars = 'abcdefghijklmnopqrstuvwxyz';
-                
-                function scrambleText() {
-                    let scrambled = '';
-                    for (let i = 0; i < length; i++) {
-                        scrambled += chars[Math.floor(Math.random() * chars.length)];
-                    }
-                    element.textContent = scrambled;
-                }
-                
-                setInterval(scrambleText, 150);
-            });
-        });
+        window.LASTFM_CONFIG = {
+            apiKey: '66e719e318a34f92658e1e548eb550a2',
+            username: 'plyght_'
+        };
     </script>
+    <script src="js/script.js"></script>
+    <script src="js/now-playing-widget.js"></script>
 </body>
 </html>
