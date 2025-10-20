@@ -168,4 +168,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const widget = document.querySelector('.np-widget');
         if (widget) widget.classList.remove('hidden');
     });
+
+    const main = document.querySelector('main');
+    if (window.innerWidth > 768 && main) {
+        document.addEventListener('wheel', (e) => {
+            if (!lightbox.classList.contains('active')) {
+                e.preventDefault();
+                main.scrollBy({ top: e.deltaY, behavior: 'auto' });
+            }
+        }, { passive: false });
+    }
 });
