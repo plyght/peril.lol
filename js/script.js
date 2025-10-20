@@ -18,6 +18,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 link.classList.remove('active');
             }
         });
+
+        document.querySelector('main')?.scrollTo({ top: 0, behavior: 'instant' });
     }
 
     let photosLoaded = false;

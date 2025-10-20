@@ -150,26 +150,28 @@ nav a.active {
 main {
     flex: 1;
     position: relative;
-    overflow: hidden;
+    overflow-y: auto;
     padding: 40px 0;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+main::-webkit-scrollbar {
+    display: none;
 }
 
 .section {
-    position: absolute;
-    top: 40px;
-    left: 0;
-    right: 0;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.2s ease, visibility 0.2s;
-    overflow-y: auto;
-    max-height: calc(100vh - 140px);
-    padding-right: 10px;
+    display: none;
+    position: static;
+    opacity: 1;
+    visibility: visible;
+    overflow: visible;
+    max-height: none;
+    padding-right: 0;
 }
 
 .section.active {
-    opacity: 1;
-    visibility: visible;
+    display: block;
 }
 
 .section::-webkit-scrollbar {
@@ -308,22 +310,35 @@ p {
 }
 
 .photo-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
+    column-width: 280px;
+    column-gap: 20px;
     margin-top: 20px;
+    padding-bottom: 20px;
 }
 
 .photo-grid img {
     width: 100%;
     height: auto;
+    display: block;
+    margin: 0 0 20px;
     border: 0.5px solid var(--border-color);
     transition: opacity 0.2s ease;
+    break-inside: avoid;
+    -webkit-column-break-inside: avoid;
+    -moz-column-break-inside: avoid;
 }
 
 .photo-grid img:hover {
     opacity: 0.85;
     cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .photo-grid {
+        column-width: 100%;
+        column-gap: 16px;
+        padding-bottom: 0;
+    }
 }
 
 .lightbox {
