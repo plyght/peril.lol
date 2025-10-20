@@ -387,11 +387,12 @@ a {
     text-decoration-style: dotted;
     text-decoration-thickness: 0.06em;
     text-underline-offset: 2px;
-    transition: color 0.2s ease;
+    transition: all 0.2s ease;
 }
 
 a:hover {
     color: var(--text-primary);
+    text-decoration-style: solid;
 }
 
 @media (max-width: 768px) {
