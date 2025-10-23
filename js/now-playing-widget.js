@@ -4,6 +4,8 @@ class NowPlayingWidget {
         this.apiKey = this.config.apiKey || 'YOUR_API_KEY_HERE';
         this.username = this.config.username || 'YOUR_LASTFM_USERNAME';
         this.apiUrl = 'https://ws.audioscrobbler.com/2.0/';
+        this.lastTrackData = null;
+        this.isFetching = false;
         this.createWidget();
         
         this.widget = document.getElementById('nowPlayingWidget');
@@ -12,6 +14,7 @@ class NowPlayingWidget {
         this.isExpanded = false;
         
         this.loadSavedColors();
+        this.restoreSavedTrack();
         
         this.isMobile = window.matchMedia('(max-width: 768px)').matches;
         
@@ -59,8 +62,55 @@ class NowPlayingWidget {
         }
     }
 
+    restoreSavedTrack() {
+        const savedTrack = localStorage.getItem('npWidgetTrack');
+        if (!savedTrack) {
+            return;
+        }
+
+        try {
+            const data = JSON.parse(savedTrack);
+            if (!data || typeof data !== 'object') {
+                return;
+            }
+
+            const track = document.getElementById('npTrack');
+            const artist = document.getElementById('npArtist');
+            const albumArt = document.getElementById('npAlbumArt');
+
+            const trackName = typeof data.trackName === 'string' ? data.trackName : null;
+            const artistName = typeof data.artistName === 'string' ? data.artistName : null;
+            const imageUrl = typeof data.imageUrl === 'string' && data.imageUrl.trim() ? data.imageUrl : null;
+            const trackId = typeof data.trackId === 'string' ? data.trackId : null;
+
+            if (track) {
+                track.textContent = trackName || 'Unknown Track';
+            }
+            if (artist) {
+                artist.textContent = artistName || 'Unknown Artist';
+            }
+            if (albumArt) {
+                albumArt.innerHTML = imageUrl ? `<img src="${imageUrl}" alt="Album artwork">` : '';
+            }
+
+            this.lastTrackData = {
+                trackId,
+                trackName: track ? track.textContent || null : trackName,
+                artistName: artist ? artist.textContent || null : artistName,
+                imageUrl: imageUrl || null
+            };
+        } catch (error) {
+            localStorage.removeItem('npWidgetTrack');
+            console.error('Failed to restore track data:', error);
+        }
+    }
+
     saveColors(colors) {
         localStorage.setItem('npWidgetColors', JSON.stringify(colors));
+    }
+
+    saveTrackData(data) {
+        localStorage.setItem('npWidgetTrack', JSON.stringify(data));
     }
 
     createWidget() {
@@ -139,6 +189,12 @@ class NowPlayingWidget {
     }
 
     async fetchNowPlaying() {
+        if (this.isFetching) {
+            return;
+        }
+
+        this.isFetching = true;
+
         const url = `${this.apiUrl}?method=user.getrecenttracks&user=${this.username}&api_key=${this.apiKey}&format=json&limit=1`;
         
         try {
@@ -148,9 +204,11 @@ class NowPlayingWidget {
             }
             
             const data = await response.json();
-            this.updateDisplay(data);
+            await this.updateDisplay(data);
         } catch (error) {
             console.error('Error fetching Last.fm data:', error);
+        } finally {
+            this.isFetching = false;
         }
     }
 
@@ -159,15 +217,14 @@ class NowPlayingWidget {
         const track = document.getElementById('npTrack');
         const artist = document.getElementById('npArtist');
         const bars = document.querySelectorAll('.np-bar');
-        const widget = document.getElementById('nowPlayingWidget');
 
-        if (!data.recenttracks || !data.recenttracks.track || data.recenttracks.track.length === 0) {
+        if (!data.recenttracks || !Array.isArray(data.recenttracks.track) || data.recenttracks.track.length === 0) {
             return;
         }
 
         const trackData = data.recenttracks.track[0];
         const isNowPlaying = trackData['@attr'] && trackData['@attr'].nowplaying === 'true';
-        
+
         bars.forEach(bar => {
             if (isNowPlaying) {
                 bar.classList.remove('paused');
@@ -175,32 +232,95 @@ class NowPlayingWidget {
                 bar.classList.add('paused');
             }
         });
-        
-        track.textContent = trackData.name || 'Unknown Track';
-        artist.textContent = trackData.artist['#text'] || trackData.artist || 'Unknown Artist';
 
-        if (trackData.image && trackData.image.length > 0) {
-            const artwork = trackData.image.find(img => img.size === 'extralarge') || 
-                           trackData.image.find(img => img.size === 'large') || 
-                           trackData.image.find(img => img.size === 'medium') ||
-                           trackData.image[trackData.image.length - 1];
-            
-            if (artwork && artwork['#text']) {
-                albumArt.innerHTML = `<img src="${artwork['#text']}" alt="Album artwork">`;
-                
-                const colors = await this.extractColors(artwork['#text']);
-                this.saveColors(colors);
-                bars.forEach(bar => {
-                    bar.style.setProperty('--bar-color-1', colors[0]);
-                    bar.style.setProperty('--bar-color-2', colors[1]);
-                });
-            } else {
+        const rawTrackName = typeof trackData.name === 'string' ? trackData.name.trim() : '';
+        const artistField = trackData.artist || {};
+        const rawArtistName = typeof artistField === 'string'
+            ? artistField.trim()
+            : typeof artistField['#text'] === 'string'
+                ? artistField['#text'].trim()
+                : '';
+        const artworkList = Array.isArray(trackData.image) ? trackData.image : [];
+        const artwork = artworkList.find(img => img.size === 'extralarge') ||
+                        artworkList.find(img => img.size === 'large') ||
+                        artworkList.find(img => img.size === 'medium') ||
+                        artworkList[artworkList.length - 1];
+        const artworkUrl = artwork && typeof artwork['#text'] === 'string' ? artwork['#text'].trim() : '';
+
+        const trackId = typeof trackData.mbid === 'string' && trackData.mbid.trim()
+            ? trackData.mbid.trim()
+            : (rawArtistName && rawTrackName ? `${rawArtistName.toLowerCase()}::${rawTrackName.toLowerCase()}` : null);
+
+        const normalizedTrack = {
+            trackId,
+            trackName: rawTrackName || null,
+            artistName: rawArtistName || null,
+            imageUrl: artworkUrl || null
+        };
+
+        const previousData = this.lastTrackData;
+        const hasIncomingDetails = normalizedTrack.trackId || normalizedTrack.trackName || normalizedTrack.artistName;
+
+        if (!hasIncomingDetails && !previousData) {
+            return;
+        }
+
+        const sameTrack = previousData
+            ? (normalizedTrack.trackId && previousData.trackId
+                ? normalizedTrack.trackId === previousData.trackId
+                : normalizedTrack.trackName === previousData.trackName && normalizedTrack.artistName === previousData.artistName)
+            : false;
+
+        const trackChanged = !previousData || !sameTrack;
+
+        const displayTrackName = normalizedTrack.trackName || previousData?.trackName || 'Unknown Track';
+        const displayArtistName = normalizedTrack.artistName || previousData?.artistName || 'Unknown Artist';
+
+        if (track.textContent !== displayTrackName) {
+            track.textContent = displayTrackName;
+        }
+        if (artist.textContent !== displayArtistName) {
+            artist.textContent = displayArtistName;
+        }
+
+        const previousImageUrl = previousData ? previousData.imageUrl : null;
+        const shouldReplaceArt = trackChanged
+            ? normalizedTrack.imageUrl !== previousImageUrl
+            : (normalizedTrack.imageUrl && normalizedTrack.imageUrl !== previousImageUrl);
+
+        if (trackChanged && !normalizedTrack.imageUrl) {
+            if (albumArt.innerHTML !== '') {
                 albumArt.innerHTML = '';
             }
-        } else {
-            albumArt.innerHTML = '';
+        } else if (normalizedTrack.imageUrl && (shouldReplaceArt || !albumArt.firstElementChild)) {
+            if (!albumArt.firstElementChild || albumArt.firstElementChild.getAttribute('src') !== normalizedTrack.imageUrl) {
+                albumArt.innerHTML = `<img src="${normalizedTrack.imageUrl}" alt="Album artwork">`;
+            }
+            const colors = await this.extractColors(normalizedTrack.imageUrl);
+            this.saveColors(colors);
+            bars.forEach(bar => {
+                bar.style.setProperty('--bar-color-1', colors[0]);
+                bar.style.setProperty('--bar-color-2', colors[1]);
+            });
         }
-        
+
+        const displayedImage = albumArt.querySelector('img');
+        const displayedData = {
+            trackId: normalizedTrack.trackId !== null ? normalizedTrack.trackId : (trackChanged ? null : previousData?.trackId || null),
+            trackName: track.textContent || null,
+            artistName: artist.textContent || null,
+            imageUrl: displayedImage ? displayedImage.getAttribute('src') : null
+        };
+
+        if (!previousData ||
+            displayedData.trackId !== previousData.trackId ||
+            displayedData.trackName !== previousData.trackName ||
+            displayedData.artistName !== previousData.artistName ||
+            displayedData.imageUrl !== previousData.imageUrl) {
+            this.lastTrackData = displayedData;
+            this.saveTrackData(displayedData);
+        }
+
         if (this.isMobile || this.isExpanded) {
             this.expand(true);
         }
