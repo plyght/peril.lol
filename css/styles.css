@@ -56,6 +56,12 @@ body {
     }
 }
 
+#unicorn-bg img[src*="unicorn.studio"],
+#unicorn-bg img[alt*="unicorn.studio"],
+img[src*="made_in_us_small_web.svg"] {
+    display: none !important;
+}
+
 body::before {
     content: '';
     position: fixed;
