@@ -287,7 +287,12 @@ p {
     hyphens: auto;
 }
 
-.section p + p {
+#about p + p {
+    padding-left: 1.5em;
+    margin-top: 0.45em;
+}
+
+.section:not(#about) p + p {
     text-indent: 1.5em;
     margin-top: 0.45em;
 }
@@ -553,6 +558,10 @@ a:hover {
     
     .section.active {
         display: block;
+    }
+
+    #about p + p {
+        padding-left: 0;
     }
 }
 
