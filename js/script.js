@@ -418,7 +418,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('click', (e) => {
         if (window.innerWidth <= 768 && !isScrolling) {
             const target = e.target;
-            const isInteractive = target.closest('a, button, input, textarea, select, [role="button"]');
+            const isInteractive = target.closest('a, button, input, textarea, select, img, [role="button"]');
             
             if (!isInteractive) {
                 const newScheme = colorGen.generateScheme();
