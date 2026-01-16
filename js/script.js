@@ -419,8 +419,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (window.innerWidth <= 768 && !isScrolling) {
             const target = e.target;
             const isInteractive = target.closest('a, button, input, textarea, select, img, [role="button"]');
+            const lightboxActive = lightbox?.classList.contains('active');
             
-            if (!isInteractive) {
+            if (!isInteractive && !lightboxActive) {
                 const newScheme = colorGen.generateScheme();
                 colorGen.applyScheme(newScheme);
             }
