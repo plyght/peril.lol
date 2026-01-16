@@ -1,21 +1,10 @@
 :root {
-    --bg-primary: #f6f3ea;
-    --bg-secondary: #fffdf7;
-    --text-primary: #1c1b17;
-    --text-secondary: #4b473f;
-    --border-color: #d8d2c4;
-    --accent-color: #2a2a28;
-}
-
-@media (prefers-color-scheme: dark) {
-    :root {
-        --bg-primary: #121211;
-        --bg-secondary: #181817;
-        --text-primary: #e6e4df;
-        --text-secondary: #a8a398;
-        --border-color: #2a2926;
-        --accent-color: #d8d2c4;
-    }
+    --bg-primary: #fafafa;
+    --bg-secondary: #ffffff;
+    --text-primary: #0a0a0a;
+    --text-secondary: #525252;
+    --border-color: #e5e5e5;
+    --accent-color: #171717;
 }
 
 * {
@@ -117,7 +106,7 @@ h1.scrambling {
 nav {
     display: flex;
     gap: 0;
-    align-items: baseline;
+    align-items: center;
 }
 
 nav a {
@@ -138,13 +127,42 @@ nav a:first-child {
 }
 
 nav a:last-child {
-    border-right: none;
+    border-right: 1px solid var(--border-color);
 }
 
 nav a:hover,
 nav a.active {
     color: var(--text-primary);
     text-decoration-style: solid;
+}
+
+.colorscheme-btn {
+    background: none;
+    border: none;
+    padding: 0 0 0 10px;
+    cursor: pointer;
+    color: var(--text-secondary);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+    opacity: 0.7;
+}
+
+.colorscheme-btn:hover {
+    color: var(--text-primary);
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.colorscheme-btn:active {
+    transform: scale(0.95);
+}
+
+.colorscheme-btn svg {
+    display: block;
+    width: 15px;
+    height: 15px;
 }
 
 main {
@@ -452,6 +470,10 @@ a:hover {
 
     nav a.active {
         color: var(--text-primary);
+    }
+
+    .colorscheme-btn {
+        padding: 0 0 0 8px;
     }
     
     main {

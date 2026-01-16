@@ -183,7 +183,7 @@ class NowPlayingWidget {
                 
                 resolve([color1, color2]);
             };
-            img.onerror = () => resolve(['#1a73e8', '#0d47a1']);
+            img.onerror = () => resolve(['#171717', '#0a0a0a']);
             img.src = imageUrl;
         });
     }

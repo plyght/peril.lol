@@ -56,8 +56,8 @@
 }
 
 .np-bar {
-  --bar-color-1: #333;
-  --bar-color-2: #1a1a1a;
+  --bar-color-1: #171717;
+  --bar-color-2: #0a0a0a;
   width: 3px;
   height: 3px;
   max-height: 28px;
@@ -68,21 +68,21 @@
 
 @media (prefers-color-scheme: dark) {
   .np-bar {
-    --bar-color-1: #e8e8e8;
-    --bar-color-2: #a0a0a0;
+    --bar-color-1: #fafafa;
+    --bar-color-2: #a3a3a3;
   }
 }
 
 @property --bar-color-1 {
   syntax: '<color>';
   inherits: false;
-  initial-value: #333;
+  initial-value: #171717;
 }
 
 @property --bar-color-2 {
   syntax: '<color>';
   inherits: false;
-  initial-value: #1a1a1a;
+  initial-value: #0a0a0a;
 }
 
 .np-bar:nth-child(1) {
