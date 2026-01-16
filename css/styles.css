@@ -58,8 +58,12 @@ body {
 
 #unicorn-bg img[src*="unicorn.studio"],
 #unicorn-bg img[alt*="unicorn.studio"],
-img[src*="made_in_us_small_web.svg"] {
+img[src*="made_in_us_small_web.svg"],
+a[href*="unicorn.studio?utm_source=public-url"] {
     display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
 }
 
 body::before {
