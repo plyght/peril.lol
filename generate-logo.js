@@ -40,11 +40,10 @@ const base = `
   Z
 `;
 
+const combinedPath = `${wing1} ${wing2} ${centerBar} ${base}`;
+
 const svg = `<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg">
-  <path d="${wing1}" fill="#0a0a0a"/>
-  <path d="${wing2}" fill="#0a0a0a"/>
-  <path d="${centerBar}" fill="#0a0a0a"/>
-  <path d="${base}" fill="#0a0a0a"/>
+  <path d="${combinedPath}" fill="#0a0a0a" fill-rule="evenodd"/>
 </svg>`;
 
 fs.writeFileSync('plyght-logo.svg', svg);
