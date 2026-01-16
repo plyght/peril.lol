@@ -507,6 +507,7 @@ a:hover {
 
     .colorscheme-btn {
         padding: 0 0 0 8px;
+        align-self: center;
     }
     
     main {

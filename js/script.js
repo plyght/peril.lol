@@ -399,4 +399,31 @@ document.addEventListener('DOMContentLoaded', () => {
             colorGen.applyScheme(colorGen.currentScheme);
         }
     });
+
+    let isScrolling = false;
+    let touchStartY = 0;
+
+    document.addEventListener('touchstart', (e) => {
+        touchStartY = e.touches[0].clientY;
+        isScrolling = false;
+    }, { passive: true });
+
+    document.addEventListener('touchmove', (e) => {
+        const touchY = e.touches[0].clientY;
+        if (Math.abs(touchY - touchStartY) > 10) {
+            isScrolling = true;
+        }
+    }, { passive: true });
+
+    document.addEventListener('click', (e) => {
+        if (window.innerWidth <= 768 && !isScrolling) {
+            const target = e.target;
+            const isInteractive = target.closest('a, button, input, textarea, select, [role="button"]');
+            
+            if (!isInteractive) {
+                const newScheme = colorGen.generateScheme();
+                colorGen.applyScheme(newScheme);
+            }
+        }
+    });
 });
