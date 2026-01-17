@@ -488,7 +488,7 @@ a:hover {
     }
 
     header {
-        padding: 30px 0 15px;
+        padding: 20px 0 12px;
     }
 
     .header-content {
@@ -536,7 +536,7 @@ a:hover {
     }
     
     main {
-        padding: 30px 0 100px 0;
+        padding: 20px 0 100px 0;
         overflow: visible;
         flex: initial;
     }
@@ -562,6 +562,24 @@ a:hover {
 
     #about p + p {
         padding-left: 0;
+    }
+
+    #about h2 {
+        font-size: 1.25rem;
+        margin-bottom: 4px;
+    }
+
+    #about .ornament {
+        margin: 8px 0 14px;
+    }
+
+    #about p {
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+
+    #about p + p {
+        margin-top: 0.35em;
     }
 }
 
