@@ -226,13 +226,41 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelector('main')?.scrollTo({ top: 0, behavior: 'instant' });
     }
 
+    const photosSection = document.getElementById('photos');
+    if (photosSection) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !photosLoaded) {
+                    const images = document.querySelectorAll('.photo-grid img[data-src]');
+                    images.forEach(img => {
+                        img.src = img.getAttribute('data-src');
+                        img.removeAttribute('data-src');
+                    });
+                    photosLoaded = true;
+                    observer.disconnect();
+                }
+            });
+        }, { rootMargin: '200px' });
+        observer.observe(photosSection);
+    }
+
     let photosLoaded = false;
     
     navLinks.forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
             const targetId = link.getAttribute('href').substring(1);
-            showSection(targetId);
+            
+            if (window.innerWidth <= 768) {
+                const targetElement = document.getElementById(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    link.classList.add('active');
+                }
+            } else {
+                showSection(targetId);
+            }
             
             if (targetId === 'photos' && !photosLoaded) {
                 const images = document.querySelectorAll('.photo-grid img[data-src]');
@@ -374,9 +402,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const main = document.querySelector('main');
-    if (window.innerWidth > 768 && main) {
+    if (main) {
         document.addEventListener('wheel', (e) => {
-            if (!lightbox.classList.contains('active')) {
+            if (window.innerWidth > 768 && !lightbox.classList.contains('active')) {
                 e.preventDefault();
                 main.scrollBy({ top: e.deltaY, behavior: 'auto' });
             }
@@ -428,4 +456,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     });
+
+
 });
