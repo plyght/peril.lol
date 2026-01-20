@@ -24,7 +24,7 @@
 }
 
 html {
-    color-scheme: light dark;
+    color-scheme: light;
     background-color: var(--bg-primary-fallback, var(--bg-primary));
 }
 
