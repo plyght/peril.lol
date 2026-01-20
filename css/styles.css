@@ -185,6 +185,26 @@ nav a.active {
     text-decoration-style: solid;
 }
 
+.colorscheme-btn {
+    background: none;
+    border: none;
+    padding: 0 10px;
+    cursor: pointer;
+    color: var(--text-secondary);
+    transition: color 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+}
+
+.colorscheme-btn:hover {
+    color: var(--text-primary);
+}
+
+.colorscheme-btn svg {
+    width: 16px;
+    height: 16px;
+}
+
 main {
     flex: 1;
     position: relative;
@@ -479,6 +499,10 @@ a:hover {
     }
 
     nav {
+        display: none;
+    }
+
+    .colorscheme-btn {
         display: none;
     }
 
