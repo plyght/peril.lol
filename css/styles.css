@@ -47,10 +47,10 @@ body {
     overflow: hidden;
     height: 100vh;
     height: 100dvh;
-    padding-top: var(--safe-area-inset-top);
+    padding-top: calc(var(--safe-area-inset-top) + var(--viewport-offset-top));
     padding-left: var(--safe-area-inset-left);
     padding-right: var(--safe-area-inset-right);
-    padding-bottom: var(--safe-area-inset-bottom);
+    padding-bottom: calc(var(--safe-area-inset-bottom) + var(--viewport-offset-bottom));
 }
 
 .page-backdrop {
@@ -172,8 +172,8 @@ body::before {
     display: flex;
     flex-direction: column;
     padding: 0 2rem;
-    padding-top: max(var(--safe-area-inset-top), 0);
-    padding-bottom: max(var(--safe-area-inset-bottom), 0);
+    padding-top: max(calc(var(--safe-area-inset-top) + var(--viewport-offset-top)), 0px);
+    padding-bottom: max(calc(var(--safe-area-inset-bottom) + var(--viewport-offset-bottom)), 0px);
 }
 
 header {
