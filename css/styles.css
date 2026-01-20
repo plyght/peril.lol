@@ -5,6 +5,12 @@
     --text-secondary: #525252;
     --border-color: #e5e5e5;
     --accent-color: #171717;
+    --edge-fade-top: clamp(2rem, 4vh, 3rem);
+    --edge-fade-bottom: clamp(1.75rem, 3.5vh, 2.75rem);
+    --edge-fade-solid: 5%;
+    --edge-fade-bg-rgb: 250, 250, 250;
+    --viewport-offset-top: 0px;
+    --viewport-offset-bottom: 0px;
     --safe-area-inset-top: env(safe-area-inset-top, 0px);
     --safe-area-inset-right: env(safe-area-inset-right, 0px);
     --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
@@ -36,6 +42,32 @@ body {
     padding-left: var(--safe-area-inset-left);
     padding-right: var(--safe-area-inset-right);
     padding-bottom: var(--safe-area-inset-bottom);
+}
+
+.edge-fade {
+    position: fixed;
+    left: 0;
+    right: 0;
+    pointer-events: none;
+    z-index: 40;
+    background-image: linear-gradient(
+        var(--edge-fade-direction, to bottom),
+        rgba(var(--edge-fade-bg-rgb), 1) 0%,
+        rgba(var(--edge-fade-bg-rgb), 1) var(--edge-fade-solid),
+        rgba(var(--edge-fade-bg-rgb), 0) 100%
+    );
+}
+
+.edge-fade--top {
+    top: calc(var(--viewport-offset-top) + env(safe-area-inset-top));
+    height: var(--edge-fade-top);
+    --edge-fade-direction: to bottom;
+}
+
+.edge-fade--bottom {
+    bottom: calc(var(--viewport-offset-bottom) + env(safe-area-inset-bottom));
+    height: var(--edge-fade-bottom);
+    --edge-fade-direction: to top;
 }
 
 #unicorn-bg {
