@@ -25,13 +25,13 @@
 
 html {
     color-scheme: light;
-    background-color: var(--bg-primary-fallback, var(--bg-primary));
+    background-color: var(--bg-primary-fallback, #fafafa);
 }
 
 body {
     font-family: 'STIX Two Text', 'Times New Roman', serif;
     color: var(--text-primary);
-    background-color: var(--bg-primary-fallback, var(--bg-primary));
+    background-color: var(--bg-primary-fallback, #fafafa);
     line-height: 1.6;
     font-size: 17px;
     text-rendering: optimizeLegibility;
@@ -118,7 +118,7 @@ body {
     content: '';
     position: absolute;
     inset: 0;
-    background: var(--bg-primary);
+    background: var(--bg-primary-fallback, #fafafa);
     opacity: 0.78;
     pointer-events: none;
 }
