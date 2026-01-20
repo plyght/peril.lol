@@ -107,6 +107,19 @@ class ColorSchemeGenerator {
         return `${r}, ${g}, ${b}`;
     }
 
+    updateThemeColor(hex) {
+        if (!hex) return;
+        const tags = document.querySelectorAll('meta[name="theme-color"]');
+        if (tags.length === 0) {
+            const meta = document.createElement('meta');
+            meta.name = 'theme-color';
+            meta.content = hex;
+            document.head.appendChild(meta);
+            return;
+        }
+        tags.forEach((tag) => tag.setAttribute('content', hex));
+    }
+
     generateScheme() {
         const baseHue = Math.floor(Math.random() * 360);
         const harmony = this.harmonies[Math.floor(Math.random() * this.harmonies.length)];
@@ -176,6 +189,7 @@ class ColorSchemeGenerator {
             root.style.setProperty(`${prop}-fallback`, hex);
             if (prop === '--bg-primary') {
                 root.style.setProperty('--edge-fade-bg-rgb', this.hexToRgb(hex));
+                this.updateThemeColor(hex);
             }
         };
 

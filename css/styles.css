@@ -23,10 +23,17 @@
     box-sizing: border-box;
 }
 
+html {
+    color-scheme: light dark;
+    background-color: var(--bg-primary-fallback, var(--bg-primary));
+    background-color: var(--bg-primary);
+}
+
 body {
     font-family: 'STIX Two Text', 'Times New Roman', serif;
     color: var(--text-primary);
-    background: var(--bg-primary);
+    background-color: var(--bg-primary-fallback, var(--bg-primary));
+    background-color: var(--bg-primary);
     line-height: 1.6;
     font-size: 17px;
     text-rendering: optimizeLegibility;
@@ -68,6 +75,25 @@ body {
     bottom: calc(var(--viewport-offset-bottom) + env(safe-area-inset-bottom));
     height: var(--edge-fade-bottom);
     --edge-fade-direction: to top;
+}
+
+.edge-fill {
+    position: fixed;
+    left: 0;
+    right: 0;
+    pointer-events: none;
+    z-index: 39;
+    background-color: rgb(var(--edge-fade-bg-rgb));
+}
+
+.edge-fill--top {
+    top: 0;
+    height: calc(var(--viewport-offset-top) + env(safe-area-inset-top));
+}
+
+.edge-fill--bottom {
+    bottom: 0;
+    height: calc(var(--viewport-offset-bottom) + env(safe-area-inset-bottom));
 }
 
 #unicorn-bg {
