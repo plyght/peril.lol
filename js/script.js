@@ -93,6 +93,29 @@ class ColorSchemeGenerator {
         return `#${toHex(r)}${toHex(g)}${toHex(bval)}`;
     }
 
+    hexToRgb(hex) {
+        if (!hex) return '250, 250, 250';
+        let value = hex.replace('#', '').trim();
+        if (value.length === 3) {
+            value = value.split('').map((char) => char + char).join('');
+        }
+        if (value.length !== 6) return '250, 250, 250';
+        const int = parseInt(value, 16);
+        const r = (int >> 16) & 255;
+        const g = (int >> 8) & 255;
+        const b = int & 255;
+        return `${r}, ${g}, ${b}`;
+    }
+
+    updateThemeColor(hex) {
+        if (!hex) return;
+        const tags = document.querySelectorAll('meta[name="theme-color"]');
+        if (tags.length === 0) {
+            return;
+        }
+        tags.forEach((tag) => tag.setAttribute('content', hex));
+    }
+
     generateScheme() {
         const baseHue = Math.floor(Math.random() * 360);
         const harmony = this.harmonies[Math.floor(Math.random() * this.harmonies.length)];
@@ -160,6 +183,10 @@ class ColorSchemeGenerator {
             const oklch = `oklch(${color.l} ${color.c} ${color.h})`;
             root.style.setProperty(prop, oklch);
             root.style.setProperty(`${prop}-fallback`, hex);
+            if (prop === '--bg-primary') {
+                root.style.setProperty('--edge-fade-bg-rgb', this.hexToRgb(hex));
+                this.updateThemeColor(hex);
+            }
         };
 
         setColor('--bg-primary', colors.bgPrimary);
@@ -203,6 +230,28 @@ class ColorSchemeGenerator {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    const root = document.documentElement;
+    const updateViewportOffsets = () => {
+        const viewport = window.visualViewport;
+        if (!viewport) {
+            root.style.setProperty('--viewport-offset-top', '0px');
+            root.style.setProperty('--viewport-offset-bottom', '0px');
+            return;
+        }
+
+        const offsetTop = viewport.offsetTop || 0;
+        const offsetBottom = Math.max(0, window.innerHeight - viewport.height - offsetTop);
+
+        root.style.setProperty('--viewport-offset-top', `${Math.round(offsetTop)}px`);
+        root.style.setProperty('--viewport-offset-bottom', `${Math.round(offsetBottom)}px`);
+    };
+
+    updateViewportOffsets();
+    window.visualViewport?.addEventListener('resize', updateViewportOffsets);
+    window.visualViewport?.addEventListener('scroll', updateViewportOffsets);
+    window.addEventListener('orientationchange', updateViewportOffsets);
+    window.addEventListener('resize', updateViewportOffsets);
+
     const sections = [...document.querySelectorAll('main .section[id]')];
     const navLinks = [...document.querySelectorAll('header nav a')];
 
