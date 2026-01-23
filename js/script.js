@@ -1,3 +1,50 @@
+class AudioManager {
+    constructor() {
+        this.audioReady = false;
+        this.enabled = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        this.scrambleSynth = null;
+    }
+
+    async initialize() {
+        if (!this.enabled || this.audioReady) return;
+        
+        try {
+            await Tone.start();
+            
+            this.scrambleSynth = new Tone.Synth({
+                oscillator: { type: 'triangle' },
+                envelope: {
+                    attack: 0.002,
+                    decay: 0.015,
+                    sustain: 0,
+                    release: 0.015
+                },
+                volume: -34
+            }).toDestination();
+            
+            this.audioReady = true;
+        } catch (error) {
+            this.enabled = false;
+        }
+    }
+
+    playScramble() {
+        if (!this.enabled || !this.audioReady) return;
+        
+        try {
+            const notes = ['E5', 'G5', 'B5', 'D5', 'F#5'];
+            const timings = [0, 0.07, 0.15, 0.25, 0.37, 0.51, 0.67, 0.84, 0.98];
+            const now = Tone.now();
+            
+            for (let i = 0; i < timings.length; i++) {
+                const note = notes[Math.floor(Math.random() * notes.length)];
+                const time = now + timings[i];
+                this.scrambleSynth.triggerAttackRelease(note, '0.03', time);
+            }
+        } catch (error) {}
+    }
+}
+
 class ColorSchemeGenerator {
     constructor() {
         this.harmonies = ['monochromatic', 'analogous', 'complementary', 'triadic', 'split-complementary'];
@@ -203,6 +250,16 @@ class ColorSchemeGenerator {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    const audioManager = new AudioManager();
+    let audioInitialized = false;
+
+    const ensureAudio = async () => {
+        if (!audioInitialized) {
+            await audioManager.initialize();
+            audioInitialized = true;
+        }
+    };
+
     const sections = [...document.querySelectorAll('main .section[id]')];
     const navLinks = [...document.querySelectorAll('header nav a')];
 
@@ -279,7 +336,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const title = document.querySelector('h1');
     const originalText = 'plyght';
-    const targetTexts = ['inaplight', 'pliiight'];
+    const targetTexts = ['inaplight', 'pliiight', 'plyght'];
     const chars = 'abcdefghijklmnopqrstuvwxyz';
     let isAnimating = false;
     let currentTarget = '';
@@ -333,19 +390,21 @@ document.addEventListener('DOMContentLoaded', () => {
         animationId = requestAnimationFrame(step);
     }
 
-    title.addEventListener('mouseenter', () => {
+    title.addEventListener('mouseenter', async () => {
         if (isAnimating) return;
+        
         isAnimating = true;
         if (animationId) cancelAnimationFrame(animationId);
-        currentTarget = targetTexts[Math.floor(Math.random() * targetTexts.length)];
+        
+        let newTarget;
+        const availableTexts = targetTexts.filter(t => t !== title.textContent);
+        newTarget = availableTexts[Math.floor(Math.random() * availableTexts.length)];
+        currentTarget = newTarget;
+        
         animate(currentTarget);
-    });
-
-    title.addEventListener('mouseleave', () => {
-        if (isAnimating) return;
-        isAnimating = true;
-        if (animationId) cancelAnimationFrame(animationId);
-        animate(originalText);
+        
+        await ensureAudio();
+        audioManager.playScramble();
     });
 
     async function fetchGitHubStars(owner, repo) {
