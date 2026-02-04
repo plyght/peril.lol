@@ -407,37 +407,122 @@ document.addEventListener('DOMContentLoaded', () => {
         audioManager.playScramble();
     });
 
-    async function fetchGitHubStars(owner, repo) {
-        try {
-            const response = await fetch(`https://api.github.com/repos/${owner}/${repo}`);
-            if (!response.ok) return null;
-            const data = await response.json();
-            return data.stargazers_count;
-        } catch (error) {
-            console.error(`Failed to fetch stars for ${repo}:`, error);
-            return null;
+    class GitHubStarsManager {
+        constructor() {
+            this.cacheKey = 'gh_stars_cache';
+            this.cacheExpiry = 5 * 60 * 1000;
+            this.pollInterval = 5 * 60 * 1000;
+            this.owner = 'plyght';
         }
-    }
 
-    async function updateProjectStars() {
-        const projects = [
-            { name: 'spine', element: document.querySelector('a[href*="spine"]')?.closest('.publication')?.querySelector('.pub-meta') },
-            { name: 'skew', element: document.querySelector('a[href*="skew"]')?.closest('.publication')?.querySelector('.pub-meta') },
-            { name: 'VeRA', element: document.querySelector('a[href*="VeRA"]')?.closest('.publication')?.querySelector('.pub-meta') },
-            { name: 'cedar', element: document.querySelector('a[href*="cedar"]')?.closest('.publication')?.querySelector('.pub-meta') }
-        ];
-
-        for (const project of projects) {
-            if (!project.element) continue;
-            
-            const stars = await fetchGitHubStars('plyght', project.name);
-            if (stars !== null) {
-                project.element.textContent = `Rust · ${stars} ${stars === 1 ? 'star' : 'stars'}`;
+        getCache() {
+            try {
+                const cached = localStorage.getItem(this.cacheKey);
+                if (!cached) return null;
+                
+                const data = JSON.parse(cached);
+                const now = Date.now();
+                
+                if (now - data.timestamp < this.cacheExpiry) {
+                    return data.stars;
+                }
+                
+                return null;
+            } catch (error) {
+                return null;
             }
         }
+
+        setCache(stars) {
+            try {
+                const data = {
+                    stars,
+                    timestamp: Date.now()
+                };
+                localStorage.setItem(this.cacheKey, JSON.stringify(data));
+            } catch (error) {}
+        }
+
+        async fetchStars(repo) {
+            try {
+                const response = await fetch(`https://api.github.com/repos/${this.owner}/${repo}`);
+                if (!response.ok) return null;
+                const data = await response.json();
+                return data.stargazers_count;
+            } catch (error) {
+                return null;
+            }
+        }
+
+        async updateStars(projects, forceUpdate = false) {
+            const cached = forceUpdate ? null : this.getCache();
+            const updatedCache = { ...cached } || {};
+            
+            for (const project of projects) {
+                if (!project.element) continue;
+                
+                const cachedStars = cached?.[project.name];
+                if (cachedStars !== undefined && !forceUpdate) {
+                    this.updateElement(project.element, cachedStars, project.language);
+                    continue;
+                }
+                
+                const stars = await this.fetchStars(project.name);
+                if (stars !== null) {
+                    this.updateElement(project.element, stars, project.language);
+                    updatedCache[project.name] = stars;
+                }
+            }
+            
+            if (Object.keys(updatedCache).length > 0) {
+                this.setCache(updatedCache);
+            }
+        }
+
+        updateElement(element, stars, language) {
+            const newText = `${language} · ${stars} ${stars === 1 ? 'star' : 'stars'}`;
+            if (element.textContent !== newText) {
+                element.textContent = newText;
+            }
+        }
+
+        async pollStars(projects) {
+            const cached = this.getCache() || {};
+            let hasChanges = false;
+            
+            for (const project of projects) {
+                if (!project.element) continue;
+                
+                const stars = await this.fetchStars(project.name);
+                if (stars !== null && stars !== cached[project.name]) {
+                    this.updateElement(project.element, stars, project.language);
+                    cached[project.name] = stars;
+                    hasChanges = true;
+                }
+            }
+            
+            if (hasChanges) {
+                this.setCache(cached);
+            }
+        }
+
+        startPolling(projects) {
+            setInterval(() => {
+                this.pollStars(projects);
+            }, this.pollInterval);
+        }
     }
 
-    updateProjectStars();
+    const starsManager = new GitHubStarsManager();
+    const projects = [
+        { name: 'spine', language: 'Rust', element: document.querySelector('a[href*="spine"]')?.closest('.publication')?.querySelector('.pub-meta') },
+        { name: 'skew', language: 'Rust', element: document.querySelector('a[href*="skew"]')?.closest('.publication')?.querySelector('.pub-meta') },
+        { name: 'anchor', language: 'TypeScript', element: document.querySelector('a[href*="anchor"]')?.closest('.publication')?.querySelector('.pub-meta') },
+        { name: 'wax', language: 'Rust', element: document.querySelector('a[href*="wax"]')?.closest('.publication')?.querySelector('.pub-meta') }
+    ];
+
+    starsManager.updateStars(projects);
+    starsManager.startPolling(projects);
 
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = lightbox.querySelector('img');
