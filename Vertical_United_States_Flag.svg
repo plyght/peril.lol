@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="600px" height="1140px" viewBox="0 0 600 1140" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Vertical_United_States_Flag</title>
+    <g id="Vertical_United_States_Flag" stroke="none" fill="none" transform="translate(-0, -0)" fill-rule="evenodd" stroke-width="1">
+        <g id="Group">
+            <polygon id="Path" fill="#000000" points="0 0 600 0 600 1140 0 1140"></polygon>
+            <line x1="46.1538462" y1="570" x2="276.923077" y2="570" id="Path" stroke="#FFFFFF" stroke-width="1140" stroke-dasharray="46.15384615384615"></line>
+            <polygon id="Path" fill="#000000" points="0 0 0 456 323 456 323 0"></polygon>
+            <path d="M61,248 L111,108 L161,108 L111,248 L61,248 Z M261,248 L211,108 L161,108 L211,248 L261,248 Z M136,168 L186,168 L186,348 L136,348 L136,168 Z M41,248 L281,248 L241,298 L81,298 L41,248 Z" id="Shape" fill="#FFFFFF" transform="translate(161, 228) rotate(-90) translate(-161, -228)"></path>
+            <line x1="323.076923" y1="570" x2="553.846154" y2="570" id="Path" stroke="#FFFFFF" stroke-width="1140" stroke-dasharray="46.15384615384615"></line>
+        </g>
+    </g>
+</svg>

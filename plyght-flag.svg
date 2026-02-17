@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1235px" height="650px" viewBox="0 0 1235 650" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Flag_of_the_United_States_(fixed)</title>
+    <g id="Flag_of_the_United_States_(fixed)" stroke="none" fill="none" fill-rule="evenodd" stroke-width="1">
+        <g id="svg3836">
+            <rect id="rect3838" fill="#000000" x="0" y="0" width="1235" height="650"></rect>
+            <path d="M0,75 L1235,75 M1235,175 L0,175 M0,275 L1235,275 M1235,375 L0,375 M0,475 L1235,475 M1235,575 L0,575" id="path3840" stroke="#FFFFFF" stroke-width="50" fill="#000000" fill-rule="nonzero"></path>
+            <rect id="rect3842" fill="#000000" x="0" y="0" width="494" height="350"></rect>
+            <path d="M147,195 L197,55 L247,55 L197,195 L147,195 Z M347,195 L297,55 L247,55 L297,195 L347,195 Z M222,115 L272,115 L272,295 L222,295 L222,115 Z M127,195 L367,195 L327,245 L167,245 L127,195 Z" id="Shape" fill="#FFFFFF"></path>
+        </g>
+    </g>
+</svg>

@@ -106,6 +106,8 @@ body::before {
     padding: 0 2rem;
     padding-top: max(var(--safe-area-inset-top), 0);
     padding-bottom: max(var(--safe-area-inset-bottom), 0);
+    position: relative;
+    z-index: 1;
 }
 
 header {

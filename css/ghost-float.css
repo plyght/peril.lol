@@ -1,0 +1,49 @@
+@keyframes ghostFloat {
+    0%, 100% {
+        transform: translate(-50%, 0) rotate(0deg);
+    }
+    50% {
+        transform: translate(calc(-50% + 5px), -6px) rotate(0.5deg);
+    }
+}
+
+@keyframes shimmerPulse {
+    0%, 100% { opacity: 0.06; }
+    50%      { opacity: 0.10; }
+}
+
+#float-figure {
+    position: fixed;
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+    animation: ghostFloat 8s ease-in-out infinite;
+    transform-origin: center top;
+}
+
+#float-figure img {
+    height: 85vh;
+    width: auto;
+    animation: shimmerPulse 4s ease-in-out infinite;
+    filter: invert(1);
+}
+
+@media (prefers-color-scheme: dark) {
+    #float-figure img {
+        filter: none;
+    }
+
+    @keyframes shimmerPulse {
+        0%, 100% { opacity: 0.05; }
+        50%      { opacity: 0.09; }
+    }
+}
+
+@media (max-width: 768px) {
+    #float-figure {
+        display: none;
+    }
+}
