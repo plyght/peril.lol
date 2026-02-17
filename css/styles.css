@@ -129,6 +129,55 @@ header {
     flex: 1;
 }
 
+.title-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.title-sep {
+    width: 0.5px;
+    height: 22px;
+    background: var(--border-color);
+    flex-shrink: 0;
+    opacity: 1;
+    transition: opacity 0.4s ease 0.12s;
+    transform: translateY(2px);
+}
+
+.title-flag-link {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    text-decoration: none;
+    border: none;
+    opacity: 0.6;
+    transition: opacity 0.4s ease 0.12s;
+    transform: translateY(2px);
+}
+
+.title-flag-link:hover {
+    opacity: 0.9;
+    transition: opacity 0.15s ease;
+}
+
+.title-flag {
+    display: block;
+    height: 16px;
+    width: auto;
+    aspect-ratio: 1235 / 650;
+}
+
+h1.scrambling ~ .title-sep {
+    opacity: 0;
+    transition: none;
+}
+
+h1.scrambling ~ .title-flag-link {
+    opacity: 0;
+    transition: none;
+}
+
 h1 {
     font-family: 'EB Garamond', serif;
     font-size: 2.5rem;
@@ -143,7 +192,6 @@ h1 {
 
 h1.scrambling {
     filter: blur(1.2px);
-    letter-spacing: 0.02em;
 }
 
 .subtitle {
@@ -513,6 +561,23 @@ a:hover {
         font-weight: 500;
         margin-bottom: 0;
         letter-spacing: -0.01em;
+    }
+
+    .title-row {
+        gap: 8px;
+    }
+
+    .title-sep {
+        height: 16px;
+    }
+
+    .title-flag {
+        height: 15px;
+    }
+
+    .title-flag-link {
+        padding: 14px 10px;
+        margin: -14px -10px;
     }
 
     h2 {

@@ -261,10 +261,16 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const sections = [...document.querySelectorAll('main .section[id]')];
-    const navLinks = [...document.querySelectorAll('header nav a')];
+    const navLinks = [...document.querySelectorAll('header nav a[href^="/"]')];
+    const sectionIds = sections.map(s => s.id);
 
-    function showSection(targetId) {
-        sections.forEach(section => {
+    function pathToSection(path) {
+        var id = path.replace(/^\/|\/$/g, '');
+        return sectionIds.indexOf(id) !== -1 ? id : sectionIds[0];
+    }
+
+    function showSection(targetId, push) {
+        sections.forEach(function (section) {
             if (section.id === targetId) {
                 section.classList.add('active');
             } else {
@@ -272,28 +278,39 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        navLinks.forEach(link => {
-            if (link.getAttribute('href') === `#${targetId}`) {
+        navLinks.forEach(function (link) {
+            if (pathToSection(link.getAttribute('href')) === targetId) {
                 link.classList.add('active');
             } else {
                 link.classList.remove('active');
             }
         });
 
+        if (push) {
+            history.pushState({ section: targetId }, '', '/' + targetId + '/');
+        }
+
         document.querySelector('main')?.scrollTo({ top: 0, behavior: 'instant' });
+    }
+
+    let photosLoaded = false;
+
+    function loadPhotos() {
+        if (photosLoaded) return;
+        var images = document.querySelectorAll('.photo-grid img[data-src]');
+        images.forEach(function (img) {
+            img.src = img.getAttribute('data-src');
+            img.removeAttribute('data-src');
+        });
+        photosLoaded = true;
     }
 
     const photosSection = document.getElementById('photos');
     if (photosSection) {
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting && !photosLoaded) {
-                    const images = document.querySelectorAll('.photo-grid img[data-src]');
-                    images.forEach(img => {
-                        img.src = img.getAttribute('data-src');
-                        img.removeAttribute('data-src');
-                    });
-                    photosLoaded = true;
+        var observer = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                    loadPhotos();
                     observer.disconnect();
                 }
             });
@@ -301,38 +318,37 @@ document.addEventListener('DOMContentLoaded', () => {
         observer.observe(photosSection);
     }
 
-    let photosLoaded = false;
-    
-    navLinks.forEach(link => {
-        link.addEventListener('click', (e) => {
+    navLinks.forEach(function (link) {
+        link.addEventListener('click', function (e) {
             e.preventDefault();
-            const targetId = link.getAttribute('href').substring(1);
-            
+            var targetId = pathToSection(link.getAttribute('href'));
+
             if (window.innerWidth <= 768) {
-                const targetElement = document.getElementById(targetId);
+                var targetElement = document.getElementById(targetId);
                 if (targetElement) {
                     targetElement.scrollIntoView({ behavior: 'smooth' });
-                    navLinks.forEach(l => l.classList.remove('active'));
+                    navLinks.forEach(function (l) { l.classList.remove('active'); });
                     link.classList.add('active');
                 }
             } else {
-                showSection(targetId);
+                showSection(targetId, true);
             }
-            
-            if (targetId === 'photos' && !photosLoaded) {
-                const images = document.querySelectorAll('.photo-grid img[data-src]');
-                images.forEach(img => {
-                    img.src = img.getAttribute('data-src');
-                    img.removeAttribute('data-src');
-                });
-                photosLoaded = true;
-            }
+
+            if (targetId === 'photos') loadPhotos();
         });
     });
 
-    if (sections.length > 0) {
-        showSection(sections[0].id);
+    var initialSection = pathToSection(location.pathname);
+    showSection(initialSection, false);
+
+    if (window.innerWidth <= 768 && initialSection !== sectionIds[0]) {
+        var el = document.getElementById(initialSection);
+        if (el) setTimeout(function () { el.scrollIntoView({ behavior: 'smooth' }); }, 100);
     }
+
+    window.addEventListener('popstate', function () {
+        showSection(pathToSection(location.pathname), false);
+    });
 
     const title = document.querySelector('h1');
     const originalText = 'plyght';
