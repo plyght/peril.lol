@@ -340,6 +340,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     var initialSection = pathToSection(location.pathname);
     showSection(initialSection, false);
+    if (initialSection === 'photos') loadPhotos();
 
     if (window.innerWidth <= 768 && initialSection !== sectionIds[0]) {
         var el = document.getElementById(initialSection);
