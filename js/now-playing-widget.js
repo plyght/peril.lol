@@ -22,6 +22,10 @@ class NowPlayingWidget {
             this.widget.style.width = `${this.collapsedWidth}px`;
         }
         
+        this.widget.addEventListener('click', (e) => {
+            window.open(`https://www.last.fm/user/${this.username}`, '_blank', 'noopener');
+        });
+        
         if (!this.isMobile) {
             this.widget.addEventListener('mouseenter', () => this.expand());
             this.widget.addEventListener('mouseleave', () => this.collapse());
