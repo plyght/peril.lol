@@ -18,6 +18,7 @@
 }
 
 body {
+    cursor: default;
     font-family: 'STIX Two Text', 'Times New Roman', serif;
     color: var(--text-primary);
     background: var(--bg-primary);
