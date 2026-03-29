@@ -291,6 +291,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         document.querySelector('main')?.scrollTo({ top: 0, behavior: 'instant' });
+
+        if (targetId === 'photos') loadPhotos();
     }
 
     let photosLoaded = false;
@@ -303,19 +305,6 @@ document.addEventListener('DOMContentLoaded', () => {
             img.removeAttribute('data-src');
         });
         photosLoaded = true;
-    }
-
-    const photosSection = document.getElementById('photos');
-    if (photosSection) {
-        var observer = new IntersectionObserver(function (entries) {
-            entries.forEach(function (entry) {
-                if (entry.isIntersecting) {
-                    loadPhotos();
-                    observer.disconnect();
-                }
-            });
-        }, { rootMargin: '200px' });
-        observer.observe(photosSection);
     }
 
     navLinks.forEach(function (link) {
@@ -334,13 +323,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 showSection(targetId, true);
             }
 
-            if (targetId === 'photos') loadPhotos();
         });
     });
 
     var initialSection = pathToSection(location.pathname);
     showSection(initialSection, false);
-    if (initialSection === 'photos') loadPhotos();
+
 
     if (window.innerWidth <= 768 && initialSection !== sectionIds[0]) {
         var el = document.getElementById(initialSection);
