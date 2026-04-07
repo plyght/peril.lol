@@ -143,7 +143,7 @@ a { color: inherit; text-decoration: none; }
   to { opacity: 1; filter: blur(0px); }
 }
 
-.reveal { opacity: 0; animation: reveal 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+.reveal { opacity: 0; animation: reveal 0.8s cubic-bezier(0.22, 1, 0.36, 1) both; }
 .reveal-d1 { animation-delay: 0.1s; }
 .reveal-d2 { animation-delay: 0.2s; }
 .reveal-d3 { animation-delay: 0.35s; }

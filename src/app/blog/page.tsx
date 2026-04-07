@@ -3,7 +3,7 @@ import { getAllPosts } from "@/lib/blog";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "blog — peril.lol",
+  title: "writing | peril.lol",
 };
 
 export default function Blog() {
