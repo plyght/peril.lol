@@ -4,6 +4,15 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "writing - peril.lol",
+  openGraph: {
+    title: "writing",
+    images: [{ url: "/og/writing.png", width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "writing",
+    images: ["/og/writing.png"],
+  },
 };
 
 export default function Blog() {

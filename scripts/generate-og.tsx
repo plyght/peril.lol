@@ -24,16 +24,22 @@ async function loadFonts() {
   ).then((r) => r.arrayBuffer());
 }
 
-const fonts = [
-  { name: "EB Garamond", data: () => fontRegular, weight: 400 as const, style: "normal" as const },
-  { name: "EB Garamond Bold", data: () => fontBold, weight: 700 as const, style: "normal" as const },
-];
-
 function getFonts() {
-  return fonts.map((f) => ({ ...f, data: f.data() }));
+  return [
+    { name: "EB Garamond", data: fontRegular, weight: 400 as const, style: "normal" as const },
+    { name: "EB Garamond Bold", data: fontBold, weight: 700 as const, style: "normal" as const },
+  ];
 }
 
-async function renderOg(title: string | null, outPath: string) {
+interface OgOptions {
+  title?: string;
+  bigText: string;
+  bigTextSize?: string;
+  bottomOffset?: string;
+  outPath: string;
+}
+
+async function renderOg({ title, bigText, bigTextSize = "280px", bottomOffset = "20px", outPath }: OgOptions) {
   const children: any[] = [];
 
   if (title) {
@@ -57,13 +63,13 @@ async function renderOg(title: string | null, outPath: string) {
     props: {
       style: {
         fontFamily: "EB Garamond Bold",
-        fontSize: "280px",
+        fontSize: bigTextSize,
         color: "#e8e8e8",
         opacity: 0.5,
         letterSpacing: "-0.05em",
         lineHeight: "0.8",
       },
-      children: "plyght",
+      children: bigText,
     },
   });
 
@@ -78,7 +84,7 @@ async function renderOg(title: string | null, outPath: string) {
           flexDirection: "column",
           justifyContent: title ? "space-between" : "flex-end",
           backgroundColor: "#0c0c0c",
-          padding: title ? "60px 72px 20px 72px" : "0 0 20px 72px",
+          padding: title ? `60px 72px ${bottomOffset} 72px` : `0 0 ${bottomOffset} 72px`,
           overflow: "hidden",
         },
         children,
@@ -93,14 +99,23 @@ async function renderOg(title: string | null, outPath: string) {
   console.log(`wrote ${outPath} (${png.byteLength} bytes)`);
 }
 
+const pages: OgOptions[] = [
+  { bigText: "plyght", outPath: join(root, "public/og-image.png") },
+  { bigText: "writing", outPath: join(ogDir, "writing.png") },
+  { bigText: "404", bigTextSize: "420px", bottomOffset: "-60px", outPath: join(ogDir, "404.png") },
+];
+
 async function main() {
   await loadFonts();
 
   if (!existsSync(ogDir)) mkdirSync(ogDir, { recursive: true });
 
-  const defaultOg = join(root, "public/og-image.png");
-  if (!existsSync(defaultOg)) {
-    await renderOg(null, defaultOg);
+  for (const page of pages) {
+    if (!existsSync(page.outPath)) {
+      await renderOg(page);
+    } else {
+      console.log(`skip ${page.outPath} (already exists)`);
+    }
   }
 
   if (!existsSync(postsDir)) {
@@ -124,7 +139,7 @@ async function main() {
     const { data } = matter(raw);
     const title = data.title || slug;
 
-    await renderOg(title, outPath);
+    await renderOg({ title, bigText: "plyght", outPath });
     generated++;
   }
 
