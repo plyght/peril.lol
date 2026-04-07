@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Script from "next/script";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 declare global {
   interface Window {
@@ -16,17 +16,23 @@ declare global {
 
 export default function Home() {
   const sceneRef = useRef<{ destroy: () => void } | null>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [isDesktop, setIsDesktop] = useState(false);
 
   useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)");
+    setIsDesktop(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
+    mq.addEventListener("change", handler);
     return () => {
+      mq.removeEventListener("change", handler);
       sceneRef.current?.destroy();
     };
   }, []);
 
   const initScene = () => {
-    if (!window.UnicornStudio || !containerRef.current) return;
+    if (!window.UnicornStudio) return;
     if (sceneRef.current) return;
+    if (!window.matchMedia("(min-width: 768px)").matches) return;
     window.UnicornStudio.addScene({
       elementId: "unicorn-container",
       projectId: "IYyOoRrLn7Kydgb9Pmkw",
@@ -43,7 +49,8 @@ export default function Home() {
   return (
     <div className="h-[100dvh] flex flex-col justify-between px-[6vw] md:px-[8vw] pt-[6vh] md:pt-[8vh] pb-[2vh] overflow-hidden relative">
 
-      <div className="fixed top-0 left-0 right-0 h-[env(safe-area-inset-top)] bg-[var(--color-bg)] z-50" />
+      <div className="safari-tint-top" />
+      <div className="safari-tint-bottom" />
 
       <div className="max-w-[700px] reveal reveal-d1 relative z-10">
         <p className="serif text-[clamp(22px,3vw,34px)] leading-[1.5] tracking-[-0.01em]">
@@ -68,11 +75,12 @@ export default function Home() {
         </div>
       </div>
 
-      <div
-        id="unicorn-container"
-        ref={containerRef}
-        className="pointer-events-none relative my-8 w-full h-[min(60vw,300px)] md:absolute md:my-0 md:-top-[8%] md:-right-[4%] md:w-[clamp(240px,50vw,560px)] md:h-[clamp(240px,50vw,560px)]"
-      />
+      {isDesktop && (
+        <div
+          id="unicorn-container"
+          className="pointer-events-none absolute -top-[8%] -right-[4%] w-[clamp(240px,50vw,560px)] h-[clamp(240px,50vw,560px)]"
+        />
+      )}
 
       <div className="reveal reveal-d2 select-none pointer-events-none leading-none relative z-10">
         <span
@@ -87,11 +95,13 @@ export default function Home() {
         </span>
       </div>
 
-      <Script
-        src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.1.6/dist/unicornStudio.umd.js"
-        strategy="afterInteractive"
-        onLoad={initScene}
-      />
+      {isDesktop && (
+        <Script
+          src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.1.6/dist/unicornStudio.umd.js"
+          strategy="afterInteractive"
+          onLoad={initScene}
+        />
+      )}
     </div>
   );
 }
