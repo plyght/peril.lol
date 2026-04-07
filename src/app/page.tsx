@@ -17,6 +17,7 @@ declare global {
 export default function Home() {
   const sceneRef = useRef<{ destroy: () => void } | null>(null);
   const [isDesktop, setIsDesktop] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     document.documentElement.classList.add("no-scroll");
@@ -78,7 +79,18 @@ export default function Home() {
           <Link href="/blog" className="underline-link serif">Writing</Link>
           <a href="https://github.com/plyght" target="_blank" rel="noopener noreferrer" className="underline-link serif">GitHub</a>
           <a href="https://x.com/inaplight" target="_blank" rel="noopener noreferrer" className="underline-link serif">X</a>
-          <a href="mailto:plyght@peril.lol" className="underline-link serif">Contact</a>
+          <button
+            type="button"
+            onClick={() => {
+              navigator.clipboard.writeText("plyght@peril.lol");
+              setCopied(true);
+              setTimeout(() => setCopied(false), 2000);
+            }}
+            className={`${copied ? "" : "underline-link"} serif contact-copy`}
+          >
+            <span className={copied ? "copy-text copy-text-out" : "copy-text copy-text-in"}>Contact</span>
+            <span className={copied ? "copy-text copy-text-in" : "copy-text copy-text-out"}>Copied</span>
+          </button>
         </div>
       </div>
 

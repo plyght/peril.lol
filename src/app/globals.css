@@ -173,3 +173,33 @@ article th { font-weight: 600; background: var(--color-surface); }
 
 .blink { animation: blink 0.9s linear infinite; }
 
+.contact-copy {
+  position: relative;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-size: inherit;
+  color: inherit;
+  overflow: hidden;
+}
+
+.copy-text {
+  display: block;
+  transition: opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1), filter 0.4s cubic-bezier(0.22, 1, 0.36, 1), transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.copy-text-in {
+  opacity: 1;
+  filter: blur(0px);
+  transform: translateY(0);
+}
+
+.copy-text-out {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  filter: blur(6px);
+  transform: translateY(4px);
+}
+
