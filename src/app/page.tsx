@@ -72,7 +72,7 @@ export default function Home() {
           <a href="https://github.com/plyght/spine" target="_blank" rel="noopener noreferrer" className="underline-link">Spine</a>,{" "}
           <a href="https://github.com/plyght/skew" target="_blank" rel="noopener noreferrer" className="underline-link">Skew</a>,{" "}
           <a href="https://github.com/plyght/wax" target="_blank" rel="noopener noreferrer" className="underline-link">Wax</a>, and{" "}
-          <a href="https://github.com/plyght/anchor" target="_blank" rel="noopener noreferrer" className="underline-link">Anchor</a>.
+          <a href="https://github.com/plyght/angel" target="_blank" rel="noopener noreferrer" className="underline-link">Angel</a>.
         </p>
         <div className="flex items-center gap-5 mt-6 text-[clamp(16px,1.4vw,18px)]">
           <Link href="/blog" className="underline-link serif">Writing</Link>
