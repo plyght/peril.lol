@@ -165,7 +165,18 @@ article h2, article h3 { margin-top: 2em; margin-bottom: 0.6em; font-weight: 600
 article code { font-family: "SF Mono", ui-monospace, monospace; font-size: 0.85em; padding: 2px 5px; border-radius: 4px; background: var(--color-surface); }
 article pre { padding: 1em; border-radius: 8px; background: var(--color-surface); overflow-x: auto; margin: 1.5em 0; }
 article pre code { padding: 0; background: none; }
-article blockquote { border-left: 2px solid var(--color-border); padding-left: 1em; color: var(--color-secondary); font-style: italic; }
+article blockquote { border-left: 2px solid var(--color-border); padding-left: 1em; color: var(--color-secondary); font-style: italic; margin: 1.5em 0; }
+article ul, article ol { padding-left: 1.5em; margin-bottom: 1.2em; }
+article ul { list-style-type: disc; }
+article ol { list-style-type: decimal; }
+article li { margin-bottom: 0.4em; }
+article li > ul, article li > ol { margin-top: 0.4em; margin-bottom: 0; }
+article hr { border: none; border-top: 1px solid var(--color-border); margin: 2em 0; }
+article img { max-width: 100%; height: auto; border-radius: 8px; margin: 1.5em 0; }
+article strong { font-weight: 600; }
+article table { width: 100%; border-collapse: collapse; margin: 1.5em 0; }
+article th, article td { padding: 0.5em 0.75em; border: 1px solid var(--color-border); text-align: left; }
+article th { font-weight: 600; background: var(--color-surface); }
 
 @keyframes blink {
   0%, 50% { opacity: 1; }
