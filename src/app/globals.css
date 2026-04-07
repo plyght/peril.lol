@@ -1,0 +1,151 @@
+@import "tailwindcss";
+
+:root {
+  --color-bg: #0c0c0c;
+  --color-text: #e8e8e8;
+  --color-secondary: #888;
+  --color-accent: #c4b4e0;
+  --color-accent-wash: rgba(196, 180, 224, 0.1);
+  --color-border: #1e1e1e;
+  --color-surface: #161616;
+  --color-dim: #555;
+  --transition: 0.2s;
+  --cubic: cubic-bezier(0.39, 0.575, 0.565, 1);
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --color-bg: #f5f3ef;
+    --color-text: #1a1a1a;
+    --color-secondary: #71717a;
+    --color-accent: #9b8ab8;
+    --color-accent-wash: rgba(155, 138, 184, 0.12);
+    --color-border: #ddd;
+    --color-surface: #eae8e3;
+    --color-dim: #a1a1aa;
+  }
+}
+
+::selection { background: var(--color-accent); color: white; }
+
+body {
+  font-family: -apple-system, "SF Pro Display", "SF Pro Text", system-ui, sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  cursor: default;
+  -webkit-font-smoothing: antialiased;
+  margin: 0;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+}
+
+a { color: inherit; text-decoration: none; }
+
+.serif {
+  font-family: var(--font-eb-garamond), "Georgia", "Times New Roman", serif;
+}
+
+.mono {
+  font-family: "SF Mono", "Geist Mono", ui-monospace, monospace;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 8px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  font-size: 0.8em;
+  transition: border-color var(--transition) var(--cubic);
+  vertical-align: baseline;
+  text-decoration: none;
+  color: var(--color-text);
+}
+
+.pill:hover {
+  border-color: var(--color-accent);
+}
+
+.accent {
+  color: var(--color-accent);
+}
+
+.dim {
+  color: var(--color-secondary);
+}
+
+.italic-bold {
+  font-style: italic;
+  font-weight: 600;
+}
+
+.ext-arrow::after {
+  content: " →";
+  display: inline;
+  transition: letter-spacing var(--transition) var(--cubic);
+}
+
+.ext-arrow:hover::after {
+  letter-spacing: 2px;
+}
+
+.nav-link {
+  color: var(--color-secondary);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  transition: color var(--transition);
+}
+
+.nav-link:hover {
+  color: var(--color-text);
+}
+
+.underline-link {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1px;
+  text-decoration-color: var(--color-dim);
+  transition: text-decoration-color var(--transition);
+}
+
+.underline-link:hover {
+  text-decoration-color: var(--color-accent);
+}
+
+@keyframes reveal {
+  from { opacity: 0; filter: blur(6px); }
+  to { opacity: 1; filter: blur(0px); }
+}
+
+.reveal { opacity: 0; animation: reveal 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+.reveal-d1 { animation-delay: 0.1s; }
+.reveal-d2 { animation-delay: 0.2s; }
+.reveal-d3 { animation-delay: 0.35s; }
+
+.ascii-bars {
+  font-family: "SF Mono", ui-monospace, monospace;
+  font-size: 0.7em;
+  letter-spacing: 2px;
+  color: var(--color-accent);
+}
+
+.logo-mark { fill: var(--color-text); }
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.blink { animation: blink 0.9s linear infinite; }
