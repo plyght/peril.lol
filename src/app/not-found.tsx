@@ -30,10 +30,10 @@ export default function NotFound() {
       <div className="safari-tint-bottom" />
 
       <div className="max-w-[700px] reveal reveal-d1 relative z-10">
-        <p className="serif text-[clamp(20px,2.6vw,30px)] leading-[1.5] tracking-[-0.01em]" style={{ color: "var(--color-secondary)" }}>
+        <p className="serif text-[clamp(24px,3vw,34px)] leading-[1.5] tracking-[-0.01em]" style={{ color: "var(--color-secondary)" }}>
           {line}
         </p>
-        <div className="flex items-center gap-5 mt-6 text-[clamp(14px,1.4vw,16px)]">
+        <div className="flex items-center gap-5 mt-6 text-[clamp(16px,1.4vw,18px)]">
           <Link href="/" className="underline-link serif">Return home</Link>
         </div>
       </div>

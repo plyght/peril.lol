@@ -62,7 +62,7 @@ export default function Home() {
       <div className="safari-tint-bottom" />
 
       <div className="max-w-[700px] reveal reveal-d1 relative z-10">
-        <p className="serif text-[clamp(22px,3vw,34px)] leading-[1.5] tracking-[-0.01em]">
+        <p className="serif text-[clamp(24px,3vw,34px)] leading-[1.5] tracking-[-0.01em]">
           High school junior out of D.C.{" "}
           <em className="font-semibold">Developer</em>,{" "}
           <em className="font-semibold">wrestler</em>,{" "}
@@ -76,7 +76,7 @@ export default function Home() {
           <a href="https://github.com/plyght/wax" target="_blank" rel="noopener noreferrer" className="underline-link">Wax</a>, and{" "}
           <a href="https://github.com/plyght/anchor" target="_blank" rel="noopener noreferrer" className="underline-link">Anchor</a>.
         </p>
-        <div className="flex items-center gap-5 mt-6 text-[clamp(14px,1.4vw,16px)]">
+        <div className="flex items-center gap-5 mt-6 text-[clamp(16px,1.4vw,18px)]">
           <Link href="/blog" className="underline-link serif">Writing</Link>
           <a href="https://github.com/plyght" target="_blank" rel="noopener noreferrer" className="underline-link serif">GitHub</a>
           <a href="https://x.com/inaplight" target="_blank" rel="noopener noreferrer" className="underline-link serif">X</a>
