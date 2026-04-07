@@ -26,8 +26,6 @@ export default function NotFound() {
 
   return (
     <div className="h-[100dvh] flex flex-col justify-between px-[6vw] md:px-[8vw] pt-[10vh] md:pt-[14vh] pb-[2vh] overflow-hidden relative">
-      <div className="safari-tint-top" />
-      <div className="safari-tint-bottom" />
 
       <div className="max-w-[700px] reveal reveal-d1 relative z-10">
         <p className="serif text-[clamp(24px,3vw,34px)] leading-[1.5] tracking-[-0.01em]" style={{ color: "var(--color-secondary)" }}>
@@ -38,7 +36,7 @@ export default function NotFound() {
         </div>
       </div>
 
-      <div className="reveal reveal-d2 select-none pointer-events-none leading-none relative z-10 mb-[-10vh]">
+      <div className="reveal reveal-d2 select-none pointer-events-none leading-none relative z-10 mb-[1vh] md:mb-[-10vh]">
         <span
           className="serif font-bold tracking-[-0.05em] block"
           style={{

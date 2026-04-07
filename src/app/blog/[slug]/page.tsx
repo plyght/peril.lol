@@ -43,9 +43,7 @@ export default async function BlogPost({
   return (
     <div className="min-h-[100dvh] flex flex-col px-[6vw] md:px-[8vw] pt-[10vh] md:pt-[14vh] pb-[4vh] relative">
 
-      <div className="safari-tint-top" />
-      <div className="safari-tint-bottom" />
-
+      
       <div className="relative z-10">
         <div className="reveal reveal-d1 flex items-center gap-5 text-[clamp(16px,1.4vw,18px)] mb-[6vh]">
           <Link href="/" className="underline-link serif">Home</Link>

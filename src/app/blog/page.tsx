@@ -21,9 +21,7 @@ export default function Blog() {
   return (
     <div className="min-h-[100dvh] flex flex-col justify-between px-[6vw] md:px-[8vw] pt-[10vh] md:pt-[14vh] pb-[2vh] relative">
 
-      <div className="safari-tint-top" />
-      <div className="safari-tint-bottom" />
-
+      
       <div className="relative z-10">
         <div className="reveal reveal-d1 flex items-center gap-5 text-[clamp(16px,1.4vw,18px)] mb-[6vh]">
           <Link href="/" className="underline-link serif">Home</Link>
@@ -78,7 +76,7 @@ export default function Blog() {
         </div>
       </div>
 
-      <div className="reveal reveal-d2 select-none pointer-events-none leading-none relative z-10 mb-[-2vh]">
+      <div className="reveal reveal-d2 select-none pointer-events-none leading-none relative z-10 mb-[1vh] md:mb-[-2vh]">
         <span
           className="serif font-bold tracking-[-0.05em] block"
           style={{

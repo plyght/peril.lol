@@ -14,7 +14,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   viewportFit: "cover",
   themeColor: [
-    { media: "(prefers-color-scheme: dark)", color: "#0c0c0c" },
+    { media: "(prefers-color-scheme: dark)", color: "#0f0f0f" },
     { media: "(prefers-color-scheme: light)", color: "#f5f3ef" },
   ],
 };
@@ -56,6 +56,19 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${ebGaramond.variable} min-h-[100dvh] antialiased`}>
+        <div
+          aria-hidden="true"
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '6px',
+            zIndex: 10000,
+            pointerEvents: 'none',
+            backgroundColor: 'var(--color-bg)',
+          }}
+        />
         {children}
       </body>
     </html>
