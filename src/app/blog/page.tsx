@@ -38,7 +38,6 @@ export default function Blog() {
                   className={`reveal reveal-d${Math.min(i + 2, 3)} group block py-[2.5vh]`}
                   style={{
                     textDecoration: "none",
-                    borderBottom: "1px solid var(--color-border)",
                   }}
                 >
                   <span className="serif text-[clamp(18px,2.4vw,26px)] leading-[1.4] tracking-[-0.01em] underline-link">
