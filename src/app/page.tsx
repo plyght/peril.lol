@@ -2,29 +2,48 @@
 
 import Link from "next/link";
 import Script from "next/script";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 declare global {
   interface Window {
-    UnicornStudio?: { isInitialized?: boolean; init: () => void };
+    UnicornStudio?: {
+      isInitialized?: boolean;
+      init: () => void;
+      addScene: (opts: Record<string, unknown>) => Promise<{ destroy: () => void }>;
+    };
   }
 }
 
 export default function Home() {
+  const sceneRef = useRef<{ destroy: () => void } | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
-    if (window.UnicornStudio?.isInitialized) {
-      window.UnicornStudio.init();
-    }
+    return () => {
+      sceneRef.current?.destroy();
+    };
   }, []);
+
+  const initScene = () => {
+    if (!window.UnicornStudio || !containerRef.current) return;
+    if (sceneRef.current) return;
+    window.UnicornStudio.addScene({
+      elementId: "unicorn-container",
+      projectId: "IYyOoRrLn7Kydgb9Pmkw",
+      scale: 1,
+      dpi: 1.5,
+      fps: 60,
+      lazyLoad: true,
+      production: true,
+    }).then((scene) => {
+      sceneRef.current = scene;
+    });
+  };
 
   return (
     <div className="h-[100dvh] flex flex-col justify-between px-[6vw] md:px-[8vw] pt-[6vh] md:pt-[8vh] pb-[2vh] overflow-hidden relative">
 
-      <div
-        className="absolute pointer-events-none -top-[5%] -right-[10%] md:-top-[8%] md:-right-[4%]"
-        style={{ width: "clamp(280px, 65vw, 720px)", height: "clamp(280px, 65vw, 720px)" }}
-        data-us-project="IYyOoRrLn7Kydgb9Pmkw"
-      />
+      <div className="fixed top-0 left-0 right-0 h-[env(safe-area-inset-top)] bg-[var(--color-bg)] z-50" />
 
       <div className="max-w-[700px] reveal reveal-d1 relative z-10">
         <p className="serif text-[clamp(22px,3vw,34px)] leading-[1.5] tracking-[-0.01em]">
@@ -49,6 +68,12 @@ export default function Home() {
         </div>
       </div>
 
+      <div
+        id="unicorn-container"
+        ref={containerRef}
+        className="pointer-events-none relative my-8 w-full h-[min(60vw,300px)] md:absolute md:my-0 md:-top-[8%] md:-right-[4%] md:w-[clamp(240px,50vw,560px)] md:h-[clamp(240px,50vw,560px)]"
+      />
+
       <div className="reveal reveal-d2 select-none pointer-events-none leading-none relative z-10">
         <span
           className="serif font-bold tracking-[-0.05em] block"
@@ -65,9 +90,7 @@ export default function Home() {
       <Script
         src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.1.6/dist/unicornStudio.umd.js"
         strategy="afterInteractive"
-        onLoad={() => {
-          if (window.UnicornStudio) window.UnicornStudio.init();
-        }}
+        onLoad={initScene}
       />
     </div>
   );

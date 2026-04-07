@@ -28,6 +28,15 @@
 
 ::selection { background: var(--color-accent); color: white; }
 
+html, body {
+  overflow: hidden;
+  height: 100dvh;
+}
+
+html {
+  background-color: var(--color-bg);
+}
+
 body {
   font-family: -apple-system, "SF Pro Display", "SF Pro Text", system-ui, sans-serif;
   background-color: var(--color-bg);
@@ -35,6 +44,7 @@ body {
   cursor: default;
   -webkit-font-smoothing: antialiased;
   margin: 0;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
 }
 
 body::after {
