@@ -9,6 +9,9 @@ out/
 .env
 .env*.local
 
+# generated
+public/og/
+
 # system
 .DS_Store
 *.pem
