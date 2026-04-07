@@ -19,15 +19,24 @@ export default function Home() {
   const [isDesktop, setIsDesktop] = useState(false);
 
   useEffect(() => {
+    document.documentElement.classList.add("no-scroll");
     const mq = window.matchMedia("(min-width: 768px)");
     setIsDesktop(mq.matches);
     const handler = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
     mq.addEventListener("change", handler);
     return () => {
+      document.documentElement.classList.remove("no-scroll");
       mq.removeEventListener("change", handler);
       sceneRef.current?.destroy();
+      sceneRef.current = null;
     };
   }, []);
+
+  useEffect(() => {
+    if (isDesktop && window.UnicornStudio && !sceneRef.current) {
+      initScene();
+    }
+  }, [isDesktop]);
 
   const initScene = () => {
     if (!window.UnicornStudio) return;
@@ -47,7 +56,7 @@ export default function Home() {
   };
 
   return (
-    <div className="h-[100dvh] flex flex-col justify-between px-[6vw] md:px-[8vw] pt-[6vh] md:pt-[8vh] pb-[2vh] overflow-hidden relative">
+    <div className="h-[100dvh] flex flex-col justify-between px-[6vw] md:px-[8vw] pt-[10vh] md:pt-[14vh] pb-[2vh] overflow-hidden relative">
 
       <div className="safari-tint-top" />
       <div className="safari-tint-bottom" />
@@ -78,11 +87,11 @@ export default function Home() {
       {isDesktop && (
         <div
           id="unicorn-container"
-          className="pointer-events-none absolute -top-[8%] -right-[4%] w-[clamp(240px,50vw,560px)] h-[clamp(240px,50vw,560px)]"
+          className="reveal reveal-d1 pointer-events-none absolute -top-[8%] -right-[4%] w-[clamp(240px,50vw,560px)] h-[clamp(240px,50vw,560px)]"
         />
       )}
 
-      <div className="reveal reveal-d2 select-none pointer-events-none leading-none relative z-10">
+      <div className="reveal reveal-d2 select-none pointer-events-none leading-none relative z-10 mb-[-2vh]">
         <span
           className="serif font-bold tracking-[-0.05em] block"
           style={{

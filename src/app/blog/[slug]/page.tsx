@@ -28,44 +28,32 @@ export default async function BlogPost({
   if (!post) notFound();
 
   return (
-    <div className="min-h-[100dvh] flex flex-col items-center px-6 md:px-8 py-16 md:py-24">
-      <div className="max-w-[520px] w-full space-y-8">
-        <div className="flex items-center justify-between">
-          <Link
-            href="/"
-            className="text-[17px] tracking-tight"
-            style={{
-              fontFamily: "var(--font-eb-garamond), Georgia, serif",
-              color: "var(--color-text)",
-              textDecoration: "none",
-            }}
-          >
-            plyght
-          </Link>
-          <Link
-            href="/blog"
-            className="text-[12px]"
-            style={{ color: "var(--color-secondary)", textDecoration: "none" }}
-          >
-            back
-          </Link>
+    <div className="min-h-[100dvh] flex flex-col px-[6vw] md:px-[8vw] pt-[10vh] md:pt-[14vh] pb-[4vh] relative">
+
+      <div className="safari-tint-top" />
+      <div className="safari-tint-bottom" />
+
+      <div className="relative z-10">
+        <div className="reveal reveal-d1 flex items-center gap-5 text-[clamp(14px,1.4vw,16px)] mb-[6vh]">
+          <Link href="/" className="underline-link serif">Home</Link>
+          <Link href="/blog" className="underline-link serif">Writing</Link>
         </div>
 
-        <div className="space-y-4">
-          <div className="space-y-1">
-            <h1
-              className="text-[18px] font-medium"
-              style={{ color: "var(--color-text)" }}
-            >
+        <div className="max-w-[700px]">
+          <div className="reveal reveal-d2 mb-[4vh]">
+            <h1 className="serif text-[clamp(22px,3vw,34px)] leading-[1.4] tracking-[-0.01em] font-medium">
               {post.title}
             </h1>
-            <p className="text-[12px]" style={{ color: "var(--color-secondary)" }}>
+            <span
+              className="mono text-[clamp(10px,1vw,12px)] tabular-nums mt-2 block"
+              style={{ color: "var(--color-dim)" }}
+            >
               {post.date}
-            </p>
+            </span>
           </div>
 
           <article
-            className="text-[14px] leading-[1.8] space-y-4"
+            className="reveal reveal-d3 serif text-[clamp(16px,1.8vw,19px)] leading-[1.8] tracking-[-0.005em]"
             style={{ color: "var(--color-text)" }}
             dangerouslySetInnerHTML={{ __html: post.content }}
           />

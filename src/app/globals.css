@@ -29,8 +29,11 @@
 ::selection { background: var(--color-accent); color: white; }
 
 html, body {
-  overflow: hidden;
   height: 100dvh;
+}
+
+html.no-scroll, html.no-scroll body {
+  overflow: hidden;
 }
 
 html {
@@ -153,6 +156,16 @@ a { color: inherit; text-decoration: none; }
 }
 
 .logo-mark { fill: var(--color-text); }
+
+article p { margin-bottom: 1.2em; }
+article p:last-child { margin-bottom: 0; }
+article a { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; text-decoration-color: var(--color-dim); transition: text-decoration-color var(--transition); }
+article a:hover { text-decoration-color: var(--color-accent); }
+article h2, article h3 { margin-top: 2em; margin-bottom: 0.6em; font-weight: 600; }
+article code { font-family: "SF Mono", ui-monospace, monospace; font-size: 0.85em; padding: 2px 5px; border-radius: 4px; background: var(--color-surface); }
+article pre { padding: 1em; border-radius: 8px; background: var(--color-surface); overflow-x: auto; margin: 1.5em 0; }
+article pre code { padding: 0; background: none; }
+article blockquote { border-left: 2px solid var(--color-border); padding-left: 1em; color: var(--color-secondary); font-style: italic; }
 
 @keyframes blink {
   0%, 50% { opacity: 1; }

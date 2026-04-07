@@ -10,75 +10,77 @@ export default function Blog() {
   const posts = getAllPosts();
 
   return (
-    <div className="min-h-[100dvh] flex flex-col items-center justify-center px-6 md:px-8">
-      <div className="max-w-[520px] w-full space-y-8">
-        <div className="flex items-center justify-between">
-          <Link
-            href="/"
-            className="text-[17px] tracking-tight"
-            style={{
-              fontFamily: "var(--font-eb-garamond), Georgia, serif",
-              color: "var(--color-text)",
-              textDecoration: "none",
-            }}
-          >
-            plyght
-          </Link>
-          <Link
-            href="/"
-            className="text-[12px]"
-            style={{ color: "var(--color-secondary)", textDecoration: "none" }}
-          >
-            back
-          </Link>
+    <div className="min-h-[100dvh] flex flex-col justify-between px-[6vw] md:px-[8vw] pt-[10vh] md:pt-[14vh] pb-[2vh] relative">
+
+      <div className="safari-tint-top" />
+      <div className="safari-tint-bottom" />
+
+      <div className="relative z-10">
+        <div className="reveal reveal-d1 flex items-center gap-5 text-[clamp(14px,1.4vw,16px)] mb-[6vh]">
+          <Link href="/" className="underline-link serif">Home</Link>
+          <span className="serif" style={{ color: "var(--color-dim)" }}>Writing</span>
         </div>
 
-        <div className="space-y-2">
-          <h1
-            className="text-[15px] font-medium"
-            style={{ color: "var(--color-text)" }}
-          >
-            blog
-          </h1>
-
+        <div className="max-w-[700px]">
           {posts.length === 0 ? (
-            <p className="text-[13px]" style={{ color: "var(--color-secondary)" }}>
+            <p
+              className="reveal reveal-d2 serif text-[clamp(18px,2.4vw,28px)] leading-[1.5]"
+              style={{ color: "var(--color-secondary)" }}
+            >
               nothing here yet.
             </p>
           ) : (
-            <div className="space-y-4">
-              {posts.map((post) => (
+            <div>
+              {posts.map((post, i) => (
                 <Link
                   key={post.slug}
                   href={`/blog/${post.slug}`}
-                  className="block group"
-                  style={{ textDecoration: "none" }}
+                  className={`reveal reveal-d${Math.min(i + 2, 3)} group block py-[2.5vh]`}
+                  style={{
+                    textDecoration: "none",
+                    borderBottom: "1px solid var(--color-border)",
+                  }}
                 >
-                  <div className="flex items-baseline justify-between gap-4">
+                  <span className="serif text-[clamp(18px,2.4vw,26px)] leading-[1.4] tracking-[-0.01em] underline-link">
+                    {post.title}
+                  </span>
+                  <div className="flex items-center gap-3 mt-1.5">
                     <span
-                      className="text-[14px]"
-                      style={{ color: "var(--color-text)" }}
-                    >
-                      {post.title}
-                    </span>
-                    <span
-                      className="text-[11px] shrink-0"
-                      style={{ color: "var(--color-secondary)" }}
+                      className="mono text-[clamp(10px,1vw,12px)] tabular-nums"
+                      style={{ color: "var(--color-dim)" }}
                     >
                       {post.date}
                     </span>
+                    {post.excerpt && (
+                      <>
+                        <span style={{ color: "var(--color-border)" }}>·</span>
+                        <span
+                          className="text-[clamp(12px,1.2vw,14px)]"
+                          style={{ color: "var(--color-secondary)" }}
+                        >
+                          {post.excerpt}
+                        </span>
+                      </>
+                    )}
                   </div>
-                  <p
-                    className="text-[12px] mt-1"
-                    style={{ color: "var(--color-secondary)" }}
-                  >
-                    {post.excerpt}
-                  </p>
                 </Link>
               ))}
             </div>
           )}
         </div>
+      </div>
+
+      <div className="reveal reveal-d2 select-none pointer-events-none leading-none relative z-10 mb-[-2vh]">
+        <span
+          className="serif font-bold tracking-[-0.05em] block"
+          style={{
+            fontSize: "clamp(100px, 22vw, 320px)",
+            color: "var(--color-text)",
+            opacity: 0.5,
+          }}
+        >
+          writing
+        </span>
       </div>
     </div>
   );
