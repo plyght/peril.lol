@@ -23,6 +23,17 @@ export const metadata: Metadata = {
   title: "plyght",
   description: "I write code, wrestle, and lift heavy things.",
   metadataBase: new URL("https://peril.lol"),
+  openGraph: {
+    title: "plyght",
+    description: "I write code, wrestle, and lift heavy things.",
+    images: [{ url: "/og-image.png", width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "plyght",
+    description: "I write code, wrestle, and lift heavy things.",
+    images: ["/og-image.png"],
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
