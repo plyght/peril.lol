@@ -263,7 +263,7 @@ article th { font-weight: 600; background: var(--color-surface); }
 
 .now-playing-mobile {
   position: absolute;
-  right: 6vw;
+  left: 6vw;
   bottom: calc(clamp(140px, 28vw, 420px) + 2vh);
   z-index: 20;
 }
