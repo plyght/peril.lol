@@ -118,7 +118,7 @@ export default function Home() {
           <a href="https://github.com/plyght/wax" target="_blank" rel="noopener noreferrer" className="underline-link">Wax</a>, and{" "}
           <a href="https://github.com/plyght/angel" target="_blank" rel="noopener noreferrer" className="underline-link">Angel</a>.
         </p>
-        <div className="flex items-center gap-5 mt-6 text-[clamp(16px,1.4vw,18px)]">
+        <div className="flex flex-wrap items-center gap-5 mt-6 text-[clamp(16px,1.4vw,18px)]">
           <Link href="/blog" className="underline-link serif">Writing</Link>
           <a href="https://github.com/plyght" target="_blank" rel="noopener noreferrer" className="underline-link serif">GitHub</a>
           <a href="https://x.com/inaplight" target="_blank" rel="noopener noreferrer" className="underline-link serif">X</a>
@@ -138,8 +138,7 @@ export default function Home() {
             href="https://www.last.fm/user/plyght_"
             target="_blank"
             rel="noopener noreferrer"
-            className="now-playing serif"
-            style={{ display: isDesktop ? undefined : "none" }}
+            className={`now-playing serif${!isDesktop ? " now-playing-mobile" : ""}`}
           >
             <span className="now-playing-icon">♪</span>
             {nowPlaying && (
