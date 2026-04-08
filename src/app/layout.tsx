@@ -36,10 +36,10 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: "/logo.svg", type: "image/svg+xml" },
+      { url: "/logo-white.svg", type: "image/svg+xml" },
     ],
     apple: [
-      { url: "/logo.svg" },
+      { url: "/logo-white.svg" },
     ],
   },
   appleWebApp: {
