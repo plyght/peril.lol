@@ -12,11 +12,11 @@ The agency definition that has taken over founder culture and self-improvement c
 
 ## The true problem is self-monitoring
 
-Skilled behavior — whether in sports, writing, negotiating, coding, or leading a meeting — relies heavily on routines that run without proper narration. Beilock and Carr describe expert performance as “encoded in a procedural form that supports performance without the need for step-by-step attentional control.” [2]
+Skilled behavior, whether in sports, writing, negotiating, coding, or leading a meeting, relies heavily on routines that run without proper narration. Beilock and Carr describe expert performance as “encoded in a procedural form that supports performance without the need for step-by-step attentional control.” [2]
 
 When you start checking yourself mid-action, you do two damaging things at once. First, you take away attention from the task. Second, you change a live situation into a test of identity. That is why “high agency” talk so often produces fragile people who are loud about intent and inconsistent in results. They are busy proving they are the kind of person who does things, which is very different from doing the actual thing well.
 
-DeCaro and colleagues summarize the same split: “Explicit monitoring theories claim essentially the opposite — that pressure prompts individuals to attend closely to skill processes in a manner that disrupts execution.” The point here is that the failure mode is well-mapped. Attention turns inward, execution falls apart. [3]
+DeCaro and colleagues summarize the same split: “Explicit monitoring theories claim essentially the opposite: that pressure prompts individuals to attend closely to skill processes in a manner that disrupts execution.” The point here is that the failure mode is well-mapped. Attention turns inward, execution falls apart. [3]
 
 ## Why “trying to have agency” doesn’t succeed
 
