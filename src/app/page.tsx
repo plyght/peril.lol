@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Script from "next/script";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 declare global {
   interface Window {
@@ -18,6 +18,49 @@ export default function Home() {
   const sceneRef = useRef<{ destroy: () => void } | null>(null);
   const [isDesktop, setIsDesktop] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [nowPlaying, setNowPlaying] = useState<{ track: string; artist: string; live: boolean } | null>(null);
+  const textRef = useRef<HTMLSpanElement>(null);
+  const containerRef = useRef<HTMLSpanElement>(null);
+  const [needsMarquee, setNeedsMarquee] = useState(false);
+
+  const fetchNowPlaying = useCallback(async () => {
+    try {
+      const res = await fetch(
+        `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${process.env.NEXT_PUBLIC_LASTFM_USER}&api_key=${process.env.NEXT_PUBLIC_LASTFM_API_KEY}&format=json&limit=1`
+      );
+      const data = await res.json();
+      const track = data?.recenttracks?.track?.[0];
+      if (track) {
+        const live = track["@attr"]?.nowplaying === "true";
+        setNowPlaying({ track: track.name, artist: track.artist["#text"], live });
+      } else {
+        setNowPlaying(null);
+      }
+    } catch {
+      setNowPlaying(null);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchNowPlaying();
+    const interval = setInterval(fetchNowPlaying, 30000);
+    return () => clearInterval(interval);
+  }, [fetchNowPlaying]);
+
+  useEffect(() => {
+    if (!nowPlaying || !textRef.current || !containerRef.current) {
+      setNeedsMarquee(false);
+      return;
+    }
+    const check = () => {
+      if (textRef.current && containerRef.current) {
+        setNeedsMarquee(textRef.current.scrollWidth > containerRef.current.clientWidth + 10);
+      }
+    };
+    const timer = setTimeout(check, 600);
+    return () => clearTimeout(timer);
+  }, [nowPlaying]);
+
 
   useEffect(() => {
     document.documentElement.classList.add("no-scroll");
@@ -91,6 +134,26 @@ export default function Home() {
             <span className={copied ? "copy-text copy-text-out" : "copy-text copy-text-in"}>Contact</span>
             <span className={copied ? "copy-text copy-text-in" : "copy-text copy-text-out"}>Copied</span>
           </button>
+          <a
+            href="https://www.last.fm/user/plyght_"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="now-playing serif"
+            style={{ display: isDesktop ? undefined : "none" }}
+          >
+            <span className="now-playing-icon">♪</span>
+            {nowPlaying && (
+              <span
+                className={`now-playing-text${!nowPlaying.live ? " now-playing-dim" : ""}`}
+                ref={containerRef}
+              >
+                <span className={`now-playing-inner${needsMarquee ? " marquee" : ""}`} ref={textRef}>
+                  {!nowPlaying.live && "last played · "}{nowPlaying.track} · {nowPlaying.artist}
+                  {needsMarquee && <>&nbsp;&nbsp;&nbsp;&nbsp;{!nowPlaying.live && "last played · "}{nowPlaying.track} · {nowPlaying.artist}</>}
+                </span>
+              </span>
+            )}
+          </a>
         </div>
       </div>
 
