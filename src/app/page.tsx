@@ -103,7 +103,7 @@ export default function Home() {
     <div className="h-[100dvh] flex flex-col justify-between px-[6vw] md:px-[8vw] pt-[10vh] md:pt-[14vh] pb-[2vh] overflow-hidden relative">
 
       
-      <div className="max-w-[700px] reveal reveal-d1 relative z-10">
+      <div className="max-w-[700px] reveal reveal-d1 relative z-10 overflow-hidden">
         <p className="serif text-[clamp(24px,3vw,34px)] leading-[1.5] tracking-[-0.01em]">
           High school junior out of D.C.{" "}
           <em className="font-semibold">Developer</em>,{" "}
@@ -138,13 +138,12 @@ export default function Home() {
             href="https://www.last.fm/user/plyght_"
             target="_blank"
             rel="noopener noreferrer"
-            className="now-playing serif"
-            style={{ display: isDesktop ? undefined : "none" }}
+            className={`now-playing serif${!isDesktop ? " now-playing-mobile" : ""}`}
           >
             <span className="now-playing-icon">♪</span>
             {nowPlaying && (
               <span
-                className={`now-playing-text${!nowPlaying.live ? " now-playing-dim" : ""}`}
+                className={`now-playing-text${!nowPlaying.live ? " now-playing-dim" : ""}${!isDesktop ? " now-playing-text-mobile" : ""}`}
                 ref={containerRef}
               >
                 <span className={`now-playing-inner${needsMarquee ? " marquee" : ""}`} ref={textRef}>

@@ -261,3 +261,26 @@ article th { font-weight: 600; background: var(--color-surface); }
   75%, 100% { transform: translateX(-50%); }
 }
 
+.now-playing-mobile {
+  flex: 1 1 0;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.now-playing-text-mobile {
+  max-width: 100%;
+  opacity: 1;
+  filter: blur(0px);
+  margin-left: 6px;
+}
+
+.now-playing-text-mobile .now-playing-inner.marquee {
+  animation: marquee 18s ease-in-out infinite;
+}
+
+@media (hover: hover) {
+  .now-playing-mobile:hover .now-playing-text-mobile {
+    max-width: 100%;
+  }
+}
+
