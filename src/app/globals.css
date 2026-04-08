@@ -264,7 +264,8 @@ article th { font-weight: 600; background: var(--color-surface); }
 .now-playing-mobile {
   position: absolute;
   left: 6vw;
-  bottom: calc(clamp(140px, 28vw, 420px) + 2vh);
+  /* Position above plyght text: font-size + mb-[1vh] + pb-[2vh] + small gap */
+  bottom: calc(clamp(140px, 28vw, 420px) + 3vh + 8px);
   z-index: 20;
 }
 
