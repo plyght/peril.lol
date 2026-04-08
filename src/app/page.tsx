@@ -118,7 +118,7 @@ export default function Home() {
           <a href="https://github.com/plyght/wax" target="_blank" rel="noopener noreferrer" className="underline-link">Wax</a>, and{" "}
           <a href="https://github.com/plyght/angel" target="_blank" rel="noopener noreferrer" className="underline-link">Angel</a>.
         </p>
-        <div className="flex items-center gap-5 mt-6 text-[clamp(16px,1.4vw,18px)]">
+        <div className="flex flex-wrap items-center gap-5 mt-6 text-[clamp(16px,1.4vw,18px)]">
           <Link href="/blog" className="underline-link serif">Writing</Link>
           <Link href="/photos" className="underline-link serif">Photos</Link>
           <a href="https://github.com/plyght" target="_blank" rel="noopener noreferrer" className="underline-link serif">GitHub</a>
@@ -135,25 +135,27 @@ export default function Home() {
             <span className={copied ? "copy-text copy-text-out" : "copy-text copy-text-in"}>Contact</span>
             <span className={copied ? "copy-text copy-text-in" : "copy-text copy-text-out"}>Copied</span>
           </button>
-          <a
-            href="https://www.last.fm/user/plyght_"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`now-playing serif${!isDesktop ? " now-playing-mobile" : ""}`}
-          >
-            <span className="now-playing-icon">♪</span>
-            {nowPlaying && (
-              <span
-                className={`now-playing-text${!nowPlaying.live ? " now-playing-dim" : ""}${!isDesktop ? " now-playing-text-mobile" : ""}`}
-                ref={containerRef}
-              >
-                <span className={`now-playing-inner${needsMarquee ? " marquee" : ""}`} ref={textRef}>
-                  {!nowPlaying.live && "last played · "}{nowPlaying.track} · {nowPlaying.artist}
-                  {needsMarquee && <>&nbsp;&nbsp;&nbsp;&nbsp;{!nowPlaying.live && "last played · "}{nowPlaying.track} · {nowPlaying.artist}</>}
+          {isDesktop && (
+            <a
+              href="https://www.last.fm/user/plyght_"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="now-playing serif"
+            >
+              <span className="now-playing-icon">♪</span>
+              {nowPlaying && (
+                <span
+                  className={`now-playing-text${!nowPlaying.live ? " now-playing-dim" : ""}`}
+                  ref={containerRef}
+                >
+                  <span className={`now-playing-inner${needsMarquee ? " marquee" : ""}`} ref={textRef}>
+                    {!nowPlaying.live && "last played · "}{nowPlaying.track} · {nowPlaying.artist}
+                    {needsMarquee && <>&nbsp;&nbsp;&nbsp;&nbsp;{!nowPlaying.live && "last played · "}{nowPlaying.track} · {nowPlaying.artist}</>}
+                  </span>
                 </span>
-              </span>
-            )}
-          </a>
+              )}
+            </a>
+          )}
         </div>
       </div>
 
@@ -162,6 +164,28 @@ export default function Home() {
           id="unicorn-container"
           className="reveal reveal-d1 pointer-events-none absolute -top-[8%] -right-[4%] w-[clamp(240px,50vw,560px)] h-[clamp(240px,50vw,560px)]"
         />
+      )}
+
+      {!isDesktop && (
+        <a
+          href="https://www.last.fm/user/plyght_"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="now-playing now-playing-mobile serif reveal reveal-d2"
+        >
+          <span className="now-playing-icon">♪</span>
+          {nowPlaying && (
+            <span
+              className={`now-playing-text${!nowPlaying.live ? " now-playing-dim" : ""}`}
+              ref={containerRef}
+            >
+              <span className={`now-playing-inner${needsMarquee ? " marquee" : ""}`} ref={textRef}>
+                {!nowPlaying.live && "last played · "}{nowPlaying.track} · {nowPlaying.artist}
+                {needsMarquee && <>&nbsp;&nbsp;&nbsp;&nbsp;{!nowPlaying.live && "last played · "}{nowPlaying.track} · {nowPlaying.artist}</>}
+              </span>
+            </span>
+          )}
+        </a>
       )}
 
       <div className="reveal reveal-d2 select-none pointer-events-none leading-none relative z-10 mb-[1vh] md:mb-[-2vh]">

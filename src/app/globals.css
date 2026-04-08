@@ -262,26 +262,21 @@ article th { font-weight: 600; background: var(--color-surface); }
 }
 
 .now-playing-mobile {
-  flex: 1 1 0;
-  overflow: hidden;
-  min-width: 0;
+  position: absolute;
+  right: 6vw;
+  bottom: calc(clamp(140px, 28vw, 420px) + 2vh);
+  z-index: 20;
 }
 
-.now-playing-text-mobile {
-  max-width: 100%;
+.now-playing-mobile .now-playing-text {
+  max-width: 200px;
   opacity: 1;
   filter: blur(0px);
   margin-left: 6px;
 }
 
-.now-playing-text-mobile .now-playing-inner.marquee {
+.now-playing-mobile .now-playing-inner.marquee {
   animation: marquee 18s ease-in-out infinite;
-}
-
-@media (hover: hover) {
-  .now-playing-mobile:hover .now-playing-text-mobile {
-    max-width: 100%;
-  }
 }
 
 .blog-entry-blur {
