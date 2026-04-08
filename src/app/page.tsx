@@ -26,7 +26,7 @@ export default function Home() {
   const fetchNowPlaying = useCallback(async () => {
     try {
       const res = await fetch(
-        `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${process.env.NEXT_PUBLIC_LASTFM_USER}&api_key=${process.env.NEXT_PUBLIC_LASTFM_API_KEY}&format=json&limit=1`
+        `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=plyght_&api_key=cd6b695e7b06661c8e90bdf322d8b7e2&format=json&limit=1`
       );
       const data = await res.json();
       const track = data?.recenttracks?.track?.[0];
