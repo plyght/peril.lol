@@ -134,25 +134,27 @@ export default function Home() {
             <span className={copied ? "copy-text copy-text-out" : "copy-text copy-text-in"}>Contact</span>
             <span className={copied ? "copy-text copy-text-in" : "copy-text copy-text-out"}>Copied</span>
           </button>
-          <a
-            href="https://www.last.fm/user/plyght_"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`now-playing serif${!isDesktop ? " now-playing-mobile" : ""}`}
-          >
-            <span className="now-playing-icon">♪</span>
-            {nowPlaying && (
-              <span
-                className={`now-playing-text${!nowPlaying.live ? " now-playing-dim" : ""}`}
-                ref={containerRef}
-              >
-                <span className={`now-playing-inner${needsMarquee ? " marquee" : ""}`} ref={textRef}>
-                  {!nowPlaying.live && "last played · "}{nowPlaying.track} · {nowPlaying.artist}
-                  {needsMarquee && <>&nbsp;&nbsp;&nbsp;&nbsp;{!nowPlaying.live && "last played · "}{nowPlaying.track} · {nowPlaying.artist}</>}
+          {isDesktop && (
+            <a
+              href="https://www.last.fm/user/plyght_"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="now-playing serif"
+            >
+              <span className="now-playing-icon">♪</span>
+              {nowPlaying && (
+                <span
+                  className={`now-playing-text${!nowPlaying.live ? " now-playing-dim" : ""}`}
+                  ref={containerRef}
+                >
+                  <span className={`now-playing-inner${needsMarquee ? " marquee" : ""}`} ref={textRef}>
+                    {!nowPlaying.live && "last played · "}{nowPlaying.track} · {nowPlaying.artist}
+                    {needsMarquee && <>&nbsp;&nbsp;&nbsp;&nbsp;{!nowPlaying.live && "last played · "}{nowPlaying.track} · {nowPlaying.artist}</>}
+                  </span>
                 </span>
-              </span>
-            )}
-          </a>
+              )}
+            </a>
+          )}
         </div>
       </div>
 
@@ -161,6 +163,28 @@ export default function Home() {
           id="unicorn-container"
           className="reveal reveal-d1 pointer-events-none absolute -top-[8%] -right-[4%] w-[clamp(240px,50vw,560px)] h-[clamp(240px,50vw,560px)]"
         />
+      )}
+
+      {!isDesktop && (
+        <a
+          href="https://www.last.fm/user/plyght_"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="now-playing now-playing-mobile serif reveal reveal-d2"
+        >
+          <span className="now-playing-icon">♪</span>
+          {nowPlaying && (
+            <span
+              className={`now-playing-text${!nowPlaying.live ? " now-playing-dim" : ""}`}
+              ref={containerRef}
+            >
+              <span className={`now-playing-inner${needsMarquee ? " marquee" : ""}`} ref={textRef}>
+                {!nowPlaying.live && "last played · "}{nowPlaying.track} · {nowPlaying.artist}
+                {needsMarquee && <>&nbsp;&nbsp;&nbsp;&nbsp;{!nowPlaying.live && "last played · "}{nowPlaying.track} · {nowPlaying.artist}</>}
+              </span>
+            </span>
+          )}
+        </a>
       )}
 
       <div className="reveal reveal-d2 select-none pointer-events-none leading-none relative z-10 mb-[1vh] md:mb-[-2vh]">

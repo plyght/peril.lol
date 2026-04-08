@@ -262,8 +262,10 @@ article th { font-weight: 600; background: var(--color-surface); }
 }
 
 .now-playing-mobile {
-  margin-top: 12px;
-  width: 100%;
+  position: absolute;
+  right: 6vw;
+  bottom: calc(clamp(140px, 28vw, 420px) + 2vh);
+  z-index: 20;
 }
 
 .now-playing-mobile .now-playing-text {
