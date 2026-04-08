@@ -56,19 +56,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${ebGaramond.variable} min-h-[100dvh] antialiased`}>
-        <div
-          aria-hidden="true"
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '6px',
-            zIndex: 10000,
-            pointerEvents: 'none',
-            backgroundColor: 'var(--color-bg)',
-          }}
-        />
         {children}
       </body>
     </html>

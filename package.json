@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "bun run scripts/convert-photos.ts && next build",
+    "photos:convert": "bun run scripts/convert-photos.ts",
     "start": "next start",
     "lint": "eslint"
   },
