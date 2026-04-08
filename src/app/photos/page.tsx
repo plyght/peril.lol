@@ -23,14 +23,15 @@ export default function Photos() {
     <div className="relative min-h-[100dvh]">
 
       <div
-        className="sticky top-0 h-[100dvh] flex flex-col overflow-hidden pointer-events-none select-none px-[6vw] md:px-[8vw]"
+        className="sticky top-0 h-[100dvh] flex flex-col justify-between overflow-hidden pointer-events-none select-none px-[6vw] md:px-[8vw] pb-[2vh]"
         style={{ zIndex: 0 }}
       >
-        <div className="reveal reveal-d2 leading-none mt-auto mb-[calc(3vh-4px)] md:mb-[calc(1.2vh-0.5px)]">
+        <div />
+        <div className="reveal reveal-d2 select-none leading-none mb-[1vh] md:mb-[-2vh]">
           <span
             className="serif font-bold tracking-[-0.05em] block"
             style={{
-              fontSize: "clamp(100px, 22vw, 320px)",
+              fontSize: "clamp(140px, 28vw, 420px)",
               color: "var(--color-text)",
               opacity: 0.5,
             }}
