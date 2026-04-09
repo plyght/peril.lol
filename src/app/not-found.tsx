@@ -28,10 +28,10 @@ export default function NotFound() {
     <div className="h-[100dvh] flex flex-col justify-between px-[6vw] md:px-[8vw] pt-[10vh] md:pt-[14vh] pb-[2vh] overflow-hidden relative">
 
       <div className="max-w-[700px] reveal reveal-d1 relative z-10">
-        <p className="serif text-[clamp(24px,3vw,34px)] leading-[1.5] tracking-[-0.01em]" style={{ color: "var(--color-secondary)" }}>
+        <p className="serif text-[clamp(22px,5vw,34px)] leading-[1.5] tracking-[-0.01em]" style={{ color: "var(--color-secondary)" }}>
           {line}
         </p>
-        <div className="flex items-center gap-5 mt-6 text-[clamp(16px,1.4vw,18px)]">
+        <div className="flex items-center gap-5 mt-6 text-[clamp(16px,3vw,20px)]">
           <Link href="/" className="underline-link serif">Return home</Link>
         </div>
       </div>
@@ -40,7 +40,7 @@ export default function NotFound() {
         <span
           className="serif font-bold tracking-[-0.05em] block"
           style={{
-            fontSize: "clamp(140px, 28vw, 420px)",
+            fontSize: "clamp(110px, 25vw, 420px)",
             color: "var(--color-text)",
             opacity: 0.5,
           }}

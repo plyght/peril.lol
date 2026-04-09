@@ -31,7 +31,7 @@ export default function Blog() {
           <span
             className="serif font-bold tracking-[-0.05em] block"
             style={{
-              fontSize: "clamp(140px, 28vw, 420px)",
+              fontSize: "clamp(110px, 25vw, 420px)",
               color: "var(--color-text)",
               opacity: 0.5,
             }}
@@ -46,7 +46,7 @@ export default function Blog() {
         style={{ zIndex: 1, marginTop: "-100dvh" }}
       >
         <div className="pt-[10vh] md:pt-[14vh]">
-          <div className="reveal reveal-d1 flex items-center gap-5 text-[clamp(16px,1.4vw,18px)] mb-[6vh]">
+          <div className="reveal reveal-d1 flex items-center gap-5 text-[clamp(16px,3vw,20px)] mb-[6vh]">
             <Link href="/" className="underline-link serif pointer-events-auto">Home</Link>
             <span className="serif" style={{ color: "var(--color-dim)" }}>Writing</span>
           </div>
@@ -54,7 +54,7 @@ export default function Blog() {
           <div className="max-w-[700px] pb-[30vh]">
             {posts.length === 0 ? (
               <p
-                className="reveal reveal-d2 serif text-[clamp(18px,1.6vw,20px)] leading-[1.5]"
+                className="reveal reveal-d2 serif text-[clamp(16px,2.2vw,20px)] leading-[1.5]"
                 style={{ color: "var(--color-secondary)" }}
               >
                 nothing here yet.

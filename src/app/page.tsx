@@ -22,9 +22,21 @@ export default function Home() {
   const textRef = useRef<HTMLSpanElement>(null);
   const containerRef = useRef<HTMLSpanElement>(null);
   const [needsMarquee, setNeedsMarquee] = useState(false);
+  const wordmarkRef = useRef<HTMLSpanElement>(null);
+  const [wordmarkWidth, setWordmarkWidth] = useState(0);
 
-  const fetchNowPlaying = useCallback(async () => {
+  const fetchNowPlaying = useCallback(async (skipCache = false) => {
     try {
+      const cacheKey = "lastfm_now_playing";
+      const cacheTimeKey = "lastfm_now_playing_ts";
+      if (!skipCache) {
+        const cached = sessionStorage.getItem(cacheKey);
+        const cachedTs = sessionStorage.getItem(cacheTimeKey);
+        if (cached && cachedTs && Date.now() - Number(cachedTs) < 30000) {
+          setNowPlaying(JSON.parse(cached));
+          return;
+        }
+      }
       const res = await fetch(
         `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=plyght_&api_key=cd6b695e7b06661c8e90bdf322d8b7e2&format=json&limit=1`
       );
@@ -32,9 +44,13 @@ export default function Home() {
       const track = data?.recenttracks?.track?.[0];
       if (track) {
         const live = track["@attr"]?.nowplaying === "true";
-        setNowPlaying({ track: track.name, artist: track.artist["#text"], live });
+        const np = { track: track.name, artist: track.artist["#text"], live };
+        setNowPlaying(np);
+        sessionStorage.setItem(cacheKey, JSON.stringify(np));
+        sessionStorage.setItem(cacheTimeKey, String(Date.now()));
       } else {
         setNowPlaying(null);
+        sessionStorage.removeItem(cacheKey);
       }
     } catch {
       setNowPlaying(null);
@@ -43,7 +59,7 @@ export default function Home() {
 
   useEffect(() => {
     fetchNowPlaying();
-    const interval = setInterval(fetchNowPlaying, 30000);
+    const interval = setInterval(() => fetchNowPlaying(true), 30000);
     return () => clearInterval(interval);
   }, [fetchNowPlaying]);
 
@@ -61,6 +77,15 @@ export default function Home() {
     return () => clearTimeout(timer);
   }, [nowPlaying]);
 
+
+  useEffect(() => {
+    if (!wordmarkRef.current) return;
+    const ro = new ResizeObserver(([entry]) => {
+      setWordmarkWidth(entry.contentRect.width);
+    });
+    ro.observe(wordmarkRef.current);
+    return () => ro.disconnect();
+  }, []);
 
   useEffect(() => {
     document.documentElement.classList.add("no-scroll");
@@ -104,7 +129,7 @@ export default function Home() {
 
       
       <div className="max-w-[700px] reveal reveal-d1 relative z-10 overflow-hidden">
-        <p className="serif text-[clamp(24px,3vw,34px)] leading-[1.5] tracking-[-0.01em]">
+        <p className="serif text-[clamp(22px,5vw,34px)] leading-[1.5] tracking-[-0.01em]">
           High school junior out of D.C.{" "}
           <em className="font-semibold">Developer</em>,{" "}
           <em className="font-semibold">wrestler</em>,{" "}
@@ -118,7 +143,7 @@ export default function Home() {
           <a href="https://github.com/plyght/wax" target="_blank" rel="noopener noreferrer" className="underline-link">Wax</a>, and{" "}
           <a href="https://github.com/plyght/angel" target="_blank" rel="noopener noreferrer" className="underline-link">Angel</a>.
         </p>
-        <div className="flex flex-wrap items-center gap-5 mt-6 text-[clamp(16px,1.4vw,18px)]">
+        <div className="flex flex-wrap items-center gap-5 mt-6 text-[clamp(16px,3vw,20px)]">
           <Link href="/blog" className="underline-link serif">Writing</Link>
           <Link href="/photos" className="underline-link serif">Photos</Link>
           <a href="https://github.com/plyght" target="_blank" rel="noopener noreferrer" className="underline-link serif">GitHub</a>
@@ -145,7 +170,7 @@ export default function Home() {
               <span className="now-playing-icon">♪</span>
               {nowPlaying && (
                 <span
-                  className={`now-playing-text${!nowPlaying.live ? " now-playing-dim" : ""}`}
+                  className={`now-playing-text now-playing-loaded${!nowPlaying.live ? " now-playing-dim" : ""}`}
                   ref={containerRef}
                 >
                   <span className={`now-playing-inner${needsMarquee ? " marquee" : ""}`} ref={textRef}>
@@ -172,16 +197,15 @@ export default function Home() {
           target="_blank"
           rel="noopener noreferrer"
           className="now-playing now-playing-mobile serif reveal reveal-d2"
+          style={wordmarkWidth ? { "--wordmark-w": `${wordmarkWidth}px` } as React.CSSProperties : undefined}
         >
           <span className="now-playing-icon">♪</span>
           {nowPlaying && (
             <span
-              className={`now-playing-text${!nowPlaying.live ? " now-playing-dim" : ""}`}
-              ref={containerRef}
+              className={`now-playing-text now-playing-loaded${!nowPlaying.live ? " now-playing-dim" : ""}`}
             >
-              <span className={`now-playing-inner${needsMarquee ? " marquee" : ""}`} ref={textRef}>
+              <span className="now-playing-inner">
                 {!nowPlaying.live && "last played · "}{nowPlaying.track} · {nowPlaying.artist}
-                {needsMarquee && <>&nbsp;&nbsp;&nbsp;&nbsp;{!nowPlaying.live && "last played · "}{nowPlaying.track} · {nowPlaying.artist}</>}
               </span>
             </span>
           )}
@@ -190,9 +214,10 @@ export default function Home() {
 
       <div className="reveal reveal-d2 select-none pointer-events-none leading-none relative z-10 mb-[1vh] md:mb-[-2vh]">
         <span
-          className="serif font-bold tracking-[-0.05em] block"
+          ref={wordmarkRef}
+          className="serif font-bold tracking-[-0.05em] inline-block"
           style={{
-            fontSize: "clamp(140px, 28vw, 420px)",
+            fontSize: "clamp(110px, 25vw, 420px)",
             color: "var(--color-text)",
             opacity: 0.5,
           }}
