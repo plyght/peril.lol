@@ -270,8 +270,8 @@ article th { font-weight: 600; background: var(--color-surface); }
 }
 
 .now-playing-mobile .now-playing-text {
-  /* Width based on plyght text: font-size clamp(140px, 28vw, 420px) × ~2.65 char-width ratio */
-  max-width: calc(clamp(140px, 28vw, 420px) * 2.65);
+  /* Width matches top text block: 88vw (100vw - 12vw padding) capped at 700px */
+  max-width: min(calc(88vw - 24px), 700px);
   opacity: 1;
   filter: blur(0px);
   margin-left: 6px;
