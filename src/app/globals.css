@@ -283,7 +283,7 @@ article th { font-weight: 600; background: var(--color-surface); }
     opacity: 0;
     filter: blur(6px);
     pointer-events: none;
-    transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1), filter 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1), filter 0.45s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   .now-playing-desktop:hover .now-playing-text {
@@ -292,8 +292,18 @@ article th { font-weight: 600; background: var(--color-surface); }
     pointer-events: auto;
   }
 
+  /*
+    Keep animation attached; pause when not hovered so transform does not snap to 0
+    while opacity fades out (avoids scroll-reset flicker on mouse leave).
+  */
+  .now-playing-desktop .now-playing-text .now-playing-inner.marquee {
+    animation: marquee 18s linear infinite;
+    animation-play-state: paused;
+    backface-visibility: hidden;
+  }
+
   .now-playing-desktop:hover .now-playing-text .now-playing-inner.marquee {
-    animation: marquee 18s ease-in-out infinite;
+    animation-play-state: running;
   }
 }
 
@@ -303,8 +313,12 @@ article th { font-weight: 600; background: var(--color-surface); }
 }
 
 @keyframes marquee {
-  0%, 25% { transform: translateX(0); }
-  75%, 100% { transform: translateX(-50%); }
+  0%, 25% {
+    transform: translate3d(0, 0, 0);
+  }
+  75%, 100% {
+    transform: translate3d(-50%, 0, 0);
+  }
 }
 
 .now-playing-mobile {
