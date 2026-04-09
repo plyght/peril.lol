@@ -19,9 +19,12 @@ export default function Home() {
   const [isDesktop, setIsDesktop] = useState(false);
   const [copied, setCopied] = useState(false);
   const [nowPlaying, setNowPlaying] = useState<{ track: string; artist: string; live: boolean } | null>(null);
+  const [displayedTrack, setDisplayedTrack] = useState<{ track: string; artist: string; live: boolean } | null>(null);
+  const [isFading, setIsFading] = useState(false);
   const textRef = useRef<HTMLSpanElement>(null);
   const containerRef = useRef<HTMLSpanElement>(null);
   const [needsMarquee, setNeedsMarquee] = useState(false);
+  const [overflowMeasured, setOverflowMeasured] = useState(false);
   const wordmarkRef = useRef<HTMLSpanElement>(null);
   const [wordmarkWidth, setWordmarkWidth] = useState(0);
   const bioRef = useRef<HTMLDivElement>(null);
@@ -70,28 +73,65 @@ export default function Home() {
   }, [fetchNowPlaying]);
 
   useEffect(() => {
-    if (!nowPlaying || !textRef.current || !containerRef.current) {
-      setNeedsMarquee(false);
+    if (!nowPlaying) {
+      if (displayedTrack) {
+        setIsFading(true);
+        const t = setTimeout(() => {
+          setDisplayedTrack(null);
+          setIsFading(false);
+        }, 450);
+        return () => clearTimeout(t);
+      }
       return;
     }
+    if (!displayedTrack) {
+      setDisplayedTrack(nowPlaying);
+      return;
+    }
+    const same =
+      displayedTrack.track === nowPlaying.track &&
+      displayedTrack.artist === nowPlaying.artist;
+    if (same) {
+      if (displayedTrack.live !== nowPlaying.live) {
+        setDisplayedTrack(nowPlaying);
+      }
+      return;
+    }
+    setIsFading(true);
+    const t = setTimeout(() => {
+      setDisplayedTrack(nowPlaying);
+      setIsFading(false);
+    }, 450);
+    return () => clearTimeout(t);
+  }, [nowPlaying, displayedTrack]);
+
+  useEffect(() => {
+    if (!displayedTrack || !textRef.current || !containerRef.current) {
+      setNeedsMarquee(false);
+      setOverflowMeasured(false);
+      return;
+    }
+    setOverflowMeasured(false);
+    setNeedsMarquee(false);
     const check = () => {
       if (textRef.current && containerRef.current) {
         setNeedsMarquee(textRef.current.scrollWidth > containerRef.current.clientWidth + 10);
+        setOverflowMeasured(true);
       }
     };
     const timer = setTimeout(check, 600);
     return () => clearTimeout(timer);
-  }, [nowPlaying, bioWidth]);
+  }, [displayedTrack, bioWidth]);
 
   useEffect(() => {
-    if (!isDesktop || !nowPlaying || !textRef.current || !containerRef.current) return;
+    if (!isDesktop || !displayedTrack || !textRef.current || !containerRef.current) return;
     const timer = setTimeout(() => {
       if (textRef.current && containerRef.current) {
         setNeedsMarquee(textRef.current.scrollWidth > containerRef.current.clientWidth + 10);
       }
     }, 600);
     return () => clearTimeout(timer);
-  }, [isDesktop, bioWidth]);
+  }, [isDesktop, bioWidth, displayedTrack]);
 
 
   useEffect(() => {
@@ -232,7 +272,7 @@ export default function Home() {
               href="https://www.last.fm/user/plyght_"
               target="_blank"
               rel="noopener noreferrer"
-              className="now-playing now-playing-desktop serif"
+              className={`now-playing now-playing-desktop serif${displayedTrack?.live && !isFading ? " now-playing-live" : ""}${!overflowMeasured || needsMarquee ? " now-playing-overflow" : ""}${isFading ? " now-playing-fading" : ""}`}
               style={
                 { "--np-track-max": `${desktopTrackMaxPx ?? 0}px` } as React.CSSProperties
               }
@@ -240,14 +280,14 @@ export default function Home() {
               <span ref={nowPlayingIconRef} className="now-playing-icon">
                 ♪
               </span>
-              {nowPlaying && (
+              {displayedTrack && (
                 <span
-                  className={`now-playing-text now-playing-loaded${!nowPlaying.live ? " now-playing-dim" : ""}`}
+                  className={`now-playing-text now-playing-loaded${!displayedTrack.live ? " now-playing-dim" : ""}`}
                   ref={containerRef}
                 >
                   <span className={`now-playing-inner${needsMarquee ? " marquee" : ""}`} ref={textRef}>
-                    {!nowPlaying.live && "last played · "}{nowPlaying.track} · {nowPlaying.artist}
-                    {needsMarquee && <>&nbsp;&nbsp;&nbsp;&nbsp;{!nowPlaying.live && "last played · "}{nowPlaying.track} · {nowPlaying.artist}</>}
+                    {!displayedTrack.live && "last played · "}{displayedTrack.track} · {displayedTrack.artist}
+                    {needsMarquee && <>&nbsp;&nbsp;&nbsp;&nbsp;{!displayedTrack.live && "last played · "}{displayedTrack.track} · {displayedTrack.artist}</>}
                   </span>
                 </span>
               )}
@@ -268,16 +308,16 @@ export default function Home() {
           href="https://www.last.fm/user/plyght_"
           target="_blank"
           rel="noopener noreferrer"
-          className="now-playing now-playing-mobile serif reveal reveal-d2"
+          className={`now-playing now-playing-mobile serif reveal reveal-d2${isFading ? " now-playing-fading" : ""}`}
           style={wordmarkWidth ? { "--wordmark-w": `${wordmarkWidth}px` } as React.CSSProperties : undefined}
         >
           <span className="now-playing-icon">♪</span>
-          {nowPlaying && (
+          {displayedTrack && (
             <span
-              className={`now-playing-text now-playing-loaded${!nowPlaying.live ? " now-playing-dim" : ""}`}
+              className={`now-playing-text now-playing-loaded${!displayedTrack.live ? " now-playing-dim" : ""}`}
             >
               <span className="now-playing-inner">
-                {!nowPlaying.live && "last played · "}{nowPlaying.track} · {nowPlaying.artist}
+                {!displayedTrack.live && "last played · "}{displayedTrack.track} · {displayedTrack.artist}
               </span>
             </span>
           )}
