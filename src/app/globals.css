@@ -270,7 +270,7 @@ article th { font-weight: 600; background: var(--color-surface); }
 }
 
 .now-playing-mobile .now-playing-text {
-  max-width: 200px;
+  max-width: clamp(200px, 60vw, 380px);
   opacity: 1;
   filter: blur(0px);
   margin-left: 6px;
