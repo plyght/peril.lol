@@ -111,16 +111,19 @@ export default function Home() {
       setOverflowMeasured(false);
       return;
     }
-    setOverflowMeasured(false);
-    setNeedsMarquee(false);
     const check = () => {
       if (textRef.current && containerRef.current) {
-        setNeedsMarquee(textRef.current.scrollWidth > containerRef.current.clientWidth + 10);
+        const next = textRef.current.scrollWidth > containerRef.current.clientWidth + 10;
+        setNeedsMarquee((prev) => (prev === next ? prev : next));
         setOverflowMeasured(true);
       }
     };
+    const raf = requestAnimationFrame(check);
     const timer = setTimeout(check, 600);
-    return () => clearTimeout(timer);
+    return () => {
+      cancelAnimationFrame(raf);
+      clearTimeout(timer);
+    };
   }, [displayedTrack, bioWidth]);
 
   useEffect(() => {
@@ -286,8 +289,8 @@ export default function Home() {
                   ref={containerRef}
                 >
                   <span className={`now-playing-inner${needsMarquee ? " marquee" : ""}`} ref={textRef}>
-                    {!displayedTrack.live && "last played · "}{displayedTrack.track} · {displayedTrack.artist}
-                    {needsMarquee && <>&nbsp;&nbsp;&nbsp;&nbsp;{!displayedTrack.live && "last played · "}{displayedTrack.track} · {displayedTrack.artist}</>}
+                    {!displayedTrack.live && "last played · "}{displayedTrack.track} · {displayedTrack.artist}{needsMarquee && <>&nbsp;&nbsp;&nbsp;&nbsp;</>}
+                    {needsMarquee && <>{!displayedTrack.live && "last played · "}{displayedTrack.track} · {displayedTrack.artist}&nbsp;&nbsp;&nbsp;&nbsp;</>}
                   </span>
                 </span>
               )}
