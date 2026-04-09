@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Script from "next/script";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 
 declare global {
   interface Window {
@@ -25,7 +25,11 @@ export default function Home() {
   const wordmarkRef = useRef<HTMLSpanElement>(null);
   const [wordmarkWidth, setWordmarkWidth] = useState(0);
   const bioRef = useRef<HTMLDivElement>(null);
+  const navRowRef = useRef<HTMLDivElement>(null);
+  const nowPlayingDesktopRef = useRef<HTMLAnchorElement>(null);
+  const nowPlayingIconRef = useRef<HTMLSpanElement>(null);
   const [bioWidth, setBioWidth] = useState(0);
+  const [desktopTrackMaxPx, setDesktopTrackMaxPx] = useState<number | null>(null);
 
   const fetchNowPlaying = useCallback(async (skipCache = false) => {
     try {
@@ -77,7 +81,17 @@ export default function Home() {
     };
     const timer = setTimeout(check, 600);
     return () => clearTimeout(timer);
-  }, [nowPlaying]);
+  }, [nowPlaying, bioWidth]);
+
+  useEffect(() => {
+    if (!isDesktop || !nowPlaying || !textRef.current || !containerRef.current) return;
+    const timer = setTimeout(() => {
+      if (textRef.current && containerRef.current) {
+        setNeedsMarquee(textRef.current.scrollWidth > containerRef.current.clientWidth + 10);
+      }
+    }, 600);
+    return () => clearTimeout(timer);
+  }, [isDesktop, bioWidth]);
 
 
   useEffect(() => {
@@ -97,6 +111,39 @@ export default function Home() {
     ro.observe(bioRef.current);
     return () => ro.disconnect();
   }, []);
+
+  const measureDesktopTrackWidth = useCallback(() => {
+    if (!bioRef.current || !nowPlayingIconRef.current) {
+      setDesktopTrackMaxPx(null);
+      return;
+    }
+    const bio = bioRef.current.getBoundingClientRect();
+    const icon = nowPlayingIconRef.current.getBoundingClientRect();
+    const gapPx = 6;
+    setDesktopTrackMaxPx(Math.max(0, Math.floor(bio.right - icon.right - gapPx)));
+  }, []);
+
+  useLayoutEffect(() => {
+    if (!isDesktop) {
+      setDesktopTrackMaxPx(null);
+      return;
+    }
+    measureDesktopTrackWidth();
+  }, [isDesktop, measureDesktopTrackWidth, bioWidth, nowPlaying, copied]);
+
+  useEffect(() => {
+    if (!isDesktop) return;
+    const obs = [bioRef.current, navRowRef.current, nowPlayingDesktopRef.current].filter(
+      (n) => n != null
+    );
+    const ro = new ResizeObserver(() => measureDesktopTrackWidth());
+    obs.forEach((el) => ro.observe(el));
+    window.addEventListener("resize", measureDesktopTrackWidth);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", measureDesktopTrackWidth);
+    };
+  }, [isDesktop, measureDesktopTrackWidth, nowPlaying]);
 
 
   useEffect(() => {
@@ -140,7 +187,11 @@ export default function Home() {
     <div className="h-[100dvh] flex flex-col justify-between px-[6vw] md:px-[8vw] pt-[10vh] md:pt-[14vh] pb-[2vh] overflow-hidden relative">
 
       
-      <div ref={bioRef} className="max-w-[700px] reveal reveal-d1 relative z-10 overflow-hidden">
+      <div
+        ref={bioRef}
+        className="max-w-[700px] reveal reveal-d1 relative z-10 overflow-hidden w-full min-w-0"
+        style={bioWidth ? ({ "--bio-w": `${bioWidth}px` } as React.CSSProperties) : undefined}
+      >
         <p className="serif text-[clamp(22px,5vw,34px)] leading-[1.5] tracking-[-0.01em]">
           High school junior out of D.C.{" "}
           <em className="font-semibold">Developer</em>,{" "}
@@ -155,7 +206,10 @@ export default function Home() {
           <a href="https://github.com/plyght/wax" target="_blank" rel="noopener noreferrer" className="underline-link">Wax</a>, and{" "}
           <a href="https://github.com/plyght/angel" target="_blank" rel="noopener noreferrer" className="underline-link">Angel</a>.
         </p>
-        <div className="flex flex-wrap items-center gap-5 mt-6 text-[clamp(16px,3vw,20px)]">
+        <div
+          ref={navRowRef}
+          className="flex flex-wrap items-center gap-5 mt-6 text-[clamp(16px,3vw,20px)]"
+        >
           <Link href="/blog" className="underline-link serif">Writing</Link>
           <Link href="/photos" className="underline-link serif">Photos</Link>
           <a href="https://github.com/plyght" target="_blank" rel="noopener noreferrer" className="underline-link serif">GitHub</a>
@@ -174,13 +228,18 @@ export default function Home() {
           </button>
           {isDesktop && (
             <a
+              ref={nowPlayingDesktopRef}
               href="https://www.last.fm/user/plyght_"
               target="_blank"
               rel="noopener noreferrer"
               className="now-playing now-playing-desktop serif"
-              style={bioWidth ? { "--bio-w": `${bioWidth}px` } as React.CSSProperties : undefined}
+              style={
+                { "--np-track-max": `${desktopTrackMaxPx ?? 0}px` } as React.CSSProperties
+              }
             >
-              <span className="now-playing-icon">♪</span>
+              <span ref={nowPlayingIconRef} className="now-playing-icon">
+                ♪
+              </span>
               {nowPlaying && (
                 <span
                   className={`now-playing-text now-playing-loaded${!nowPlaying.live ? " now-playing-dim" : ""}`}

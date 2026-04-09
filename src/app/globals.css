@@ -241,13 +241,15 @@ article th { font-weight: 600; background: var(--color-surface); }
   color: var(--color-dim);
 }
 
-@media (hover: hover) {
+/* Desktop: ♪ stays in the nav row; track width = bio column right edge minus icon (see --np-track-max) */
+@media (min-width: 768px) {
   .now-playing-desktop {
     position: relative;
   }
 
   .now-playing-desktop .now-playing-icon {
     cursor: pointer;
+    flex-shrink: 0;
   }
 
   .now-playing-desktop .now-playing-text {
@@ -256,8 +258,28 @@ article th { font-weight: 600; background: var(--color-surface); }
     padding-left: 6px;
     top: 50%;
     transform: translateY(-50%);
-    max-width: var(--bio-w, 300px);
+    max-width: var(--np-track-max);
     overflow: hidden;
+    /* Match right-edge fade on the left (mobile keeps base = right-only) */
+    -webkit-mask-image: linear-gradient(
+      90deg,
+      transparent,
+      black 8px,
+      black calc(100% - 8px),
+      transparent
+    );
+    mask-image: linear-gradient(
+      90deg,
+      transparent,
+      black 8px,
+      black calc(100% - 8px),
+      transparent
+    );
+  }
+}
+
+@media (min-width: 768px) and (hover: hover) {
+  .now-playing-desktop .now-playing-text {
     opacity: 0;
     filter: blur(6px);
     pointer-events: none;
