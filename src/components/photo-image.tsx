@@ -11,7 +11,7 @@ export function PhotoImage({ src, alt, width, height }: { src: string; alt: stri
   }, []);
 
   return (
-    <div className="photo-container">
+    <a href={src} target="_blank" rel="noopener noreferrer" className="photo-container block">
       <img
         ref={imgRef}
         src={src}
@@ -24,6 +24,6 @@ export function PhotoImage({ src, alt, width, height }: { src: string; alt: stri
         className={`photo-img${loaded ? " photo-loaded" : ""}`}
       />
       <div className={`photo-reveal${loaded ? " photo-reveal-done" : ""}`} />
-    </div>
+    </a>
   );
 }
