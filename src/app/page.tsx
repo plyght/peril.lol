@@ -24,6 +24,8 @@ export default function Home() {
   const [needsMarquee, setNeedsMarquee] = useState(false);
   const wordmarkRef = useRef<HTMLSpanElement>(null);
   const [wordmarkWidth, setWordmarkWidth] = useState(0);
+  const bioRef = useRef<HTMLDivElement>(null);
+  const [bioWidth, setBioWidth] = useState(0);
 
   const fetchNowPlaying = useCallback(async (skipCache = false) => {
     try {
@@ -88,6 +90,16 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
+    if (!bioRef.current) return;
+    const ro = new ResizeObserver(([entry]) => {
+      setBioWidth(entry.contentRect.width);
+    });
+    ro.observe(bioRef.current);
+    return () => ro.disconnect();
+  }, []);
+
+
+  useEffect(() => {
     document.documentElement.classList.add("no-scroll");
     const mq = window.matchMedia("(min-width: 768px)");
     setIsDesktop(mq.matches);
@@ -128,7 +140,7 @@ export default function Home() {
     <div className="h-[100dvh] flex flex-col justify-between px-[6vw] md:px-[8vw] pt-[10vh] md:pt-[14vh] pb-[2vh] overflow-hidden relative">
 
       
-      <div className="max-w-[700px] reveal reveal-d1 relative z-10 overflow-hidden">
+      <div ref={bioRef} className="max-w-[700px] reveal reveal-d1 relative z-10 overflow-hidden">
         <p className="serif text-[clamp(22px,5vw,34px)] leading-[1.5] tracking-[-0.01em]">
           High school junior out of D.C.{" "}
           <em className="font-semibold">Developer</em>,{" "}
@@ -165,7 +177,8 @@ export default function Home() {
               href="https://www.last.fm/user/plyght_"
               target="_blank"
               rel="noopener noreferrer"
-              className="now-playing serif"
+              className="now-playing now-playing-desktop serif"
+              style={bioWidth ? { "--bio-w": `${bioWidth}px` } as React.CSSProperties : undefined}
             >
               <span className="now-playing-icon">♪</span>
               {nowPlaying && (
