@@ -1,0 +1,39 @@
+import type { MetadataRoute } from "next";
+import { getAllPosts } from "@/lib/blog";
+
+export const dynamic = "force-static";
+
+export default function sitemap(): MetadataRoute.Sitemap {
+  const posts = getAllPosts();
+
+  const blogEntries: MetadataRoute.Sitemap = posts
+    .filter((post) => post.date && !isNaN(new Date(post.date).getTime()))
+    .map((post) => ({
+      url: `https://peril.lol/blog/${post.slug}`,
+      lastModified: new Date(post.date),
+      changeFrequency: "monthly",
+      priority: 0.7,
+    }));
+
+  return [
+    {
+      url: "https://peril.lol",
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 1,
+    },
+    {
+      url: "https://peril.lol/blog",
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.8,
+    },
+    {
+      url: "https://peril.lol/photos",
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.6,
+    },
+    ...blogEntries,
+  ];
+}

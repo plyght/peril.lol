@@ -4,14 +4,20 @@ import { getAllPhotos } from "@/lib/photos";
 import { PhotoImage } from "@/components/photo-image";
 
 export const metadata: Metadata = {
-  title: "photos - peril.lol",
+  title: "photos",
+  description: "a collection of photos.",
+  alternates: {
+    canonical: "/photos",
+  },
   openGraph: {
     title: "photos",
+    description: "a collection of photos.",
     images: [{ url: "/og-image.png", width: 1200, height: 630 }],
   },
   twitter: {
     card: "summary_large_image",
     title: "photos",
+    description: "a collection of photos.",
     images: ["/og-image.png"],
   },
 };

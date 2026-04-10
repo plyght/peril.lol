@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { getAllPosts, getPost } from "@/lib/blog";
 import { notFound } from "next/navigation";
@@ -11,15 +12,21 @@ export async function generateMetadata({
   params,
 }: {
   params: Promise<{ slug: string }>;
-}) {
+}): Promise<Metadata> {
   const { slug } = await params;
   const post = await getPost(slug);
   if (!post) return { title: "not found" };
   return {
-    title: `${post.title} - peril.lol`,
+    title: post.title,
+    description: post.excerpt ?? "",
+    alternates: {
+      canonical: `/blog/${slug}`,
+    },
     openGraph: {
       title: post.title,
       description: post.excerpt ?? "",
+      type: "article",
+      publishedTime: post.date,
       images: [{ url: `/og/${slug}.png`, width: 1200, height: 630 }],
     },
     twitter: {
@@ -40,10 +47,33 @@ export default async function BlogPost({
   const post = await getPost(slug);
   if (!post) notFound();
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: post.title,
+    datePublished: post.date,
+    author: {
+      "@type": "Person",
+      name: "plyght",
+      url: "https://peril.lol",
+    },
+    publisher: {
+      "@type": "Person",
+      name: "plyght",
+      url: "https://peril.lol",
+    },
+    url: `https://peril.lol/blog/${slug}`,
+    ...(post.excerpt ? { description: post.excerpt } : {}),
+  };
+
   return (
     <div className="min-h-[100dvh] flex flex-col px-[6vw] md:px-[8vw] pt-[10vh] md:pt-[14vh] pb-[4vh] relative">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
 
-      
+
       <div className="relative z-10">
         <div className="reveal reveal-d1 flex items-center gap-5 text-[clamp(16px,3vw,20px)] mb-[6vh]">
           <Link href="/" className="underline-link serif">Home</Link>

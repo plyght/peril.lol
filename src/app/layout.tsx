@@ -20,9 +20,15 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "plyght",
+  title: {
+    default: "plyght",
+    template: "%s - plyght",
+  },
   description: "I write code, wrestle, and lift heavy things.",
   metadataBase: new URL("https://peril.lol"),
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     title: "plyght",
     description: "I write code, wrestle, and lift heavy things.",
