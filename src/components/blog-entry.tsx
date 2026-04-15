@@ -6,13 +6,11 @@ import Link from "next/link";
 export function BlogEntry({
   slug,
   title,
-  date,
   excerpt,
   revealClass,
 }: {
   slug: string;
   title: string;
-  date: string;
   excerpt: string;
   revealClass: string;
 }) {
@@ -58,25 +56,14 @@ export function BlogEntry({
       <span className="serif text-[clamp(22px,2.4vw,26px)] leading-[1.4] tracking-[-0.01em] underline-link">
         {title}
       </span>
-      <div className="flex items-center gap-3 mt-1.5">
+      {excerpt && (
         <span
-          className="mono text-[clamp(12px,1vw,13px)] tabular-nums"
-          style={{ color: "var(--color-dim)" }}
+          className="block mt-1.5 text-[clamp(14px,1.2vw,15px)]"
+          style={{ color: "var(--color-secondary)" }}
         >
-          {date}
+          {excerpt}
         </span>
-        {excerpt && (
-          <>
-            <span style={{ color: "var(--color-border)" }}>·</span>
-            <span
-              className="text-[clamp(14px,1.2vw,15px)]"
-              style={{ color: "var(--color-secondary)" }}
-            >
-              {excerpt}
-            </span>
-          </>
-        )}
-      </div>
+      )}
     </Link>
   );
 }

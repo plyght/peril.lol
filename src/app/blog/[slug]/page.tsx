@@ -27,7 +27,6 @@ export async function generateMetadata({
       title: post.title,
       description: post.excerpt ?? "",
       type: "article",
-      publishedTime: post.date,
       images: [{ url: `/og/${slug}.png`, width: 1200, height: 630 }],
     },
     twitter: {
@@ -52,7 +51,6 @@ export default async function BlogPost({
     "@context": "https://schema.org",
     "@type": "Article",
     headline: post.title,
-    datePublished: post.date,
     author: {
       "@type": "Person",
       name: "plyght",
@@ -86,12 +84,6 @@ export default async function BlogPost({
             <h1 className="serif text-[clamp(22px,5vw,34px)] leading-[1.3] tracking-[-0.015em] font-medium">
               {post.title}
             </h1>
-            <span
-              className="mono text-[clamp(12px,1vw,13px)] tabular-nums mt-2 block"
-              style={{ color: "var(--color-dim)" }}
-            >
-              {post.date}
-            </span>
           </div>
 
           <article

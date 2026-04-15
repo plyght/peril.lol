@@ -72,7 +72,6 @@ export default function Blog() {
                     key={post.slug}
                     slug={post.slug}
                     title={post.title}
-                    date={post.date}
                     excerpt={post.excerpt}
                     revealClass={`reveal reveal-d${Math.min(i + 2, 3)}`}
                   />

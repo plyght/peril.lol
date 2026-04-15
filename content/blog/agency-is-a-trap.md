@@ -1,6 +1,5 @@
 ---
 title: Agency is a Trap
-date: 2026-04-07
 excerpt: my thoughts on agency and self-monitoring.
 ---
 

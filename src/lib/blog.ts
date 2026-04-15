@@ -44,7 +44,6 @@ function linkifyCitations(rawHtml: string): string {
 export interface Post {
   slug: string;
   title: string;
-  date: string;
   excerpt: string;
   content: string;
 }
@@ -54,7 +53,7 @@ export function getAllPosts(): Post[] {
 
   const files = fs.readdirSync(postsDir).filter((f) => f.endsWith(".md"));
 
-  const posts = files.map((file) => {
+  return files.map((file) => {
     const slug = file.replace(/\.md$/, "");
     const raw = fs.readFileSync(path.join(postsDir, file), "utf-8");
     const { data, content } = matter(raw);
@@ -62,15 +61,10 @@ export function getAllPosts(): Post[] {
     return {
       slug,
       title: data.title || slug,
-      date: data.date ? String(data.date).split("T")[0] : "",
       excerpt: data.excerpt || content.slice(0, 120) + "...",
       content,
     };
   });
-
-  return posts.sort(
-    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-  );
 }
 
 export async function getPost(slug: string): Promise<Post | null> {
@@ -85,7 +79,6 @@ export async function getPost(slug: string): Promise<Post | null> {
   return {
     slug,
     title: data.title || slug,
-    date: data.date ? String(data.date).split("T")[0] : "",
     excerpt: data.excerpt ? String(data.excerpt) : "",
     content: linkifyCitations(processed.toString()),
   };
