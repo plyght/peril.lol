@@ -162,6 +162,13 @@ article li > ul, article li > ol { margin-top: 0.4em; margin-bottom: 0; }
 article hr { border: none; border-top: 1px solid var(--color-border); margin: 2em 0; }
 article img { max-width: 100%; height: auto; border-radius: 8px; margin: 1.5em 0; }
 article strong { font-weight: 600; }
+article .cite-ref, article .cite-back { text-decoration: none; cursor: pointer; }
+article .cite-ref:hover, article .cite-back:hover { text-decoration: none; }
+article .cite-bracket { color: var(--color-dim); }
+article .cite-num { color: var(--color-secondary); transition: color var(--transition) var(--cubic); }
+article .cite-ref:hover .cite-num, article .cite-back:hover .cite-num { color: var(--color-accent); }
+.cite-pulse { animation: cite-pulse 0.8s var(--cubic) both; }
+@keyframes cite-pulse { 0% { color: var(--color-accent); } 100% { color: var(--color-secondary); } }
 article table { width: 100%; border-collapse: collapse; margin: 1.5em 0; }
 article th, article td { padding: 0.5em 0.75em; border: 1px solid var(--color-border); text-align: left; }
 article th { font-weight: 600; background: var(--color-surface); }

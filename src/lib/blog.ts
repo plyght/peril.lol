@@ -6,6 +6,41 @@ import html from "remark-html";
 
 const postsDir = path.join(process.cwd(), "content/blog");
 
+function linkifyCitations(rawHtml: string): string {
+  const lastOlStart = rawHtml.lastIndexOf("<ol>");
+  const lastOlEnd = rawHtml.lastIndexOf("</ol>");
+  if (lastOlStart === -1 || lastOlEnd === -1) return rawHtml;
+
+  const beforeSources = rawHtml.slice(0, lastOlStart);
+  if (!beforeSources.includes("<strong>Sources:")) return rawHtml;
+
+  const sourcesBlock = rawHtml.slice(lastOlStart, lastOlEnd + 5);
+  const sourceItems = sourcesBlock.match(/<li>/g);
+  if (!sourceItems) return rawHtml;
+  const sourceCount = sourceItems.length;
+
+  const validNums = new Set(
+    Array.from({ length: sourceCount }, (_, i) => i + 1)
+  );
+
+  let srcIdx = 0;
+  const taggedSources = sourcesBlock.replace(/<li>/g, () => {
+    srcIdx++;
+    return `<li id="source-${srcIdx}"><a href="#ref-${srcIdx}-1" class="cite-back" data-source="${srcIdx}"><span class="cite-bracket">[</span><span class="cite-num">${srcIdx}</span><span class="cite-bracket">]</span></a> `;
+  });
+
+  const occurrences: Record<number, number> = {};
+  const body = rawHtml.slice(0, lastOlStart).replace(/\[(\d+)\]/g, (match, num) => {
+    const n = parseInt(num, 10);
+    if (!validNums.has(n)) return match;
+    occurrences[n] = (occurrences[n] || 0) + 1;
+    const k = occurrences[n];
+    return `<a href="#source-${n}" id="ref-${n}-${k}" class="cite-ref" data-source="${n}"><span class="cite-bracket">[</span><span class="cite-num">${n}</span><span class="cite-bracket">]</span></a>`;
+  });
+
+  return body + taggedSources + rawHtml.slice(lastOlEnd + 5);
+}
+
 export interface Post {
   slug: string;
   title: string;
@@ -52,6 +87,6 @@ export async function getPost(slug: string): Promise<Post | null> {
     title: data.title || slug,
     date: data.date ? String(data.date).split("T")[0] : "",
     excerpt: data.excerpt ? String(data.excerpt) : "",
-    content: processed.toString(),
+    content: linkifyCitations(processed.toString()),
   };
 }

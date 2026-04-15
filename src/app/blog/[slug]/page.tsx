@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getAllPosts, getPost } from "@/lib/blog";
 import { notFound } from "next/navigation";
+import { CitationHandler } from "@/components/citation-handler";
 
 export async function generateStaticParams() {
   const posts = getAllPosts();
@@ -98,6 +99,7 @@ export default async function BlogPost({
             style={{ color: "var(--color-text)" }}
             dangerouslySetInnerHTML={{ __html: post.content }}
           />
+          <CitationHandler />
         </div>
       </div>
     </div>

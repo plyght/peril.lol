@@ -1,7 +1,7 @@
 ---
 title: Agency is a Trap
 date: 2026-04-07
-excerpt: first post.
+excerpt: my thoughts on agency and self-monitoring.
 ---
 
 Defining agency as something to possess, display, or improve makes it a status symbol. Predictably, this shifts attention from the task itself to how your actions reflect on you. As a result, performance declines, learning slows, and external forces like incentives, shame, or low status become more influential.
@@ -12,7 +12,7 @@ The agency definition that has taken over founder culture and self-improvement c
 
 ## The true problem is self-monitoring
 
-Skilled behavior, whether in sports, writing, negotiating, coding, or leading a meeting, relies heavily on routines that run without proper narration. Beilock and Carr describe expert performance as “encoded in a procedural form that supports performance without the need for step-by-step attentional control.” [2]
+Having skills, whether in sports, writing, negotiating, coding, or leading a meeting, relies heavily on routines that run without proper narration. Beilock and Carr describe expert performance as “encoded in a procedural form that supports performance without the need for step-by-step attentional control.” [2]
 
 When you start checking yourself mid-action, you do two damaging things at once. First, you take away attention from the task. Second, you change a live situation into a test of identity. That is why “high agency” talk so often produces fragile people who are loud about intent and inconsistent in results. They are busy proving they are the kind of person who does things, which is very different from doing the actual thing well.
 
