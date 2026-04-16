@@ -1,5 +1,5 @@
 ---
-title: God is a Manmade Machine.
+title: God is a Manmade Machine
 excerpt: my thoughts on God, Psychology, and Religion
 ---
 
