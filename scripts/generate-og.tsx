@@ -102,6 +102,7 @@ async function renderOg({ title, bigText, bigTextSize = "280px", bottomOffset = 
 const pages: OgOptions[] = [
   { bigText: "plyght", outPath: join(root, "public/og-image.png") },
   { bigText: "writing", outPath: join(ogDir, "writing.png") },
+  { bigText: "videos", outPath: join(ogDir, "videos.png") },
   { bigText: "404", bigTextSize: "420px", bottomOffset: "-60px", outPath: join(ogDir, "404.png") },
 ];
 
