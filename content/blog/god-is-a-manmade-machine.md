@@ -15,7 +15,7 @@ You hear a branch snap in the woods and your first instinct is that something is
 
 ## Watched people are nice people
 
-Here's where it gets interesting. It's not just that we imagine agents. It's that the mere feeling of being watched changes how we act.
+Here's where it gets interesting. We do more than imagine agents. The mere feeling of being watched changes how we act.
 
 Bateson, Nettle, and Roberts placed an image of a pair of eyes above an honesty box in a university coffee room, the kind where you drop money for your drink on the honor system. When the eyes were displayed instead of a neutral image, people paid nearly three times as much. A picture of eyes on a wall tripled honest payment. Not a camera. Not a person. Not a consequence. A picture. [2]
 
@@ -25,13 +25,13 @@ This is the engine of the machine. God doesn't need to exist to change what peop
 
 ## Punitive gods as social infrastructure
 
-Norenzayan's broader research program, laid out in *Big Gods*, argues that this surveillance effect isn't a quirk. It's the mechanism that allowed human societies to scale beyond small tribal groups. Societies that developed beliefs in moralizing, punitive, all-knowing gods were better able to sustain large-scale cooperation among strangers. [4]
+Norenzayan's broader research program, laid out in *Big Gods*, argues that this surveillance effect allowed human societies to scale beyond small tribal groups. Societies that developed beliefs in moralizing, punitive, all-knowing gods were better able to sustain large-scale cooperation among strangers. [4]
 
 Think about the problem early societies faced. In a group of 50, everyone knows everyone. Cheaters get caught because the community is small enough for reputation to do the policing. But once you're dealing with thousands of strangers, reputation breaks down. You need something else to keep people in line.
 
-The answer, across culture after culture, was a god who sees everything and punishes defectors. Not a god who creates sunsets. Not a god who loves unconditionally. A god who watches and punishes. And the data backs this up: countries with higher rates of belief in hell have lower national crime rates, while belief in heaven alone does not predict the same effect. The threat of divine punishment does more behavioral work than the promise of divine reward. [4]
+The answer, across culture after culture, was a god who sees everything and punishes defectors. The gods that scaled civilizations weren't the ones painting sunsets or loving unconditionally. They were the ones keeping score. And the data backs this up: countries with higher rates of belief in hell have lower national crime rates, while belief in heaven alone does not predict the same effect. The threat of divine punishment does more behavioral work than the promise of divine reward. [4]
 
-This is not a story about faith. It's a story about infrastructure. Punitive gods are a social technology for enforcing cooperation at scale, and they work whether or not anyone upstairs is actually keeping score.
+Strip away the theology and what's left is infrastructure. Punitive gods are a social technology for enforcing cooperation at scale, and they work whether or not anyone upstairs is actually watching.
 
 ## religion is a social loop, not a private belief
 
@@ -40,7 +40,7 @@ durkheim saw this over a century ago. in *the elementary forms of the religious 
 he called the intense shared experience of ritual "collective effervescence," the feeling of losing yourself in a crowd, of being part of something bigger. it happens at religious services, but also at concerts, protests, and sporting events. the feeling is real. the interpretation, that it's evidence of the divine, is added afterward.
 
 
-this is the feedback loop that keeps the machine running. people gather, perform rituals, and feel something powerful; attributing that feeling to god. this attribution reinforces the belief. the belief motivates more gathering and more ritual. the cycle sustains itself, and the god it produces is, from a functional standpoint, very much real. not as a being, but as a socially distributed force that shapes behavior, norms, and institutions.
+this is the feedback loop that keeps the machine running. people gather, perform rituals, and feel something powerful; attributing that feeling to god. this attribution reinforces the belief. the belief motivates more gathering and more ritual. the cycle sustains itself, and the god it produces is, from a functional standpoint, very much real. A socially distributed force that shapes behavior, norms, and institutions.
 
 
 ## the god-shaped panopticon
@@ -57,15 +57,15 @@ terror management theory, developed by greenberg, pyszczynski, and solomon, adds
 
 hundreds of studies have tested this by making mortality salient, reminding people that they will die, and then measuring what happens. consistently, mortality salience causes people to cling harder to their cultural worldviews and defend their belief systems more aggressively. religious beliefs are particularly effective because they are all-encompassing, difficult to disprove, and promise literal immortality. [7]
 
-god is both a cooperation mechanism and an anxiety buffer, morphing human behavior while helping people cope with the terror of knowing they will die.
+god functions as cooperation mechanism and anxiety buffer simultaneously, morphing human behavior while helping people cope with the terror of knowing they will die.
 
 ## The uncomfortable conclusion
 
-God, understood this way, is the most successful technology humans have ever built. Not built with metal and code, but with stories, rituals, fear, and the deep cognitive architecture of a species that can't stop looking for someone behind the curtain.
+God, understood this way, is the most successful technology humans have ever built. Assembled from stories, rituals, fear, and the deep cognitive architecture of a species that can't stop looking for someone behind the curtain.
 
 This doesn't mean religion is fake in some dismissive sense. The effects are real. The communities are real. The moral behavior is real. The comfort in the face of death is real. What's constructed is the agent, the invisible watcher, and the construction is so effective precisely because it maps perfectly onto how human brains already work.
 
-The punitive God doesn't become real because it exists. It becomes real because millions of people act as if it exists, and their coordinated action produces real consequences: charity, law, war, shame, belonging, exclusion. The machine runs on belief, and belief runs on psychology, and the output is a world that genuinely looks like it has a God in it, if you don't look at the wiring.
+The punitive God becomes real the moment millions of people act as if it exists, and their coordinated action produces real consequences: charity, law, war, shame, belonging, exclusion. The machine runs on belief, and belief runs on psychology, and the output is a world that genuinely looks like it has a God in it, if you don't look at the wiring.
 
 My view isn't that people are stupid for believing. My view is that the system is unbelievably well-engineered, by accident, by natural selection, by cultural evolution, and that understanding the engineering doesn't require you to hate the building. It just requires you to notice that nobody drew the blueprints from above.
 
