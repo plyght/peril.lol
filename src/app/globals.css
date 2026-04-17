@@ -424,5 +424,38 @@ article th { font-weight: 600; background: var(--color-surface); }
   opacity: 0;
 }
 
+.video-volume-slider {
+  overflow: hidden;
+  transition: width 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.video-title-container {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-align: center;
+  font-family: var(--font-eb-garamond), "Georgia", "Times New Roman", serif;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.5);
+  -webkit-mask-image: linear-gradient(90deg, black, black calc(100% - 8px), transparent);
+  mask-image: linear-gradient(90deg, black, black calc(100% - 8px), transparent);
+}
+
+.video-title-container.video-title-overflow {
+  -webkit-mask-image: linear-gradient(90deg, transparent, black 8px, black calc(100% - 8px), transparent);
+  mask-image: linear-gradient(90deg, transparent, black 8px, black calc(100% - 8px), transparent);
+}
+
+.video-title-inner {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.video-title-inner.marquee {
+  animation: marquee 18s linear infinite;
+  backface-visibility: hidden;
+}
+
 
 

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState, useCallback } from "react";
+import React, { useRef, useState, useCallback, useEffect } from "react";
 import { Play, Pause, Volume2, Volume1, VolumeX, Loader2, ArrowUpRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -56,23 +56,41 @@ function VolumeSlider({
   onChange: (value: number) => void;
   className?: string;
 }) {
+  const sliderRef = useRef<HTMLDivElement>(null);
+
+  const calcValue = (clientX: number) => {
+    if (!sliderRef.current) return value;
+    const rect = sliderRef.current.getBoundingClientRect();
+    const x = clientX - rect.left;
+    return Math.min(Math.max((x / rect.width) * 100, 0), 100);
+  };
+
+  const handlePointerDown = (e: React.PointerEvent) => {
+    e.currentTarget.setPointerCapture(e.pointerId);
+    onChange(calcValue(e.clientX));
+  };
+
+  const handlePointerMove = (e: React.PointerEvent) => {
+    if (e.buttons === 0) return;
+    onChange(calcValue(e.clientX));
+  };
+
   return (
     <div
+      ref={sliderRef}
       className={cn(
-        "relative w-full h-1 bg-white/20 rounded-full cursor-pointer",
+        "relative w-full h-3 flex items-center cursor-pointer touch-none",
         className
       )}
-      onClick={(e) => {
-        const rect = e.currentTarget.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const percentage = (x / rect.width) * 100;
-        onChange(Math.min(Math.max(percentage, 0), 100));
-      }}
+      onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
     >
-      <div
-        className="absolute top-0 left-0 h-full bg-white rounded-full"
-        style={{ width: `${value}%`, transition: "width 0.15s linear" }}
-      />
+      <div className="relative w-full h-1 bg-white/20 rounded-full">
+        <div
+          className="absolute top-0 left-0 h-full bg-white rounded-full"
+          style={{ width: `${value}%` }}
+        />
+      </div>
     </div>
   );
 }
@@ -106,6 +124,7 @@ export function VideoPlayer({
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [hasPlayed, setHasPlayed] = useState(false);
   const [volume, setVolume] = useState(1);
   const [progress, setProgress] = useState(0);
   const [buffered, setBuffered] = useState(0);
@@ -114,6 +133,49 @@ export function VideoPlayer({
   const [showControls, setShowControls] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [videoTitle, setVideoTitle] = useState<string | null>(null);
+  const [needsMarquee, setNeedsMarquee] = useState(false);
+  const [volumeHover, setVolumeHover] = useState(false);
+  const titleContainerRef = useRef<HTMLSpanElement>(null);
+  const titleTextRef = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    if (!youtubeUrl) return;
+    const cached = sessionStorage.getItem(`yt_title_${youtubeUrl}`);
+    if (cached) {
+      setVideoTitle(cached);
+      return;
+    }
+    fetch(`https://noembed.com/embed?url=${encodeURIComponent(youtubeUrl)}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data?.title) {
+          setVideoTitle(data.title);
+          sessionStorage.setItem(`yt_title_${youtubeUrl}`, data.title);
+        }
+      })
+      .catch(() => {});
+  }, [youtubeUrl]);
+
+  useEffect(() => {
+    if (!videoTitle || !titleTextRef.current || !titleContainerRef.current) {
+      setNeedsMarquee(false);
+      return;
+    }
+    const check = () => {
+      if (titleTextRef.current && titleContainerRef.current) {
+        setNeedsMarquee(
+          titleTextRef.current.scrollWidth > titleContainerRef.current.clientWidth + 2
+        );
+      }
+    };
+    const raf = requestAnimationFrame(check);
+    const timer = setTimeout(check, 300);
+    return () => {
+      cancelAnimationFrame(raf);
+      clearTimeout(timer);
+    };
+  }, [videoTitle, showControls, volumeHover]);
 
   const updateBuffered = useCallback(() => {
     if (!videoRef.current || !videoRef.current.duration) return;
@@ -130,6 +192,7 @@ export function VideoPlayer({
         videoRef.current.pause();
       } else {
         videoRef.current.play();
+        setHasPlayed(true);
       }
       setIsPlaying(!isPlaying);
     }
@@ -216,7 +279,22 @@ export function VideoPlayer({
       </AnimatePresence>
 
       <AnimatePresence>
-        {showControls && (
+        {showControls && !hasPlayed && (
+          <motion.div
+            className="absolute inset-0 flex items-center justify-center cursor-pointer"
+            initial={{ opacity: 0, filter: "blur(6px)" }}
+            animate={{ opacity: 1, filter: "blur(0px)" }}
+            exit={{ opacity: 0, filter: "blur(6px)" }}
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+            onClick={togglePlay}
+          >
+            <Play className="h-10 w-10 text-white/70" />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {showControls && hasPlayed && (
           <motion.div
             className="absolute bottom-0 mx-auto max-w-xl left-0 right-0 p-4 m-2 bg-black/60 backdrop-blur-md rounded-2xl"
             initial={{ opacity: 0, filter: "blur(6px)" }}
@@ -239,8 +317,8 @@ export function VideoPlayer({
               </span>
             </div>
 
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 shrink-0">
                 <IconButton onClick={togglePlay}>
                   {isPlaying ? (
                     <Pause className="h-5 w-5" />
@@ -248,7 +326,11 @@ export function VideoPlayer({
                     <Play className="h-5 w-5" />
                   )}
                 </IconButton>
-                <div className="flex items-center gap-x-1">
+                <div
+                  className="flex items-center gap-x-1 -my-2 py-2 -mr-3 pr-3"
+                  onMouseEnter={() => setVolumeHover(true)}
+                  onMouseLeave={() => setVolumeHover(false)}
+                >
                   <IconButton onClick={toggleMute}>
                     {isMuted ? (
                       <VolumeX className="h-5 w-5" />
@@ -258,7 +340,7 @@ export function VideoPlayer({
                       <Volume1 className="h-5 w-5" />
                     )}
                   </IconButton>
-                  <div className="w-20">
+                  <div className="video-volume-slider" style={{ width: volumeHover ? 100 : 0 }}>
                     <VolumeSlider
                       value={volume * 100}
                       onChange={handleVolumeChange}
@@ -266,10 +348,26 @@ export function VideoPlayer({
                   </div>
                 </div>
               </div>
+              {videoTitle && (
+                <span
+                  ref={titleContainerRef}
+                  className={`video-title-container${needsMarquee ? " video-title-overflow" : ""}`}
+                >
+                  <span
+                    ref={titleTextRef}
+                    className={`video-title-inner${needsMarquee ? " marquee" : ""}`}
+                  >
+                    {videoTitle}{needsMarquee && <>&nbsp;&nbsp;&nbsp;&nbsp;</>}
+                    {needsMarquee && <>{videoTitle}&nbsp;&nbsp;&nbsp;&nbsp;</>}
+                  </span>
+                </span>
+              )}
               {youtubeUrl && (
-                <IconButton onClick={() => window.open(youtubeUrl, "_blank")}>
-                  <ArrowUpRight className="h-5 w-5" />
-                </IconButton>
+                <div className="shrink-0 ml-auto">
+                  <IconButton onClick={() => window.open(youtubeUrl, "_blank")}>
+                    <ArrowUpRight className="h-5 w-5" />
+                  </IconButton>
+                </div>
               )}
             </div>
           </motion.div>
