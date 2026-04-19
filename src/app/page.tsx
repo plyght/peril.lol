@@ -31,6 +31,7 @@ export default function Home() {
   const navRowRef = useRef<HTMLDivElement>(null);
   const nowPlayingDesktopRef = useRef<HTMLAnchorElement>(null);
   const nowPlayingIconRef = useRef<HTMLSpanElement>(null);
+  const webringRef = useRef<HTMLSpanElement>(null);
   const [bioWidth, setBioWidth] = useState(0);
   const [desktopTrackMaxPx, setDesktopTrackMaxPx] = useState<number | null>(null);
 
@@ -113,7 +114,9 @@ export default function Home() {
     }
     const check = () => {
       if (textRef.current && containerRef.current) {
-        const next = textRef.current.scrollWidth > containerRef.current.clientWidth + 10;
+        const raw = textRef.current.scrollWidth;
+        const single = needsMarquee ? raw / 2 : raw;
+        const next = single > containerRef.current.clientWidth + 10;
         setNeedsMarquee((prev) => (prev === next ? prev : next));
         setOverflowMeasured(true);
       }
@@ -124,17 +127,19 @@ export default function Home() {
       cancelAnimationFrame(raf);
       clearTimeout(timer);
     };
-  }, [displayedTrack, bioWidth]);
+  }, [displayedTrack, bioWidth, desktopTrackMaxPx, needsMarquee]);
 
   useEffect(() => {
     if (!isDesktop || !displayedTrack || !textRef.current || !containerRef.current) return;
     const timer = setTimeout(() => {
       if (textRef.current && containerRef.current) {
-        setNeedsMarquee(textRef.current.scrollWidth > containerRef.current.clientWidth + 10);
+        const raw = textRef.current.scrollWidth;
+        const single = needsMarquee ? raw / 2 : raw;
+        setNeedsMarquee(single > containerRef.current.clientWidth + 10);
       }
     }, 600);
     return () => clearTimeout(timer);
-  }, [isDesktop, bioWidth, displayedTrack]);
+  }, [isDesktop, bioWidth, displayedTrack, desktopTrackMaxPx, needsMarquee]);
 
 
   useEffect(() => {
@@ -163,7 +168,10 @@ export default function Home() {
     const bio = bioRef.current.getBoundingClientRect();
     const icon = nowPlayingIconRef.current.getBoundingClientRect();
     const gapPx = 6;
-    setDesktopTrackMaxPx(Math.max(0, Math.floor(bio.right - icon.right - gapPx)));
+    const rightEdge = webringRef.current
+      ? webringRef.current.getBoundingClientRect().left
+      : bio.right;
+    setDesktopTrackMaxPx(Math.max(0, Math.floor(rightEdge - icon.right - gapPx)));
   }, []);
 
   useLayoutEffect(() => {
@@ -176,7 +184,7 @@ export default function Home() {
 
   useEffect(() => {
     if (!isDesktop) return;
-    const obs = [bioRef.current, navRowRef.current, nowPlayingDesktopRef.current].filter(
+    const obs = [bioRef.current, navRowRef.current, nowPlayingDesktopRef.current, webringRef.current].filter(
       (n) => n != null
     );
     const ro = new ResizeObserver(() => measureDesktopTrackWidth());
@@ -296,6 +304,10 @@ export default function Home() {
               )}
             </a>
           )}
+          <span ref={webringRef} className="webring serif" aria-label="webring">
+            <a href="https://ring.liampas.ca/left" target="_blank" rel="noopener noreferrer" className="underline-link" title="webring · previous" aria-label="previous site in webring">←</a>
+            <a href="https://ring.liampas.ca/right" target="_blank" rel="noopener noreferrer" className="underline-link" title="webring · next" aria-label="next site in webring">→</a>
+          </span>
         </div>
       </div>
 
