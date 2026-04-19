@@ -305,8 +305,8 @@ export default function Home() {
             </a>
           )}
           <span ref={webringRef} className="webring serif" aria-label="webring">
-            <a href="https://ring.liampas.ca/left" target="_blank" rel="noopener noreferrer" className="underline-link" title="webring · previous" aria-label="previous site in webring">←</a>
-            <a href="https://ring.liampas.ca/right" target="_blank" rel="noopener noreferrer" className="underline-link" title="webring · next" aria-label="next site in webring">→</a>
+            <a href="https://ring.liampas.ca/left" target="_blank" className="underline-link" title="webring · previous" aria-label="previous site in webring">←</a>
+            <a href="https://ring.liampas.ca/right" target="_blank" className="underline-link" title="webring · next" aria-label="next site in webring">→</a>
           </span>
         </div>
       </div>
