@@ -195,6 +195,8 @@ article th { font-weight: 600; background: var(--color-surface); }
   font-size: inherit;
   color: inherit;
   overflow: hidden;
+  display: inline-grid;
+  grid-template-areas: "stack";
   transition-property: scale;
   transition-duration: 0.15s;
   transition-timing-function: var(--cubic);
@@ -205,7 +207,7 @@ article th { font-weight: 600; background: var(--color-surface); }
 }
 
 .copy-text {
-  display: block;
+  grid-area: stack;
   transition: opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1), filter 0.4s cubic-bezier(0.22, 1, 0.36, 1), transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -216,8 +218,6 @@ article th { font-weight: 600; background: var(--color-surface); }
 }
 
 .copy-text-out {
-  position: absolute;
-  inset: 0;
   opacity: 0;
   filter: blur(6px);
   transform: translateY(4px);
