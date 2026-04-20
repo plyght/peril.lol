@@ -264,7 +264,7 @@ export default function Home() {
           <Link href="/blog" className="underline-link serif">Writing</Link>
           <Link href="/photos" className="underline-link serif">Photos</Link>
           <a href="https://github.com/plyght" target="_blank" rel="noopener noreferrer" className="underline-link serif">GitHub</a>
-          <a href="https://x.com/inaplight" target="_blank" rel="noopener noreferrer" className="underline-link serif">X</a>
+          <a href="https://x.com/pliiight" target="_blank" rel="noopener noreferrer" className="underline-link serif">X</a>
           <button
             type="button"
             onClick={() => {
