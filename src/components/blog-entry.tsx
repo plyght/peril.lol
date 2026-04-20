@@ -58,7 +58,7 @@ export function BlogEntry({
       </span>
       {excerpt && (
         <span
-          className="block mt-1.5 text-[clamp(14px,1.2vw,15px)]"
+          className="serif block mt-1.5 text-[clamp(15px,1.5vw,17px)]"
           style={{ color: "var(--color-secondary)" }}
         >
           {excerpt}
