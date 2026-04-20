@@ -60,8 +60,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${ebGaramond.variable} min-h-[100dvh] antialiased`}>
+    <html lang="en" className="antialiased">
+      <body className={`${ebGaramond.variable} min-h-[100dvh]`}>
         {children}
       </body>
     </html>
