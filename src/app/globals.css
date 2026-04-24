@@ -371,7 +371,7 @@ article th { font-weight: 600; background: var(--color-surface); }
 }
 
 .now-playing-mobile .now-playing-loaded {
-  animation: reveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: none;
 }
 
 .now-playing-mobile .now-playing-text {
@@ -379,6 +379,8 @@ article th { font-weight: 600; background: var(--color-surface); }
   opacity: 1;
   filter: blur(0px);
   margin-left: 6px;
+  -webkit-mask-image: none;
+  mask-image: none;
 }
 
 .now-playing-mobile.now-playing-fading .now-playing-text {
