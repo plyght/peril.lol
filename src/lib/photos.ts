@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { execSync } from "child_process";
+import sharp from "sharp";
 
 const photosDir = path.join(process.cwd(), "public/photos");
 const imageExts = new Set([".jpg", ".jpeg", ".png", ".webp", ".avif"]);
@@ -11,6 +12,7 @@ export interface Photo {
   filename: string;
   width: number;
   height: number;
+  placeholder: string;
 }
 
 function ensureHeicConverted(): void {
@@ -47,7 +49,21 @@ function getDimensions(): Record<string, { w: number; h: number }> {
   }
 }
 
-export function getAllPhotos(): Photo[] {
+async function getPlaceholder(filePath: string): Promise<string> {
+  try {
+    const buffer = await sharp(filePath)
+      .rotate()
+      .resize({ width: 24, height: 24, fit: "inside" })
+      .blur(2)
+      .webp({ quality: 35 })
+      .toBuffer();
+    return `data:image/webp;base64,${buffer.toString("base64")}`;
+  } catch {
+    return "";
+  }
+}
+
+export async function getAllPhotos(): Promise<Photo[]> {
   if (!fs.existsSync(photosDir)) return [];
 
   ensureHeicConverted();
@@ -59,12 +75,23 @@ export function getAllPhotos(): Photo[] {
     return imageExts.has(ext) && !f.startsWith(".");
   });
 
-  return files
-    .map((f) => {
-      const stat = fs.statSync(path.join(photosDir, f));
+  const photos = await Promise.all(
+    files.map(async (f) => {
+      const filePath = path.join(photosDir, f);
+      const stat = fs.statSync(filePath);
       const d = dims[f] || { w: 4, h: 3 };
-      return { src: `/photos/${f}`, filename: f, mtime: stat.mtimeMs, width: d.w, height: d.h };
-    })
+      return {
+        src: `/photos/${f}`,
+        filename: f,
+        mtime: stat.mtimeMs,
+        width: d.w,
+        height: d.h,
+        placeholder: await getPlaceholder(filePath),
+      };
+    }),
+  );
+
+  return photos
     .sort((a, b) => b.mtime - a.mtime)
-    .map(({ src, filename, width, height }) => ({ src, filename, width, height }));
+    .map(({ src, filename, width, height, placeholder }) => ({ src, filename, width, height, placeholder }));
 }

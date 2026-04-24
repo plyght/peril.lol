@@ -22,8 +22,8 @@ export const metadata: Metadata = {
   },
 };
 
-export default function Photos() {
-  const photos = getAllPhotos();
+export default async function Photos() {
+  const photos = await getAllPhotos();
 
   return (
     <div className="relative min-h-[100dvh]">
@@ -70,7 +70,7 @@ export default function Photos() {
             <div className="reveal reveal-d2 columns-1 sm:columns-2 lg:columns-3 gap-4 pb-[30vh]">
               {photos.map((photo) => (
                 <div key={photo.filename} className="mb-4 break-inside-avoid">
-                  <PhotoImage src={photo.src} alt="" width={photo.width} height={photo.height} />
+                  <PhotoImage src={photo.src} alt="" width={photo.width} height={photo.height} placeholder={photo.placeholder} />
                 </div>
               ))}
             </div>
