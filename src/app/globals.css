@@ -371,7 +371,7 @@ article th { font-weight: 600; background: var(--color-surface); }
 }
 
 .now-playing-mobile .now-playing-loaded {
-  animation: none;
+  animation: reveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .now-playing-mobile .now-playing-text {
@@ -383,6 +383,23 @@ article th { font-weight: 600; background: var(--color-surface); }
   mask-image: none;
 }
 
+.now-playing-mobile.now-playing-overflow .now-playing-text {
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent,
+    black 8px,
+    black calc(100% - 8px),
+    transparent
+  );
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    black 8px,
+    black calc(100% - 8px),
+    transparent
+  );
+}
+
 .now-playing-mobile.now-playing-fading .now-playing-text {
   opacity: 0;
   filter: blur(6px);
@@ -392,7 +409,7 @@ article th { font-weight: 600; background: var(--color-surface); }
   display: inline-block;
   white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;
+  text-overflow: clip;
   max-width: var(--wordmark-w, 300px);
 }
 

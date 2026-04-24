@@ -115,7 +115,7 @@ export default function Home() {
     const check = () => {
       if (textRef.current && containerRef.current) {
         const raw = textRef.current.scrollWidth;
-        const single = needsMarquee ? raw / 2 : raw;
+        const single = isDesktop && needsMarquee ? raw / 2 : raw;
         const next = single > containerRef.current.clientWidth + 10;
         setNeedsMarquee((prev) => (prev === next ? prev : next));
         setOverflowMeasured(true);
@@ -127,7 +127,7 @@ export default function Home() {
       cancelAnimationFrame(raf);
       clearTimeout(timer);
     };
-  }, [displayedTrack, bioWidth, desktopTrackMaxPx, needsMarquee]);
+  }, [displayedTrack, bioWidth, desktopTrackMaxPx, needsMarquee, isDesktop]);
 
   useEffect(() => {
     if (!isDesktop || !displayedTrack || !textRef.current || !containerRef.current) return;
@@ -323,15 +323,16 @@ export default function Home() {
           href="https://www.last.fm/user/plyght_"
           target="_blank"
           rel="noopener noreferrer"
-          className={`now-playing now-playing-mobile serif reveal reveal-d2${isFading ? " now-playing-fading" : ""}`}
+          className={`now-playing now-playing-mobile serif reveal reveal-d2${needsMarquee ? " now-playing-overflow" : ""}${isFading ? " now-playing-fading" : ""}`}
           style={wordmarkWidth ? { "--wordmark-w": `${wordmarkWidth}px` } as React.CSSProperties : undefined}
         >
           <span className="now-playing-icon">♪</span>
           {displayedTrack && (
             <span
               className={`now-playing-text now-playing-loaded${!displayedTrack.live ? " now-playing-dim" : ""}`}
+              ref={containerRef}
             >
-              <span className="now-playing-inner">
+              <span className="now-playing-inner" ref={textRef}>
                 {!displayedTrack.live && "last played · "}{displayedTrack.track} · {displayedTrack.artist}
               </span>
             </span>
