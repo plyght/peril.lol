@@ -254,7 +254,7 @@ export default function Home() {
           {" "}doing low level infra.
           {" "}I made{" "}
           <a href="https://github.com/plyght/spine" target="_blank" rel="noopener noreferrer" className="underline-link">Spine</a>,{" "}
-          <a href="https://github.com/plyght/skew" target="_blank" rel="noopener noreferrer" className="underline-link">Skew</a>,{" "}
+          <a href="https://github.com/plyght/hops" target="_blank" rel="noopener noreferrer" className="underline-link">Hops</a>,{" "}
           <a href="https://github.com/plyght/wax" target="_blank" rel="noopener noreferrer" className="underline-link">Wax</a>, and{" "}
           <a href="https://github.com/plyght/angel" target="_blank" rel="noopener noreferrer" className="underline-link">Angel</a>.
         </p>

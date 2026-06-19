@@ -3,9 +3,9 @@ title: God is a Manmade Machine
 excerpt: my thoughts on God, Psychology, and Religion
 ---
 
-God was never about a man in the sky. God is a machine built by humans, running on humans, maintained by humans, and producing real effects in the world because humans treat it as real. For centuries, billions of people have believed in an all-knowing, all-seeing God across wildly different religions, languages, and geographies. There is no physical evidence for any of it. But there doesn't need to be, because the mechanism was never supernatural. It's psychological.
+God was never about a man in the sky. He is a machine built by humans, running on humans, maintained by humans, and producing real effects in the world because humans treat it as real. For centuries, billions of people have believed in an all-knowing, all-seeing God across completely different religions, languages, and geographies. There is no physical evidence for any of it. But there doesn't need to be, because the belief was never supernatural–It's psychological.
 
-Prefacing this: I'm not a hardline materialist who thinks science has all the answers. I am religious. But I also read the research, and I keep landing on the same conclusion: "God" is best understood not just as a being, but as a coordination technology. One that humans accidentally invented, then couldn't stop running. Holding both of those ideas at the same time is the point.
+Prefacing this: I'm not a full on materialist who thinks science has all the answers. I am religious. I do, however, read the research, bringing me to the same conclusion: "God" is best understood not just as a being, but as a coordination technology. One that humans accidentally invented, then couldn't stop running. Holding both of those ideas at the same time is the point.
 
 ## We are wired to see agents that aren't there
 
