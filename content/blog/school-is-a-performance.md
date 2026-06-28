@@ -1,5 +1,5 @@
 ---
-title: School is a Broken Loss Function
+title: School and the Appearance of Discipline
 excerpt: my thoughts on executive functioning, procrastination, and measurement.
 ---
 
