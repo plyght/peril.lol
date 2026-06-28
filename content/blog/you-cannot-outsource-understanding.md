@@ -3,11 +3,11 @@ title: You Cannot Outsource Understanding
 excerpt: my thoughts on intellectual content, AI, and learning.
 ---
 
-Every medium that teaches also teaches a model of what learning feels like. A book teaches one pace, a classroom teaches another, a video teaches another, and the feed teaches the fastest one of all: receive the shape of an idea, feel the click, move on.
+Every medium that teaches also teaches a model of what learning feels like. A book teaches one pace, a classroom teaches another, a video teaches another, and a feed teaches the fastest one of all: receive the shape of an idea, feel the click, move on.
 
-That click is the part worth being suspicious of.
+That click is worth being suspicious of.
 
-The modern internet is extremely good at making learning feel like it happened before much has actually happened. You can watch a video on ego death, another on quantum mechanics, another on politics, another on why the previous video was wrong, and after an hour feel as if your mind has been doing serious work. Sometimes it has. Often it has only been carried through someone else's clean path.
+The modern internet is extremely good at making learning feel like it happened before much has actually happened. You can watch a video on ego death, another on quantum mechanics, another on politics, another on why the previous video was wrong, and after an hour feel as if your mind has been doing serious work. Sometimes it has. Often it has only been carried through someone else's thoughtfully curated path.
 
 The promise is almost too obvious to parody: click and become less trapped in yourself. Even humility has to arrive on demand. Even getting outside yourself gets turned into content for the self to consume.
 
@@ -15,7 +15,7 @@ An idea can be introduced instantly. It cannot be digested instantly. The differ
 
 ## intellectual content is still content
 
-Veritasium, Vsauce, 3Blue1Brown, and channels like them have probably brought more people into difficult ideas than most formal institutions could have on their own. A good explanation can make a subject available. It can remove fake difficulty. It can show the structure that textbooks sometimes bury under notation or bad writing.
+Veritasium, Vsauce, 3Blue1Brown, and channels like them have probably brought more people into difficult ideas than most formal institutions could have on their own. A good explanation can make a subject available. It can remove unecessary difficulty. It can show the structure that textbooks sometimes bury under notation or bad writing.
 
 A clean video is clean because someone else already did the messy part. The order of examples, the analogy, the pacing, the animation, the missing boring parts, the satisfying ending: all of it is the result of work done before the viewer arrives. The viewer receives the finished path.
 
@@ -27,9 +27,9 @@ Good intellectual media carries this danger precisely because it is good. The be
 
 ## input is not thought
 
-Learning starts after the input. The video, lecture, book, thread, class, or conversation gives material. The mind still has to metabolize it: connect it to other things, argue with it, apply it badly, fix the application, forget the decorative parts, and find the piece that survives.
+Learning starts after the input. A video, lecture, book, thread, class, or conversation gives material. The mind still has to metabolize it: connect it to other things, argue with it, apply it badly, fix the application, lose the decorative parts, and find the piece that survives.
 
-This does not mean every video needs notes. Nobody needs to turn a Minecraft philosophy video into a doctoral seminar. The point is simpler. If nothing in the idea changes shape inside your own head, then the idea passed through you more than it entered you.
+This does not mean every video needs notes. Nobody needs to turn a Minecraft philosophy video into a doctoral seminar. If nothing in the idea changes shape inside your own head, then the idea passed through you more than it entered you.
 
 A math video can make a concept feel obvious. The problem set tells you whether the obviousness was yours. A philosophy video can give words to something you half-believed already. The argument starts when you ask what would make it false. Commentary can sharpen taste, but taste that only selects more commentary has not left the feed.
 
@@ -37,7 +37,7 @@ The learning research points in the same direction. Karpicke and Blunt found tha
 
 The common thread is not complicated. Understanding gets stronger when the learner has to produce something.
 
-## the feed removes the pause
+## the feed takes away a place to stop and think
 
 The feed does not just add bad ideas to a person's life. Bad ideas existed before phones. What it changes is the amount of time between contact and reaction, which is often the exact space where digestion would have happened.
 
