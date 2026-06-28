@@ -245,7 +245,7 @@ export default function Home() {
         style={bioWidth ? ({ "--bio-w": `${bioWidth}px` } as React.CSSProperties) : undefined}
       >
         <p className="serif text-[clamp(22px,5vw,34px)] leading-[1.5] tracking-[-0.01em]">
-          High school junior out of D.C.{" "}
+          High school senior out of D.C.{" "}
           <em className="font-semibold">Developer</em>,{" "}
           <em className="font-semibold">wrestler</em>,{" "}
           <em className="font-semibold">photographer</em>.
