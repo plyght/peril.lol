@@ -5,11 +5,11 @@ excerpt: my thoughts on intellectual content, AI, and learning.
 
 Every medium that teaches also teaches a model of what learning feels like. A book teaches one pace, a classroom teaches another, a video teaches another, and a feed teaches the fastest one of all: receive the shape of an idea, feel the click, move on.
 
-That click is worth being suspicious of.
+This "click" is worth being suspicious of.
 
 The modern internet is extremely good at making learning feel like it happened before much has actually happened. You can watch a video on ego death, another on quantum mechanics, another on politics, another on why the previous video was wrong, and after an hour feel as if your mind has been doing serious work. Sometimes it has. Often it has only been carried through someone else's thoughtfully curated path.
 
-The promise is almost too obvious to parody: click and become less trapped in yourself. Even humility has to arrive on demand. Even getting outside yourself gets turned into content for the self to consume.
+The promise is almost too obvious: learn, and become less trapped in yourself. Even humility has to arrive on demand. Even getting outside yourself gets turned into content for the self to consume.
 
 An idea can be introduced instantly. It cannot be digested instantly. The difference between those two things is most of what people call understanding.
 

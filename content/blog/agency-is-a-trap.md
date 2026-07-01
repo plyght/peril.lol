@@ -58,7 +58,7 @@ Notice what is missing: there is no requirement to “feel agentic”, identify 
 
 ## The uncomfortable part
 
-My view insults a lot of popular motivational culture. It also removes a lot of the excuses. There is no caste system of “agentic” people versus everyone else. There is only a person in a situation, with some mix of clarity, skill, fear, ego, and incentives, producing a result, then self-improving or not.
+My view insults a lot of popular motivational culture. It also takes away a lot of the excuses. There is no caste system of “agentic” people versus everyone else. There is only a person in a situation, with some mix of clarity, skill, fear, ego, and incentives, producing a result, then self-improving or not.
 
 People who look “high agency” from the outside usually have one boring advantage: they spend less time negotiating with themselves. They do something, they see what happened, and they change course.
 
