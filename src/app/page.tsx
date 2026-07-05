@@ -256,7 +256,7 @@ export default function Home() {
           <a href="https://github.com/plyght/spine" target="_blank" rel="noopener noreferrer" className="underline-link">Spine</a>,{" "}
           <a href="https://github.com/plyght/hops" target="_blank" rel="noopener noreferrer" className="underline-link">Hops</a>,{" "}
           <a href="https://github.com/plyght/wax" target="_blank" rel="noopener noreferrer" className="underline-link">Wax</a>, and{" "}
-          <a href="https://github.com/plyght/angel" target="_blank" rel="noopener noreferrer" className="underline-link">Angel</a>.
+          <a href="https://github.com/plyght/guardrail" target="_blank" rel="noopener noreferrer" className="underline-link">Guardrail</a>.
         </p>
         <div
           ref={navRowRef}
