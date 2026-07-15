@@ -21,6 +21,21 @@ export function BlogEntry({
     const el = ref.current;
     if (!el) return;
 
+    console.log(`[blur-debug] "${title}" mounted`, {
+      supportsBackdrop: CSS.supports("backdrop-filter", "blur(16px)"),
+      supportsWebkitBackdrop: CSS.supports("-webkit-backdrop-filter", "blur(16px)"),
+    });
+    const before = getComputedStyle(el, "::before");
+    console.log(`[blur-debug] "${title}" ::before computed`, {
+      backdropFilter: before.backdropFilter,
+      webkitBackdropFilter: (before as CSSStyleDeclaration & { webkitBackdropFilter?: string }).webkitBackdropFilter,
+      background: before.background,
+      opacity: before.opacity,
+      content: before.content,
+      zIndex: before.zIndex,
+      position: before.position,
+    });
+
     const observer = new IntersectionObserver(
       () => {
         const rect = el.getBoundingClientRect();
@@ -31,11 +46,24 @@ export function BlogEntry({
       { threshold: 0 }
     );
 
+    let lastLogged: boolean | null = null;
     const onScroll = () => {
       const rect = el.getBoundingClientRect();
       const viewportH = window.innerHeight;
       const wordmarkTop = viewportH * 0.75;
-      setOverlapping(rect.bottom > wordmarkTop && rect.top < viewportH);
+      const next = rect.bottom > wordmarkTop && rect.top < viewportH;
+      if (next !== lastLogged) {
+        lastLogged = next;
+        const before = getComputedStyle(el, "::before");
+        console.log(`[blur-debug] "${title}" overlapping=${next}`, {
+          hasBlurClass: el.classList.contains("blog-entry-blur"),
+          beforeOpacity: before.opacity,
+          beforeBackdrop: before.backdropFilter,
+          rectBottom: Math.round(rect.bottom),
+          wordmarkTop: Math.round(wordmarkTop),
+        });
+      }
+      setOverlapping(next);
     };
 
     observer.observe(el);
@@ -44,7 +72,7 @@ export function BlogEntry({
       observer.disconnect();
       window.removeEventListener("scroll", onScroll);
     };
-  }, []);
+  }, [title]);
 
   return (
     <Link
