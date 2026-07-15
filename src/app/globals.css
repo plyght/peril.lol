@@ -437,28 +437,20 @@ article th { font-weight: 600; background: var(--color-surface); }
   }
 }
 
-.blog-entry {
-  position: relative;
-}
-
-.blog-entry::before {
-  content: "";
-  position: absolute;
-  inset: 0 -12px;
-  border-radius: 8px;
-  background: color-mix(in srgb, var(--color-bg) 30%, transparent);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  opacity: 0;
-  transition: opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+.blog-wordmark-blur {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 48vh;
+  backdrop-filter: blur(14px);
   pointer-events: none;
+  mask-image: linear-gradient(to top, #000 0%, #000 20%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.blog-entry > span {
-  position: relative;
-}
-
-.blog-entry-blur::before {
+.blog-wordmark-blur-active {
   opacity: 1;
 }
 

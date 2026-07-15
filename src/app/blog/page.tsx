@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getAllPosts } from "@/lib/blog";
 import { BlogEntry } from "@/components/blog-entry";
+import { WordmarkBlur } from "@/components/wordmark-blur";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -45,6 +46,7 @@ export default function Blog() {
             writing
           </span>
         </div>
+        <WordmarkBlur />
       </div>
 
       <div
@@ -73,7 +75,7 @@ export default function Blog() {
                     slug={post.slug}
                     title={post.title}
                     excerpt={post.excerpt}
-                    revealClass={`reveal reveal-d${Math.min(i + 2, 3)}`}
+                    index={i}
                   />
                 ))}
               </div>
