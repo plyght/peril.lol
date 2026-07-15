@@ -50,7 +50,7 @@ export function BlogEntry({
     <Link
       ref={ref}
       href={`/blog/${slug}`}
-      className={`${revealClass} group block py-[2.5vh] ${overlapping ? "blog-entry-blur" : ""}`}
+      className={`${revealClass} blog-entry group block py-[2.5vh] ${overlapping ? "blog-entry-blur" : ""}`}
       style={{ textDecoration: "none" }}
     >
       <span className="serif text-[clamp(22px,2.4vw,26px)] leading-[1.4] tracking-[-0.01em] underline-link">
