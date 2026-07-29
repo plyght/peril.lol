@@ -5,6 +5,10 @@ import Script from "next/script";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 
+// Webring arrows are hidden for now. Markup below is kept intact — flip this to
+// true to bring them back.
+const SHOW_WEBRING: boolean = false;
+
 declare global {
   interface Window {
     UnicornStudio?: {
@@ -305,14 +309,16 @@ export default function Home() {
               )}
             </a>
           )}
-          <span ref={webringRef} className="webring serif" aria-label="webring">
-            <a href="https://ring.liampas.ca/left" target="_blank" className="underline-link" title="webring · previous" aria-label="previous site in webring">
-              <ArrowLeft size={17} strokeWidth={1.75} />
-            </a>
-            <a href="https://ring.liampas.ca/right" target="_blank" className="underline-link" title="webring · next" aria-label="next site in webring">
-              <ArrowRight size={17} strokeWidth={1.75} />
-            </a>
-          </span>
+          {SHOW_WEBRING && (
+            <span ref={webringRef} className="webring serif" aria-label="webring">
+              <a href="https://ring.liampas.ca/left" target="_blank" className="underline-link" title="webring · previous" aria-label="previous site in webring">
+                <ArrowLeft size={17} strokeWidth={1.75} />
+              </a>
+              <a href="https://ring.liampas.ca/right" target="_blank" className="underline-link" title="webring · next" aria-label="next site in webring">
+                <ArrowRight size={17} strokeWidth={1.75} />
+              </a>
+            </span>
+          )}
         </div>
       </div>
 

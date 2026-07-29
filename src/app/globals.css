@@ -437,14 +437,19 @@ article th { font-weight: 600; background: var(--color-surface); }
   }
 }
 
+/* Sized from the wordmark itself in JS: --wordmark-band is the wordmark's own
+   height, --chrome-inset the strip of screen the browser's floating bottom bar
+   is sitting over. Both default to 0 so the band stays invisible until measured. */
 .blog-wordmark-blur {
   position: fixed;
   left: 0;
   right: 0;
-  bottom: 0;
-  height: 48vh;
+  bottom: calc(-1 * var(--chrome-inset, 0px));
+  height: calc(var(--wordmark-band, 0px) + var(--chrome-inset, 0px));
+  -webkit-backdrop-filter: blur(14px);
   backdrop-filter: blur(14px);
   pointer-events: none;
+  -webkit-mask-image: linear-gradient(to top, #000 0%, #000 20%, transparent 100%);
   mask-image: linear-gradient(to top, #000 0%, #000 20%, transparent 100%);
   opacity: 0;
   transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1);
