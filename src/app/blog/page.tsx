@@ -36,6 +36,7 @@ export default function Blog() {
         <div />
         <div className="reveal reveal-d2 select-none leading-none mb-[1vh] md:mb-[-2vh]">
           <span
+            data-blog-wordmark
             className="serif font-bold tracking-[-0.05em] block"
             style={{
               fontSize: "clamp(110px, 25vw, 420px)",
