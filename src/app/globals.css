@@ -11,6 +11,8 @@
   --color-dim: #555;
   --transition: 0.2s;
   --cubic: cubic-bezier(0.39, 0.575, 0.565, 1);
+  --text-entry-title: clamp(19px, 15.5px + 0.9vw, 26px);
+  --text-entry-excerpt: clamp(14px, 12.5px + 0.4vw, 17px);
 }
 
 @media (prefers-color-scheme: light) {

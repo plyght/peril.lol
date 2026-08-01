@@ -51,7 +51,7 @@ export default function Blog() {
       </div>
 
       <div
-        className="relative px-[6vw] md:px-[8vw]"
+        className="relative flex flex-col min-h-[100dvh] px-[6vw] md:px-[8vw]"
         style={{ zIndex: 1, marginTop: "-100dvh" }}
       >
         <div className="pt-[10vh] md:pt-[14vh]">
@@ -60,7 +60,7 @@ export default function Blog() {
             <span className="serif" style={{ color: "var(--color-dim)" }}>Writing</span>
           </div>
 
-          <div className="max-w-[700px] pb-[30vh]">
+          <div className="max-w-[700px] pb-[14vh]">
             {posts.length === 0 ? (
               <p
                 className="reveal reveal-d2 serif text-[clamp(16px,2.2vw,20px)] leading-[1.5]"
@@ -83,6 +83,7 @@ export default function Blog() {
             )}
           </div>
         </div>
+        <div className="flex-1" />
       </div>
     </div>
   );

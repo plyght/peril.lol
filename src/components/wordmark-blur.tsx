@@ -21,21 +21,46 @@ export function WordmarkBlur() {
     document.documentElement.appendChild(probe);
 
     let queued = 0;
+    const ctx = document.createElement("canvas").getContext("2d");
+
+    // the line box is a whole em tall; the glyphs only fill the middle of it, so
+    // a link can clear the visible word by ~0.2em and still overlap the rect.
+    const inkBox = (rect: DOMRect, style: CSSStyleDeclaration) => {
+      const size = parseFloat(style.fontSize);
+      const fallback = { top: rect.top + size * 0.19, bottom: rect.top + size * 1.06 };
+      if (!ctx) return fallback;
+
+      ctx.font = `${style.fontStyle} ${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
+      const m = ctx.measureText(wordmark.textContent ?? "");
+      if (!m.actualBoundingBoxAscent || !m.fontBoundingBoxAscent) return fallback;
+
+      const lineH = rect.height || size;
+      const baseline =
+        (lineH - (m.fontBoundingBoxAscent + m.fontBoundingBoxDescent)) / 2 +
+        m.fontBoundingBoxAscent;
+      return {
+        top: rect.top + baseline - m.actualBoundingBoxAscent,
+        bottom: rect.top + baseline + m.actualBoundingBoxDescent,
+      };
+    };
 
     const measure = () => {
       queued = 0;
       const viewportH = document.documentElement.clientHeight;
       const wm = wordmark.getBoundingClientRect();
+      const ink = inkBox(wm, getComputedStyle(wordmark));
 
       setChrome(Math.max(0, Math.round(probe.getBoundingClientRect().height - viewportH)));
       // the band only has to cover the wordmark — anything taller frosts bare
       // background, which is the whole of what it looked like on small screens.
-      setBand(Math.max(0, Math.round(viewportH - wm.top)));
+      setBand(Math.max(0, Math.round(viewportH - ink.top)));
 
       let over = false;
       for (const el of document.querySelectorAll<HTMLElement>("[data-blog-link]")) {
-        const rect = el.getBoundingClientRect();
-        if (rect.bottom > wm.top && rect.top < wm.bottom) {
+        // the link's own box carries vertical padding; the text inside is what
+        // has to be legible, so measure that.
+        const rect = (el.firstElementChild ?? el).getBoundingClientRect();
+        if (rect.bottom > ink.top && rect.top < ink.bottom) {
           over = true;
           break;
         }
@@ -48,6 +73,7 @@ export function WordmarkBlur() {
     };
 
     measure();
+    document.fonts?.ready.then(schedule);
     window.addEventListener("scroll", schedule, { passive: true });
     window.addEventListener("resize", schedule);
     const ro = new ResizeObserver(schedule);

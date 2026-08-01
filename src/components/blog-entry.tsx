@@ -22,12 +22,12 @@ export function BlogEntry({
         className="reveal block"
         style={{ animationDelay: `${0.2 + index * 0.08}s` }}
       >
-        <span className="serif text-[clamp(22px,2.4vw,26px)] leading-[1.4] tracking-[-0.01em] underline-link">
+        <span className="serif text-[length:var(--text-entry-title)] leading-[1.4] tracking-[-0.01em] underline-link">
           {title}
         </span>
         {excerpt && (
           <span
-            className="serif block mt-1.5 text-[clamp(15px,1.5vw,17px)]"
+            className="serif block mt-1.5 text-[length:var(--text-entry-excerpt)]"
             style={{ color: "var(--color-secondary)" }}
           >
             {excerpt}
