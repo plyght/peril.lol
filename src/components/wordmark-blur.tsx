@@ -21,27 +21,70 @@ export function WordmarkBlur() {
     document.documentElement.appendChild(probe);
 
     let queued = 0;
-    const ctx = document.createElement("canvas").getContext("2d");
+    const ctx = document.createElement("canvas").getContext("2d", { willReadFrequently: true });
 
-    // the line box is a whole em tall; the glyphs only fill the middle of it, so
-    // a link can clear the visible word by ~0.2em and still overlap the rect.
+    // ratios are relative to the font size, so they survive every resize step
+    const FALLBACK = { top: 0.55, bottom: 0.21, baseline: 0.85 };
+    // ascender tips and the dots on the i's reach far above the body of the
+    // word, and text passing over those strokes stays perfectly readable — the
+    // blur is only worth it once the dense part of the glyphs is behind it.
+    const COVERAGE = 0.25;
+    let cacheKey = "";
+    let ratios = FALLBACK;
+
+    const inkRatios = (style: CSSStyleDeclaration) => {
+      const size = parseFloat(style.fontSize);
+      const key = `${size}|${style.fontWeight}|${style.fontFamily}`;
+      if (key === cacheKey) return ratios;
+      if (!ctx || !size) return FALLBACK;
+
+      const text = wordmark.textContent ?? "";
+      const scale = Math.min(1, 96 / size);
+      const px = size * scale;
+      ctx.font = `${style.fontStyle} ${style.fontWeight} ${px}px ${style.fontFamily}`;
+      const m = ctx.measureText(text);
+      if (!m.actualBoundingBoxAscent || !m.fontBoundingBoxAscent) return FALLBACK;
+
+      const w = Math.ceil(m.width);
+      const base = Math.ceil(m.actualBoundingBoxAscent) + 1;
+      const h = base + Math.ceil(m.actualBoundingBoxDescent) + 1;
+      if (w < 1 || h < 1) return FALLBACK;
+
+      const canvas = ctx.canvas;
+      canvas.width = w;
+      canvas.height = h;
+      ctx.font = `${style.fontStyle} ${style.fontWeight} ${px}px ${style.fontFamily}`;
+      ctx.textBaseline = "alphabetic";
+      ctx.fillStyle = "#fff";
+      ctx.fillText(text, 0, base);
+
+      const data = ctx.getImageData(0, 0, w, h).data;
+      let row = -1;
+      for (let y = 0; y < base && row < 0; y++) {
+        let lit = 0;
+        for (let x = 0; x < w; x++) if (data[(y * w + x) * 4 + 3] > 24) lit++;
+        if (lit / w >= COVERAGE) row = y;
+      }
+      if (row < 0) return FALLBACK;
+
+      cacheKey = key;
+      ratios = {
+        top: (base - row) / px,
+        bottom: m.actualBoundingBoxDescent / px,
+        baseline:
+          ((size * scale - (m.fontBoundingBoxAscent + m.fontBoundingBoxDescent)) / 2 +
+            m.fontBoundingBoxAscent) /
+          px,
+      };
+      return ratios;
+    };
+
     const inkBox = (rect: DOMRect, style: CSSStyleDeclaration) => {
       const size = parseFloat(style.fontSize);
-      const fallback = { top: rect.top + size * 0.19, bottom: rect.top + size * 1.06 };
-      if (!ctx) return fallback;
-
-      ctx.font = `${style.fontStyle} ${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
-      const m = ctx.measureText(wordmark.textContent ?? "");
-      if (!m.actualBoundingBoxAscent || !m.fontBoundingBoxAscent) return fallback;
-
-      const lineH = rect.height || size;
-      const baseline =
-        (lineH - (m.fontBoundingBoxAscent + m.fontBoundingBoxDescent)) / 2 +
-        m.fontBoundingBoxAscent;
-      return {
-        top: rect.top + baseline - m.actualBoundingBoxAscent,
-        bottom: rect.top + baseline + m.actualBoundingBoxDescent,
-      };
+      const r = inkRatios(style);
+      // the line box is a whole em tall and the glyphs sit centred inside it
+      const baseline = rect.top + (rect.height - size) / 2 + r.baseline * size;
+      return { top: baseline - r.top * size, bottom: baseline + r.bottom * size };
     };
 
     const measure = () => {
