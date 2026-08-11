@@ -26,6 +26,7 @@ export default function Home() {
   const [nowPlaying, setNowPlaying] = useState<{ track: string; artist: string; live: boolean } | null>(null);
   const [displayedTrack, setDisplayedTrack] = useState<{ track: string; artist: string; live: boolean } | null>(null);
   const [isFading, setIsFading] = useState(false);
+  const [npFetched, setNpFetched] = useState(false);
   const textRef = useRef<HTMLSpanElement>(null);
   const containerRef = useRef<HTMLSpanElement>(null);
   const [needsMarquee, setNeedsMarquee] = useState(false);
@@ -35,7 +36,6 @@ export default function Home() {
   const bioRef = useRef<HTMLDivElement>(null);
   const navRowRef = useRef<HTMLDivElement>(null);
   const nowPlayingDesktopRef = useRef<HTMLAnchorElement>(null);
-  const nowPlayingIconRef = useRef<HTMLSpanElement>(null);
   const webringRef = useRef<HTMLSpanElement>(null);
   const [bioWidth, setBioWidth] = useState(0);
   const [desktopTrackMaxPx, setDesktopTrackMaxPx] = useState<number | null>(null);
@@ -69,8 +69,17 @@ export default function Home() {
       }
     } catch {
       setNowPlaying(null);
+    } finally {
+      setNpFetched(true);
     }
   }, []);
+
+  /*
+    Hold the whole element invisible until the state is not just fetched but
+    settled into displayedTrack — otherwise the ♪ paints for the one frame
+    between the fetch resolving and the track being copied over.
+  */
+  const npReady = npFetched && (!nowPlaying || displayedTrack !== null);
 
   useEffect(() => {
     fetchNowPlaying();
@@ -166,17 +175,17 @@ export default function Home() {
   }, []);
 
   const measureDesktopTrackWidth = useCallback(() => {
-    if (!bioRef.current || !nowPlayingIconRef.current) {
+    if (!bioRef.current || !nowPlayingDesktopRef.current) {
       setDesktopTrackMaxPx(null);
       return;
     }
     const bio = bioRef.current.getBoundingClientRect();
-    const icon = nowPlayingIconRef.current.getBoundingClientRect();
+    const origin = nowPlayingDesktopRef.current.getBoundingClientRect();
     const gapPx = 6;
     const rightEdge = webringRef.current
       ? webringRef.current.getBoundingClientRect().left
       : bio.right;
-    setDesktopTrackMaxPx(Math.max(0, Math.floor(rightEdge - icon.right - gapPx)));
+    setDesktopTrackMaxPx(Math.max(0, Math.floor(rightEdge - origin.left - gapPx)));
   }, []);
 
   useLayoutEffect(() => {
@@ -264,7 +273,7 @@ export default function Home() {
         </p>
         <div
           ref={navRowRef}
-          className="flex flex-wrap items-center gap-5 mt-6 text-[clamp(16px,3vw,20px)]"
+          className="flex flex-wrap items-center gap-5 mt-6 pb-4 text-[clamp(16px,3vw,20px)]"
         >
           <Link href="/blog" className="underline-link serif">Writing</Link>
           <Link href="/photos" className="underline-link serif">Photos</Link>
@@ -288,24 +297,27 @@ export default function Home() {
               href="https://www.last.fm/user/plyght_"
               target="_blank"
               rel="noopener noreferrer"
-              className={`now-playing now-playing-desktop serif${displayedTrack?.live && !isFading ? " now-playing-live" : ""}${!overflowMeasured || needsMarquee ? " now-playing-overflow" : ""}${isFading ? " now-playing-fading" : ""}`}
+              className={`now-playing now-playing-desktop serif${npReady ? " now-playing-ready" : ""}${displayedTrack?.live && !isFading ? " now-playing-live" : ""}${displayedTrack && !isFading ? " now-playing-hide-icon" : ""}${!overflowMeasured || needsMarquee ? " now-playing-overflow" : ""}${isFading ? " now-playing-fading" : ""}`}
               style={
                 { "--np-track-max": `${desktopTrackMaxPx ?? 0}px` } as React.CSSProperties
               }
             >
-              <span ref={nowPlayingIconRef} className="now-playing-icon">
+              <span className="now-playing-icon">
                 ♪
               </span>
               {displayedTrack && (
                 <span
-                  className={`now-playing-text now-playing-loaded${!displayedTrack.live ? " now-playing-dim" : ""}`}
+                  className={`now-playing-text${!displayedTrack.live ? " now-playing-dim" : ""}`}
                   ref={containerRef}
                 >
                   <span className={`now-playing-inner${needsMarquee ? " marquee" : ""}`} ref={textRef}>
-                    {!displayedTrack.live && "last played · "}{displayedTrack.track} · {displayedTrack.artist}{needsMarquee && <>&nbsp;&nbsp;&nbsp;&nbsp;</>}
-                    {needsMarquee && <>{!displayedTrack.live && "last played · "}{displayedTrack.track} · {displayedTrack.artist}&nbsp;&nbsp;&nbsp;&nbsp;</>}
+                    {displayedTrack.track} · {displayedTrack.artist}{needsMarquee && <>&nbsp;&nbsp;&nbsp;&nbsp;</>}
+                    {needsMarquee && <>{displayedTrack.track} · {displayedTrack.artist}&nbsp;&nbsp;&nbsp;&nbsp;</>}
                   </span>
                 </span>
+              )}
+              {displayedTrack && !displayedTrack.live && (
+                <span className="now-playing-label serif">last played</span>
               )}
             </a>
           )}
@@ -334,19 +346,22 @@ export default function Home() {
           href="https://www.last.fm/user/plyght_"
           target="_blank"
           rel="noopener noreferrer"
-          className={`now-playing now-playing-mobile serif reveal reveal-d2${needsMarquee ? " now-playing-overflow" : ""}${isFading ? " now-playing-fading" : ""}`}
+          className={`now-playing now-playing-mobile serif${npReady ? " now-playing-ready" : ""}${displayedTrack && !isFading ? " now-playing-hide-icon" : ""}${needsMarquee ? " now-playing-overflow" : ""}${isFading ? " now-playing-fading" : ""}`}
           style={wordmarkWidth ? { "--wordmark-w": `${wordmarkWidth}px` } as React.CSSProperties : undefined}
         >
           <span className="now-playing-icon">♪</span>
           {displayedTrack && (
             <span
-              className={`now-playing-text now-playing-loaded${!displayedTrack.live ? " now-playing-dim" : ""}`}
+              className={`now-playing-text${!displayedTrack.live ? " now-playing-dim" : ""}`}
               ref={containerRef}
             >
               <span className="now-playing-inner" ref={textRef}>
-                {!displayedTrack.live && "last played · "}{displayedTrack.track} · {displayedTrack.artist}
+                {displayedTrack.track} · {displayedTrack.artist}
               </span>
             </span>
+          )}
+          {displayedTrack && !displayedTrack.live && (
+            <span className="now-playing-label serif">last played</span>
           )}
         </a>
       )}
