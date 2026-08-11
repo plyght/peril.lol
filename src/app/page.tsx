@@ -297,7 +297,7 @@ export default function Home() {
               href="https://www.last.fm/user/plyght_"
               target="_blank"
               rel="noopener noreferrer"
-              className={`now-playing now-playing-desktop serif${npReady ? " now-playing-ready" : ""}${displayedTrack?.live && !isFading ? " now-playing-live" : ""}${displayedTrack && !isFading ? " now-playing-hide-icon" : ""}${!overflowMeasured || needsMarquee ? " now-playing-overflow" : ""}${isFading ? " now-playing-fading" : ""}`}
+              className={`now-playing now-playing-desktop serif${npReady ? " now-playing-ready" : ""}${displayedTrack?.live && !isFading ? " now-playing-live" : ""}${displayedTrack ? " now-playing-hide-icon" : ""}${!overflowMeasured || needsMarquee ? " now-playing-overflow" : ""}${needsMarquee ? " now-playing-marquee" : ""}${isFading ? " now-playing-fading" : ""}`}
               style={
                 { "--np-track-max": `${desktopTrackMaxPx ?? 0}px` } as React.CSSProperties
               }
@@ -346,7 +346,7 @@ export default function Home() {
           href="https://www.last.fm/user/plyght_"
           target="_blank"
           rel="noopener noreferrer"
-          className={`now-playing now-playing-mobile serif${npReady ? " now-playing-ready" : ""}${displayedTrack && !isFading ? " now-playing-hide-icon" : ""}${needsMarquee ? " now-playing-overflow" : ""}${isFading ? " now-playing-fading" : ""}`}
+          className={`now-playing now-playing-mobile serif${npReady ? " now-playing-ready" : ""}${displayedTrack ? " now-playing-hide-icon" : ""}${needsMarquee ? " now-playing-overflow" : ""}${isFading ? " now-playing-fading" : ""}`}
           style={wordmarkWidth ? { "--wordmark-w": `${wordmarkWidth}px` } as React.CSSProperties : undefined}
         >
           <span className="now-playing-icon">♪</span>
