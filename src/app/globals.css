@@ -216,11 +216,11 @@ article th { font-weight: 600; background: var(--color-surface); }
 }
 
 /*
-  The ♪ and the track text are both taken out of flow and stacked on the same
-  origin, so neither ever occupies layout space and no state change can reflow
-  the nav row. The rule is uniform: the ♪ is visible exactly when the text is
-  not. Nothing paints until the last.fm state is known (.now-playing-ready), so
-  the element only ever appears in its final state.
+  The track text is taken out of flow, so it never occupies layout space and no
+  state change can reflow the nav row. With no track there is nothing to show —
+  the element renders empty rather than falling back to a placeholder. Nothing
+  paints until the last.fm state is known (.now-playing-ready), so the element
+  only ever appears in its final state.
 */
 .now-playing {
   position: relative;
@@ -239,19 +239,6 @@ article th { font-weight: 600; background: var(--color-surface); }
 
 .now-playing:hover .now-playing-text {
   color: var(--color-accent);
-}
-
-.now-playing-icon {
-  position: absolute;
-  left: 0;
-  opacity: 1;
-  transition: opacity 0.35s cubic-bezier(0.22, 1, 0.36, 1),
-    filter 0.35s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.now-playing-hide-icon .now-playing-icon {
-  opacity: 0;
-  filter: blur(3px);
 }
 
 .now-playing-text {
@@ -288,21 +275,10 @@ article th { font-weight: 600; background: var(--color-surface); }
 
 /*
   Desktop: the anchor is a zero-size flex item sitting on the nav row's own
-  gap-5 rhythm, so the ♪ and the track text both start exactly where a nav link
-  would. Track width runs from there to the bio column's right edge
-  (see --np-track-max).
+  gap-5 rhythm, so the track text starts exactly where a nav link would. Track
+  width runs from there to the bio column's right edge (see --np-track-max).
 */
 @media (min-width: 768px) {
-  /* Padding widens the hit area around a ~10px glyph; the offsetting left keeps
-     the ♪ itself on the anchor's origin. */
-  .now-playing-desktop .now-playing-icon {
-    cursor: pointer;
-    top: 0;
-    left: -14px;
-    padding: 12px 14px;
-    transform: translateY(-50%);
-  }
-
   .now-playing-desktop .now-playing-label {
     top: 0;
     transform: translateY(15px);
@@ -436,11 +412,6 @@ article th { font-weight: 600; background: var(--color-surface); }
   padding-bottom: 5px;
   opacity: 1;
   filter: blur(0px);
-}
-
-.now-playing-mobile .now-playing-icon {
-  bottom: 0;
-  top: auto;
 }
 
 /* Mobile has no hover, so the track text is the resting state — keep it in flow

@@ -76,8 +76,8 @@ export default function Home() {
 
   /*
     Hold the whole element invisible until the state is not just fetched but
-    settled into displayedTrack — otherwise the ♪ paints for the one frame
-    between the fetch resolving and the track being copied over.
+    settled into displayedTrack, so it fades up already carrying its track
+    rather than in the empty state the fetch resolves through.
   */
   const npReady = npFetched && (!nowPlaying || displayedTrack !== null);
 
@@ -297,14 +297,11 @@ export default function Home() {
               href="https://www.last.fm/user/plyght_"
               target="_blank"
               rel="noopener noreferrer"
-              className={`now-playing now-playing-desktop serif${npReady ? " now-playing-ready" : ""}${displayedTrack?.live && !isFading ? " now-playing-live" : ""}${displayedTrack ? " now-playing-hide-icon" : ""}${!overflowMeasured || needsMarquee ? " now-playing-overflow" : ""}${needsMarquee ? " now-playing-marquee" : ""}${isFading ? " now-playing-fading" : ""}`}
+              className={`now-playing now-playing-desktop serif${npReady ? " now-playing-ready" : ""}${displayedTrack?.live && !isFading ? " now-playing-live" : ""}${!overflowMeasured || needsMarquee ? " now-playing-overflow" : ""}${needsMarquee ? " now-playing-marquee" : ""}${isFading ? " now-playing-fading" : ""}`}
               style={
                 { "--np-track-max": `${desktopTrackMaxPx ?? 0}px` } as React.CSSProperties
               }
             >
-              <span className="now-playing-icon">
-                ♪
-              </span>
               {displayedTrack && (
                 <span
                   className={`now-playing-text${!displayedTrack.live ? " now-playing-dim" : ""}`}
@@ -346,10 +343,9 @@ export default function Home() {
           href="https://www.last.fm/user/plyght_"
           target="_blank"
           rel="noopener noreferrer"
-          className={`now-playing now-playing-mobile serif${npReady ? " now-playing-ready" : ""}${displayedTrack ? " now-playing-hide-icon" : ""}${needsMarquee ? " now-playing-overflow" : ""}${isFading ? " now-playing-fading" : ""}`}
+          className={`now-playing now-playing-mobile serif${npReady ? " now-playing-ready" : ""}${needsMarquee ? " now-playing-overflow" : ""}${isFading ? " now-playing-fading" : ""}`}
           style={wordmarkWidth ? { "--wordmark-w": `${wordmarkWidth}px` } as React.CSSProperties : undefined}
         >
-          <span className="now-playing-icon">♪</span>
           {displayedTrack && (
             <span
               className={`now-playing-text${!displayedTrack.live ? " now-playing-dim" : ""}`}
