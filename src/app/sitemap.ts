@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { getAllPosts } from "@/lib/blog";
+import { getAllPosts, getPageCount } from "@/lib/blog";
 
 export const dynamic = "force-static";
 
@@ -12,6 +12,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
     changeFrequency: "monthly",
     priority: 0.7,
   }));
+
+  const pageEntries: MetadataRoute.Sitemap = Array.from(
+    { length: Math.max(0, getPageCount() - 1) },
+    (_, i) => ({
+      url: `https://peril.lol/blog/p/${i + 2}`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.5,
+    })
+  );
 
   return [
     {
@@ -32,6 +42,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 0.6,
     },
+    ...pageEntries,
     ...blogEntries,
   ];
 }

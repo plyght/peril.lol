@@ -67,6 +67,17 @@ export function getAllPosts(): Post[] {
   });
 }
 
+export const POSTS_PER_PAGE = 4;
+
+export function getPageCount(): number {
+  return Math.max(1, Math.ceil(getAllPosts().length / POSTS_PER_PAGE));
+}
+
+export function getPostsForPage(page: number): Post[] {
+  const start = (page - 1) * POSTS_PER_PAGE;
+  return getAllPosts().slice(start, start + POSTS_PER_PAGE);
+}
+
 export async function getPost(slug: string): Promise<Post | null> {
   const filePath = path.join(postsDir, `${slug}.md`);
   if (!fs.existsSync(filePath)) return null;

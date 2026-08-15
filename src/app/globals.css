@@ -479,6 +479,38 @@ article th { font-weight: 600; background: var(--color-surface); }
   }
 }
 
+.blog-pager {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  color: var(--color-secondary);
+  position: relative;
+  z-index: 2;
+}
+
+.blog-pager a,
+.blog-pager-off {
+  text-decoration: none;
+  color: var(--color-secondary);
+  transition: color var(--transition) var(--cubic);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  min-height: 40px;
+  margin: -10px -8px;
+  padding: 10px 8px;
+}
+
+.blog-pager a:hover {
+  color: var(--color-accent);
+}
+
+.blog-pager-off {
+  color: var(--color-dim);
+  pointer-events: none;
+}
+
 /* Sized from the wordmark itself in JS: --wordmark-band is the wordmark's own
    height, --chrome-inset the strip of screen the browser's floating bottom bar
    is sitting over. Both default to 0 so the band stays invisible until measured. */
