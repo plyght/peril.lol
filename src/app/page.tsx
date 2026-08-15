@@ -4,6 +4,7 @@ import Link from "next/link";
 import Script from "next/script";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { NowPlayingArt } from "@/components/now-playing-art";
 
 // Webring arrows are hidden for now. Markup below is kept intact — flip this to
 // true to bring them back.
@@ -19,12 +20,24 @@ declare global {
   }
 }
 
+// last.fm hands back its own grey star for tracks with no cover — treat that as no art.
+const LASTFM_PLACEHOLDER = "2a96cbd8b46e442fc41c2b86b821562f";
+
+function coverFrom(images: { size: string; "#text": string }[] | undefined): string {
+  if (!images) return "";
+  const url =
+    images.find((i) => i.size === "extralarge")?.["#text"] ||
+    images.find((i) => i.size === "large")?.["#text"] ||
+    "";
+  return url && !url.includes(LASTFM_PLACEHOLDER) ? url : "";
+}
+
 export default function Home() {
   const sceneRef = useRef<{ destroy: () => void } | null>(null);
   const [isDesktop, setIsDesktop] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [nowPlaying, setNowPlaying] = useState<{ track: string; artist: string; live: boolean } | null>(null);
-  const [displayedTrack, setDisplayedTrack] = useState<{ track: string; artist: string; live: boolean } | null>(null);
+  const [nowPlaying, setNowPlaying] = useState<{ track: string; artist: string; live: boolean; art: string } | null>(null);
+  const [displayedTrack, setDisplayedTrack] = useState<{ track: string; artist: string; live: boolean; art: string } | null>(null);
   const [isFading, setIsFading] = useState(false);
   const [npFetched, setNpFetched] = useState(false);
   const textRef = useRef<HTMLSpanElement>(null);
@@ -59,7 +72,12 @@ export default function Home() {
       const track = data?.recenttracks?.track?.[0];
       if (track) {
         const live = track["@attr"]?.nowplaying === "true";
-        const np = { track: track.name, artist: track.artist["#text"], live };
+        const np = {
+          track: track.name,
+          artist: track.artist["#text"],
+          live,
+          art: coverFrom(track.image),
+        };
         setNowPlaying(np);
         sessionStorage.setItem(cacheKey, JSON.stringify(np));
         sessionStorage.setItem(cacheTimeKey, String(Date.now()));
@@ -107,7 +125,7 @@ export default function Home() {
       displayedTrack.track === nowPlaying.track &&
       displayedTrack.artist === nowPlaying.artist;
     if (same) {
-      if (displayedTrack.live !== nowPlaying.live) {
+      if (displayedTrack.live !== nowPlaying.live || displayedTrack.art !== nowPlaying.art) {
         setDisplayedTrack(nowPlaying);
       }
       return;
@@ -302,6 +320,16 @@ export default function Home() {
                 { "--np-track-max": `${desktopTrackMaxPx ?? 0}px` } as React.CSSProperties
               }
             >
+              {displayedTrack && (
+                <NowPlayingArt
+                  key={displayedTrack.art || "no-cover"}
+                  src={displayedTrack.art}
+                  anchorRef={nowPlayingDesktopRef}
+                  originRef={containerRef}
+                  hidden={isFading}
+                  overflowing={!overflowMeasured || needsMarquee}
+                />
+              )}
               {displayedTrack && (
                 <span
                   className={`now-playing-text${!displayedTrack.live ? " now-playing-dim" : ""}`}

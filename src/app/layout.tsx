@@ -1,12 +1,22 @@
 import type { Metadata, Viewport } from "next";
-import { EB_Garamond } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 
-const ebGaramond = EB_Garamond({
+const ebGaramond = localFont({
   variable: "--font-eb-garamond",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  style: ["normal", "italic"],
+  display: "swap",
+  src: [
+    {
+      path: "../fonts/eb-garamond-latin.woff2",
+      weight: "400 800",
+      style: "normal",
+    },
+    {
+      path: "../fonts/eb-garamond-latin-italic.woff2",
+      weight: "400 800",
+      style: "italic",
+    },
+  ],
 });
 
 export const viewport: Viewport = {

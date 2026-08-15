@@ -28,6 +28,39 @@
   }
 }
 
+/*
+  The scheme is registered so it can be interpolated: hovering the track hands
+  the page the sleeve's own colours (see lib/palette), and the whole site walks
+  over to them rather than cutting.
+*/
+@property --color-bg { syntax: "<color>"; inherits: true; initial-value: #0f0f0f; }
+@property --color-text { syntax: "<color>"; inherits: true; initial-value: #e8e8e8; }
+@property --color-secondary { syntax: "<color>"; inherits: true; initial-value: #888; }
+@property --color-accent { syntax: "<color>"; inherits: true; initial-value: #c4b4e0; }
+@property --color-accent-wash { syntax: "<color>"; inherits: true; initial-value: rgba(196, 180, 224, 0.1); }
+@property --color-border { syntax: "<color>"; inherits: true; initial-value: #1e1e1e; }
+@property --color-surface { syntax: "<color>"; inherits: true; initial-value: #161616; }
+@property --color-dim { syntax: "<color>"; inherits: true; initial-value: #555; }
+
+/*
+  The ground walks over to the sleeve's colours and back. The accent does not:
+  it is what the hover rules paint with, and those fire the same instant the
+  pointer arrives or leaves, so an eased accent would show the previous one
+  under the pointer for the length of the ease. It changes on the frame.
+*/
+html {
+  transition: --color-bg 0.55s var(--cubic), --color-text 0.55s var(--cubic),
+    --color-secondary 0.55s var(--cubic), --color-border 0.55s var(--cubic),
+    --color-surface 0.55s var(--cubic), --color-dim 0.55s var(--cubic);
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    transition: none;
+  }
+}
+
 ::selection { background: var(--color-accent); color: white; }
 
 html, body {
@@ -108,11 +141,20 @@ a { color: inherit; text-decoration: none; }
   color: var(--color-text);
 }
 
+/*
+  The resting rule is mixed down from currentColor and reads no custom property
+  at all. A link's colour properties — text-decoration-color among them — are
+  resolved in a pass where custom properties are not available, so any var()
+  here goes unread the moment the sleeve hands the page its scheme, and the
+  property falls back to its initial value, currentColor, flashing every
+  underline at full text weight. currentColor is always available there, and it
+  still follows the theme, since the text colour is itself themed.
+*/
 .underline-link {
   text-decoration: underline;
   text-underline-offset: 4px;
   text-decoration-thickness: 1px;
-  text-decoration-color: var(--color-dim);
+  text-decoration-color: color-mix(in oklab, currentColor 34%, transparent);
   transition: text-decoration-color var(--transition);
 }
 
@@ -141,7 +183,7 @@ a { color: inherit; text-decoration: none; }
 
 article p { margin-bottom: 1.2em; }
 article p:last-child { margin-bottom: 0; }
-article a { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; text-decoration-color: var(--color-dim); transition: text-decoration-color var(--transition); }
+article a { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; text-decoration-color: color-mix(in oklab, currentColor 34%, transparent); transition: text-decoration-color var(--transition); }
 article a:hover { text-decoration-color: var(--color-accent); }
 article h2, article h3 { margin-top: 2em; margin-bottom: 0.6em; font-weight: 600; text-wrap: balance; }
 article p { text-wrap: pretty; }
@@ -222,11 +264,17 @@ article th { font-weight: 600; background: var(--color-surface); }
   paints until the last.fm state is known (.now-playing-ready), so the element
   only ever appears in its final state.
 */
+/*
+  Mixed down from currentColor, not read out of --color-secondary: this is an
+  anchor, and colour is resolved for a link's visited state in a pass with no
+  custom properties, so the var went unresolved the moment the scheme changed
+  and the track fell back to full text weight — a white flash on the way out.
+*/
 .now-playing {
   position: relative;
   display: inline-flex;
   align-items: center;
-  color: var(--color-secondary);
+  color: color-mix(in oklab, currentColor 55%, transparent);
   text-decoration: none;
   cursor: pointer;
   opacity: 0;
@@ -255,7 +303,7 @@ article th { font-weight: 600; background: var(--color-surface); }
 }
 
 .now-playing-dim {
-  color: var(--color-dim);
+  color: color-mix(in oklab, currentColor 62%, transparent);
 }
 
 /* Subordinate stamp for the idle state — replaces the inline "last played · " prefix */
@@ -265,7 +313,6 @@ article th { font-weight: 600; background: var(--color-surface); }
   font-size: 12px;
   line-height: 1;
   white-space: nowrap;
-  color: var(--color-secondary);
   pointer-events: none;
   opacity: 0;
   filter: blur(2px);
@@ -369,6 +416,125 @@ article th { font-weight: 600; background: var(--color-surface); }
   display: inline-block;
   white-space: nowrap;
 }
+
+/*
+  Cover art hangs under the track line on the same left origin as the text, and
+  only on hover. It is portalled to the body — the bio column clips its overflow
+  and the track line rides its bottom edge — so it is placed off the anchor's
+  own rect. Every dimension comes off the nav row's type size by the golden
+  ratio: the square is φ⁴ of it and the corner is the side over φ⁴.
+*/
+.np-art {
+  --np-fs: clamp(16px, 3vw, 20px);
+  --np-size: calc(var(--np-fs) * 6.854);
+  position: fixed;
+  z-index: 30;
+  display: block;
+  width: var(--np-size);
+  height: var(--np-size);
+  overflow: hidden;
+  border-radius: calc(var(--np-size) / 6.854);
+  background-color: var(--color-surface);
+  outline: 1px solid rgba(255, 255, 255, 0.1);
+  outline-offset: -1px;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-8px, -6px) scale(0.94);
+  filter: blur(4px);
+  transition: opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/*
+  The side is a fluid clamp, so it lands on fractions of a pixel and the surface
+  under the cover shows as a hairline down one edge. Snap it to whole pixels
+  where the browser can round (the placement is snapped in JS to match).
+*/
+@supports (width: round(1px, 1px)) {
+  .np-art {
+    /* Even steps, so the -50% centring lands on a whole pixel too. */
+    --np-size: round(calc(var(--np-fs) * 6.854), 2px);
+  }
+}
+
+/* The same corner on a superellipse where the browser can draw one. */
+@supports (corner-shape: squircle) {
+  .np-art {
+    corner-shape: squircle;
+  }
+}
+
+.np-art-open {
+  opacity: 1;
+  transform: translate(0, 0) scale(1);
+  filter: blur(0px);
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+/* No sleeve to show: the tile keeps the page's own colours and holds a note. */
+.np-art.np-art-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-surface);
+  cursor: default;
+}
+
+/*
+  The old ♪, sitting a shade lighter than its tile. Centring is
+  optical, not box — the glyph's ink sits 2.7% of its size below the em box's
+  middle (measured), so it is lifted by exactly that.
+*/
+.np-art-note {
+  --np-note: calc(var(--np-size) * 0.54);
+  font-size: var(--np-note);
+  line-height: 1;
+  transform: translateY(calc(var(--np-note) * -0.027));
+  user-select: none;
+  color: color-mix(in oklab, var(--color-surface) 68%, #fff);
+}
+
+/* Clicked, the sleeve's scheme is held on the page until it is clicked off. */
+.np-art-pinned {
+  outline-width: 2px;
+  outline-color: var(--color-accent);
+}
+
+/* Pre-portal stand-in: gives the loader an element to rank without painting. */
+.np-art-probe {
+  display: none;
+}
+
+@media (prefers-color-scheme: light) {
+  .np-art {
+    outline-color: rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* The tile's own corner has to be repeated here: a squircle corner does not clip
+   its children, so the artwork would paint square over a rounded tile. */
+.np-art-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+  corner-shape: inherit;
+  filter: blur(var(--photo-blur, 18px));
+  transform: scale(1.06);
+  opacity: 0;
+  transition: filter 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.6s ease;
+}
+
+.np-art-img-loaded {
+  filter: blur(0px);
+  transform: scale(1);
+  opacity: 1;
+}
+
 
 @keyframes marquee {
   0%, 25% {
