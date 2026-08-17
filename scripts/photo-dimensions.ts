@@ -5,6 +5,16 @@ import sharp from "sharp";
 const photosDir = path.join(process.cwd(), "public/photos");
 const imageExts = new Set([".jpg", ".jpeg", ".png", ".webp", ".avif"]);
 
+export function displayDimensions(metadata: {
+  width?: number;
+  height?: number;
+  autoOrient?: { width: number; height: number };
+}): { w: number; h: number } | null {
+  const width = metadata.autoOrient?.width ?? metadata.width;
+  const height = metadata.autoOrient?.height ?? metadata.height;
+  return width && height ? { w: width, h: height } : null;
+}
+
 async function main() {
   if (!fs.existsSync(photosDir)) {
     console.log("{}");
@@ -21,9 +31,8 @@ async function main() {
   for (const f of files) {
     try {
       const meta = await sharp(path.join(photosDir, f)).metadata();
-      if (meta.width && meta.height) {
-        result[f] = { w: meta.width, h: meta.height };
-      }
+      const dimensions = displayDimensions(meta);
+      if (dimensions) result[f] = dimensions;
     } catch {
       result[f] = { w: 4, h: 3 };
     }
@@ -32,4 +41,4 @@ async function main() {
   console.log(JSON.stringify(result));
 }
 
-main();
+if (import.meta.main) void main();

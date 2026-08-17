@@ -5,9 +5,12 @@
   "scripts": {
     "dev": "next dev",
     "build": "bun run scripts/convert-photos.ts && next build",
+    "format": "prettier --check package.json scripts/generate-og.tsx scripts/photo-dimensions.ts scripts/photo-dimensions.test.ts src/app/not-found.tsx src/components/now-playing.tsx src/components/photo-image.tsx src/components/theme-provider.tsx",
     "photos:convert": "bun run scripts/convert-photos.ts",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "test": "bun test"
   },
   "dependencies": {
     "@radix-ui/react-hover-card": "^1.1.19",
@@ -29,6 +32,7 @@
     "@types/react-dom": "^19.2.3",
     "eslint": "^9.39.5",
     "eslint-config-next": "16.2.2",
+    "prettier": "^3.9.6",
     "satori": "^0.26.0",
     "tailwindcss": "^4.3.2",
     "typescript": "^5.9.3"

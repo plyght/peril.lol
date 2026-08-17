@@ -20,19 +20,28 @@ export default function NotFound() {
 
   useEffect(() => {
     document.documentElement.classList.add("no-scroll");
-    setLine(lines[Math.floor(Math.random() * lines.length)]);
-    return () => document.documentElement.classList.remove("no-scroll");
+    const frame = requestAnimationFrame(() => {
+      setLine(lines[Math.floor(Math.random() * lines.length)]);
+    });
+    return () => {
+      cancelAnimationFrame(frame);
+      document.documentElement.classList.remove("no-scroll");
+    };
   }, []);
 
   return (
     <div className="h-[100dvh] flex flex-col justify-between px-[6vw] md:px-[8vw] pt-[10vh] md:pt-[14vh] pb-[2vh] overflow-hidden relative">
-
       <div className="max-w-[700px] reveal reveal-d1 relative z-10">
-        <p className="serif text-[clamp(22px,5vw,34px)] leading-[1.5] tracking-[-0.01em]" style={{ color: "var(--color-secondary)" }}>
+        <p
+          className="serif text-[clamp(22px,5vw,34px)] leading-[1.5] tracking-[-0.01em]"
+          style={{ color: "var(--color-secondary)" }}
+        >
           {line}
         </p>
         <div className="flex items-center gap-5 mt-6 text-[clamp(16px,3vw,20px)]">
-          <Link href="/" className="underline-link serif">Return home</Link>
+          <Link href="/" className="underline-link serif">
+            Return home
+          </Link>
         </div>
       </div>
 

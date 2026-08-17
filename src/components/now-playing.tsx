@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { AsciiBars } from "./ascii-bars";
 
@@ -23,7 +24,7 @@ export function NowPlaying() {
     async function fetchTrack() {
       try {
         const res = await fetch(
-          `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${LASTFM_USER}&api_key=${LASTFM_API_KEY}&format=json&limit=1`
+          `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${LASTFM_USER}&api_key=${LASTFM_API_KEY}&format=json&limit=1`,
         );
         const data = await res.json();
         const recent = data.recenttracks?.track?.[0];
@@ -57,9 +58,12 @@ export function NowPlaying() {
       style={{ textDecoration: "none" }}
     >
       {track.image && (
-        <img
+        <Image
           src={track.image}
           alt=""
+          width={32}
+          height={32}
+          unoptimized
           className="w-8 h-8 rounded"
           style={{
             border: "1px solid var(--color-border)",
@@ -74,7 +78,10 @@ export function NowPlaying() {
             {track.name}
           </span>
         </div>
-        <span className="text-[11px] mono" style={{ color: "var(--color-dim)" }}>
+        <span
+          className="text-[11px] mono"
+          style={{ color: "var(--color-dim)" }}
+        >
           {track.artist}
         </span>
       </div>

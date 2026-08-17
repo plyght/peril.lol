@@ -11,15 +11,18 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     const apply = () => {
       document.documentElement.setAttribute(
         "data-theme",
-        mq.matches ? "dark" : "light"
+        mq.matches ? "dark" : "light",
       );
     };
 
     apply();
     mq.addEventListener("change", apply);
-    setMounted(true);
+    const frame = requestAnimationFrame(() => setMounted(true));
 
-    return () => mq.removeEventListener("change", apply);
+    return () => {
+      cancelAnimationFrame(frame);
+      mq.removeEventListener("change", apply);
+    };
   }, []);
 
   if (!mounted) return <div style={{ visibility: "hidden" }}>{children}</div>;

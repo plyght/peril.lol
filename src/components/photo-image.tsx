@@ -63,11 +63,14 @@ export function PhotoImage({
       rel="noopener noreferrer"
       className={`photo-container block${loaded ? " photo-container-loaded" : ""}`}
       style={{
-        ...(placeholder ? { backgroundImage: `url(${placeholder})` } : undefined),
+        ...(placeholder
+          ? { backgroundImage: `url(${placeholder})` }
+          : undefined),
+        aspectRatio: `${width} / ${height}`,
         ["--photo-blur" as string]: `${blurFor(progress).toFixed(2)}px`,
       }}
     >
-      {resolved ? (
+      {resolved && (
         <Image
           src={resolved}
           alt={alt}
@@ -76,11 +79,15 @@ export function PhotoImage({
           loading="eager"
           decoding="async"
           unoptimized
+          style={{
+            position: "absolute",
+            inset: 0,
+            height: "100%",
+            objectFit: "cover",
+          }}
           onLoad={() => setLoaded(true)}
           className={`photo-img${loaded ? " photo-loaded" : ""}`}
         />
-      ) : (
-        <div className="photo-img" style={{ aspectRatio: `${width} / ${height}` }} />
       )}
       <div className={`photo-reveal${loaded ? " photo-reveal-done" : ""}`} />
     </a>
