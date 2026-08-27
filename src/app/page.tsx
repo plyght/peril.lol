@@ -287,7 +287,7 @@ export default function Home() {
           <a href="https://github.com/plyght/spine" target="_blank" rel="noopener noreferrer" className="underline-link">Spine</a>,{" "}
           <a href="https://github.com/plyght/hops" target="_blank" rel="noopener noreferrer" className="underline-link">Hops</a>,{" "}
           <a href="https://github.com/plyght/wax" target="_blank" rel="noopener noreferrer" className="underline-link">Wax</a>, and{" "}
-          <a href="https://github.com/plyght/superdetermine" target="_blank" rel="noopener noreferrer" className="underline-link">Superdetermine</a>.
+          <a href="https://superdetermine.com" target="_blank" rel="noopener noreferrer" className="underline-link">Superdetermine</a>.
         </p>
         <div
           ref={navRowRef}
