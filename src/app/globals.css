@@ -439,10 +439,8 @@ article th { font-weight: 600; background: var(--color-surface); }
   outline-offset: -1px;
   pointer-events: none;
   opacity: 0;
-  transform: translate(-8px, -6px) scale(0.94);
   filter: blur(4px);
   transition: opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1),
-    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
     filter 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -467,7 +465,6 @@ article th { font-weight: 600; background: var(--color-surface); }
 
 .np-art-open {
   opacity: 1;
-  transform: translate(0, 0) scale(1);
   filter: blur(0px);
   pointer-events: auto;
   cursor: pointer;
