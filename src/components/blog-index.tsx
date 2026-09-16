@@ -1,25 +1,16 @@
 import Link from "next/link";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import { BlogEntry } from "@/components/blog-entry";
+import { BlogPager } from "@/components/blog-pager";
 import { WordmarkBlur } from "@/components/wordmark-blur";
 import type { Post } from "@/lib/blog";
 
-function pageHref(page: number) {
-  return page <= 1 ? "/blog" : `/blog/p/${page}`;
-}
-
-export function BlogIndex({
-  posts,
-  page,
+export function BlogShell({
   totalPages,
+  children,
 }: {
-  posts: Post[];
-  page: number;
   totalPages: number;
+  children: React.ReactNode;
 }) {
-  const hasPrev = page > 1;
-  const hasNext = page < totalPages;
-
   return (
     <div className="relative h-[100dvh] overflow-hidden">
 
@@ -54,65 +45,40 @@ export function BlogIndex({
           <div className="reveal reveal-d1 flex items-center gap-5 text-[clamp(20px,3vw,22px)] md:text-[clamp(16px,3vw,20px)] mb-[6vh]">
             <Link href="/" className="underline-link serif pointer-events-auto">Home</Link>
             <span className="serif" style={{ color: "var(--color-dim)" }}>Writing</span>
-            {totalPages > 1 && (
-              <span className="blog-pager serif pointer-events-auto" aria-label="pagination">
-                {hasPrev ? (
-                  <Link
-                    href={pageHref(page - 1)}
-                    rel="prev"
-                    title="newer posts"
-                    aria-label="newer posts"
-                  >
-                    <ChevronLeft size={17} strokeWidth={1.75} />
-                  </Link>
-                ) : (
-                  <span className="blog-pager-off" aria-hidden="true">
-                    <ChevronLeft size={17} strokeWidth={1.75} />
-                  </span>
-                )}
-                {hasNext ? (
-                  <Link
-                    href={pageHref(page + 1)}
-                    rel="next"
-                    title="older posts"
-                    aria-label="older posts"
-                  >
-                    <ChevronRight size={17} strokeWidth={1.75} />
-                  </Link>
-                ) : (
-                  <span className="blog-pager-off" aria-hidden="true">
-                    <ChevronRight size={17} strokeWidth={1.75} />
-                  </span>
-                )}
-              </span>
-            )}
+            <BlogPager totalPages={totalPages} />
           </div>
 
-          <div className="max-w-[700px]">
-            {posts.length === 0 ? (
-              <p
-                className="reveal reveal-d2 serif text-[clamp(16px,2.2vw,20px)] leading-[1.5]"
-                style={{ color: "var(--color-secondary)" }}
-              >
-                nothing here yet.
-              </p>
-            ) : (
-              <div>
-                {posts.map((post, i) => (
-                  <BlogEntry
-                    key={post.slug}
-                    slug={post.slug}
-                    title={post.title}
-                    excerpt={post.excerpt}
-                    index={i}
-                  />
-                ))}
-              </div>
-            )}
-          </div>
+          <div className="max-w-[700px]">{children}</div>
         </div>
         <div className="flex-1" />
       </div>
+    </div>
+  );
+}
+
+export function BlogPosts({ posts }: { posts: Post[] }) {
+  if (posts.length === 0) {
+    return (
+      <p
+        className="reveal reveal-d2 serif text-[clamp(16px,2.2vw,20px)] leading-[1.5]"
+        style={{ color: "var(--color-secondary)" }}
+      >
+        nothing here yet.
+      </p>
+    );
+  }
+
+  return (
+    <div>
+      {posts.map((post, i) => (
+        <BlogEntry
+          key={post.slug}
+          slug={post.slug}
+          title={post.title}
+          excerpt={post.excerpt}
+          index={i}
+        />
+      ))}
     </div>
   );
 }

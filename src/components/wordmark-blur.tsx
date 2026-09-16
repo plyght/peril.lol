@@ -121,12 +121,15 @@ export function WordmarkBlur() {
     window.addEventListener("resize", schedule);
     const ro = new ResizeObserver(schedule);
     ro.observe(wordmark);
+    const mo = new MutationObserver(schedule);
+    mo.observe(document.body, { childList: true, subtree: true });
 
     return () => {
       if (queued) cancelAnimationFrame(queued);
       window.removeEventListener("scroll", schedule);
       window.removeEventListener("resize", schedule);
       ro.disconnect();
+      mo.disconnect();
       probe.remove();
     };
   }, []);

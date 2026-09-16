@@ -1,5 +1,5 @@
-import { getPageCount, getPostsForPage } from "@/lib/blog";
-import { BlogIndex } from "@/components/blog-index";
+import { getPostsForPage } from "@/lib/blog";
+import { BlogPosts } from "@/components/blog-index";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -22,7 +22,5 @@ export const metadata: Metadata = {
 };
 
 export default function Blog() {
-  return (
-    <BlogIndex posts={getPostsForPage(1)} page={1} totalPages={getPageCount()} />
-  );
+  return <BlogPosts posts={getPostsForPage(1)} />;
 }

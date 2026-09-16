@@ -1,5 +1,5 @@
 import { getPageCount, getPostsForPage } from "@/lib/blog";
-import { BlogIndex } from "@/components/blog-index";
+import { BlogPosts } from "@/components/blog-index";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 
@@ -47,7 +47,5 @@ export default async function BlogPage({
   const totalPages = getPageCount();
   if (!Number.isInteger(n) || n < 1 || n > totalPages) notFound();
 
-  return (
-    <BlogIndex posts={getPostsForPage(n)} page={n} totalPages={totalPages} />
-  );
+  return <BlogPosts posts={getPostsForPage(n)} />;
 }
