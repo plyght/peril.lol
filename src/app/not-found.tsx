@@ -38,7 +38,7 @@ export default function NotFound() {
         >
           {line}
         </p>
-        <div className="flex items-center gap-5 mt-6 text-[clamp(20px,3vw,22px)]">
+        <div className="flex items-center gap-5 mt-6 text-[clamp(20px,3vw,22px)] md:text-[clamp(16px,3vw,20px)]">
           <Link href="/" className="underline-link serif">
             Return home
           </Link>
