@@ -1,5 +1,6 @@
 ---
 title: School and the Appearance of Discipline
+date: "2026-04-20"
 excerpt: my thoughts on executive functioning, procrastination, and measurement.
 ---
 

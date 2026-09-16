@@ -15,7 +15,7 @@ export function BlogEntry({
     <Link
       href={`/blog/${slug}`}
       data-blog-link
-      className="group block py-[2.5vh]"
+      className="group block py-[2.5vh] first:pt-0 md:first:pt-[2.5vh]"
       style={{ textDecoration: "none" }}
     >
       <span

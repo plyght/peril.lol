@@ -20,7 +20,7 @@ function linkifyCitations(rawHtml: string): string {
   const sourceCount = sourceItems.length;
 
   const validNums = new Set(
-    Array.from({ length: sourceCount }, (_, i) => i + 1)
+    Array.from({ length: sourceCount }, (_, i) => i + 1),
   );
 
   let srcIdx = 0;
@@ -30,13 +30,15 @@ function linkifyCitations(rawHtml: string): string {
   });
 
   const occurrences: Record<number, number> = {};
-  const body = rawHtml.slice(0, lastOlStart).replace(/\[(\d+)\]/g, (match, num) => {
-    const n = parseInt(num, 10);
-    if (!validNums.has(n)) return match;
-    occurrences[n] = (occurrences[n] || 0) + 1;
-    const k = occurrences[n];
-    return `<a href="#source-${n}" id="ref-${n}-${k}" class="cite-ref" data-source="${n}"><span class="cite-bracket">[</span><span class="cite-num">${n}</span><span class="cite-bracket">]</span></a>`;
-  });
+  const body = rawHtml
+    .slice(0, lastOlStart)
+    .replace(/\[(\d+)\]/g, (match, num) => {
+      const n = parseInt(num, 10);
+      if (!validNums.has(n)) return match;
+      occurrences[n] = (occurrences[n] || 0) + 1;
+      const k = occurrences[n];
+      return `<a href="#source-${n}" id="ref-${n}-${k}" class="cite-ref" data-source="${n}"><span class="cite-bracket">[</span><span class="cite-num">${n}</span><span class="cite-bracket">]</span></a>`;
+    });
 
   return body + taggedSources + rawHtml.slice(lastOlEnd + 5);
 }
@@ -44,6 +46,7 @@ function linkifyCitations(rawHtml: string): string {
 export interface Post {
   slug: string;
   title: string;
+  date: string;
   excerpt: string;
   content: string;
 }
@@ -53,21 +56,26 @@ export function getAllPosts(): Post[] {
 
   const files = fs.readdirSync(postsDir).filter((f) => f.endsWith(".md"));
 
-  return files.map((file) => {
-    const slug = file.replace(/\.md$/, "");
-    const raw = fs.readFileSync(path.join(postsDir, file), "utf-8");
-    const { data, content } = matter(raw);
+  return files
+    .map((file) => {
+      const slug = file.replace(/\.md$/, "");
+      const raw = fs.readFileSync(path.join(postsDir, file), "utf-8");
+      const { data, content } = matter(raw);
 
-    return {
-      slug,
-      title: data.title || slug,
-      excerpt: data.excerpt || content.slice(0, 120) + "...",
-      content,
-    };
-  });
+      return {
+        slug,
+        title: data.title || slug,
+        date: data.date ? new Date(data.date).toISOString() : "",
+        excerpt: data.excerpt || content.slice(0, 120) + "...",
+        content,
+      };
+    })
+    .sort(
+      (a, b) => b.date.localeCompare(a.date) || a.slug.localeCompare(b.slug),
+    );
 }
 
-export const POSTS_PER_PAGE = 4;
+export const POSTS_PER_PAGE = 3;
 
 export function getPageCount(): number {
   return Math.max(1, Math.ceil(getAllPosts().length / POSTS_PER_PAGE));
@@ -90,6 +98,7 @@ export async function getPost(slug: string): Promise<Post | null> {
   return {
     slug,
     title: data.title || slug,
+    date: data.date ? new Date(data.date).toISOString() : "",
     excerpt: data.excerpt ? String(data.excerpt) : "",
     content: linkifyCitations(processed.toString()),
   };

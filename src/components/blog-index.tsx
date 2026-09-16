@@ -21,10 +21,10 @@ export function BlogIndex({
   const hasNext = page < totalPages;
 
   return (
-    <div className="relative min-h-[100dvh]">
+    <div className="relative h-[100dvh] overflow-hidden">
 
       <div
-        className="sticky top-0 h-[100dvh] flex flex-col justify-between overflow-hidden pointer-events-none select-none px-[6vw] md:px-[8vw] pb-[2vh]"
+        className="absolute inset-0 flex flex-col justify-between overflow-hidden pointer-events-none select-none px-[6vw] md:px-[8vw] pb-[2vh]"
         style={{ zIndex: 0 }}
       >
         <div />
@@ -41,15 +41,17 @@ export function BlogIndex({
             writing
           </span>
         </div>
-        <WordmarkBlur />
+        <div className="hidden md:contents">
+          <WordmarkBlur />
+        </div>
       </div>
 
       <div
-        className="relative flex flex-col min-h-[100dvh] px-[6vw] md:px-[8vw]"
-        style={{ zIndex: 1, marginTop: "-100dvh" }}
+        className="relative flex flex-col px-[6vw] md:px-[8vw]"
+        style={{ zIndex: 1 }}
       >
-        <div className="pt-[10vh] md:pt-[14vh]">
-          <div className="reveal reveal-d1 flex items-center gap-5 text-[clamp(16px,3vw,20px)] mb-[6vh]">
+        <div className="pt-[8vh] md:pt-[14vh]">
+          <div className="reveal reveal-d1 flex items-center gap-5 text-[clamp(20px,3vw,22px)] mb-[6vh]">
             <Link href="/" className="underline-link serif pointer-events-auto">Home</Link>
             <span className="serif" style={{ color: "var(--color-dim)" }}>Writing</span>
             {totalPages > 1 && (
@@ -86,7 +88,7 @@ export function BlogIndex({
             )}
           </div>
 
-          <div className="max-w-[700px] pb-[14vh]">
+          <div className="max-w-[700px]">
             {posts.length === 0 ? (
               <p
                 className="reveal reveal-d2 serif text-[clamp(16px,2.2vw,20px)] leading-[1.5]"

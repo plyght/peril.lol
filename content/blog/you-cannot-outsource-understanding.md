@@ -1,5 +1,6 @@
 ---
 title: You Cannot Outsource Understanding
+date: "2026-06-28"
 excerpt: my thoughts on intellectual content, AI, and learning.
 ---
 

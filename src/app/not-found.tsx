@@ -30,7 +30,7 @@ export default function NotFound() {
   }, []);
 
   return (
-    <div className="h-[100dvh] flex flex-col justify-between px-[6vw] md:px-[8vw] pt-[10vh] md:pt-[14vh] pb-[2vh] overflow-hidden relative">
+    <div className="h-[100dvh] flex flex-col justify-between px-[6vw] md:px-[8vw] pt-[8vh] md:pt-[14vh] pb-[2vh] overflow-hidden relative">
       <div className="max-w-[700px] reveal reveal-d1 relative z-10">
         <p
           className="serif text-[clamp(22px,5vw,34px)] leading-[1.5] tracking-[-0.01em]"
@@ -38,7 +38,7 @@ export default function NotFound() {
         >
           {line}
         </p>
-        <div className="flex items-center gap-5 mt-6 text-[clamp(16px,3vw,20px)]">
+        <div className="flex items-center gap-5 mt-6 text-[clamp(20px,3vw,22px)]">
           <Link href="/" className="underline-link serif">
             Return home
           </Link>

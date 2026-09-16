@@ -267,7 +267,7 @@ export default function Home() {
   };
 
   return (
-    <div className="h-[100dvh] flex flex-col justify-between px-[6vw] md:px-[8vw] pt-[10vh] md:pt-[14vh] pb-[2vh] overflow-hidden relative">
+    <div className="h-[100dvh] flex flex-col justify-between px-[6vw] md:px-[8vw] pt-[8vh] md:pt-[14vh] pb-[2vh] overflow-hidden relative">
 
       
       <div
@@ -275,7 +275,7 @@ export default function Home() {
         className="max-w-[700px] reveal reveal-d1 relative z-10 overflow-hidden w-full min-w-0"
         style={bioWidth ? ({ "--bio-w": `${bioWidth}px` } as React.CSSProperties) : undefined}
       >
-        <p className="serif text-[clamp(22px,5vw,34px)] leading-[1.5] tracking-[-0.01em]">
+        <p className="serif text-[clamp(26px,5.5vw,38px)] leading-[1.5] tracking-[-0.01em]">
           High school senior out of D.C.{" "}
           <em className="font-semibold">Developer</em>,{" "}
           <em className="font-semibold">wrestler</em>,{" "}
@@ -291,7 +291,7 @@ export default function Home() {
         </p>
         <div
           ref={navRowRef}
-          className="flex flex-wrap items-center gap-5 mt-6 pb-4 text-[clamp(16px,3vw,20px)]"
+          className="flex flex-wrap items-center gap-5 mt-6 pb-4 text-[clamp(20px,3vw,22px)]"
         >
           <Link href="/blog" className="underline-link serif">Writing</Link>
           <Link href="/photos" className="underline-link serif">Photos</Link>

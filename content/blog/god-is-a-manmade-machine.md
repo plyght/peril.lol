@@ -1,5 +1,6 @@
 ---
 title: God is a Manmade Machine
+date: "2026-04-15"
 excerpt: my thoughts on God, Psychology, and Religion
 ---
 

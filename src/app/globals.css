@@ -11,8 +11,8 @@
   --color-dim: #555;
   --transition: 0.2s;
   --cubic: cubic-bezier(0.39, 0.575, 0.565, 1);
-  --text-entry-title: clamp(19px, 15.5px + 0.9vw, 26px);
-  --text-entry-excerpt: clamp(14px, 12.5px + 0.4vw, 17px);
+  --text-entry-title: clamp(22px, 19px + 0.7vw, 28px);
+  --text-entry-excerpt: clamp(17px, 15.5px + 0.4vw, 19px);
 }
 
 @media (prefers-color-scheme: light) {
@@ -561,6 +561,8 @@ article th { font-weight: 600; background: var(--color-surface); }
 }
 
 .now-playing-mobile {
+  font-size: 18px;
+  line-height: 1.4;
   position: absolute;
   left: 6vw;
   /* Position above plyght text: font-size × ~0.78 (cap height) + mb-[1vh] + pb-[2vh] + gap */
@@ -571,6 +573,7 @@ article th { font-weight: 600; background: var(--color-surface); }
 /* No hover on mobile, so the label is persistent — and it sits above the track
    line, since the wordmark occupies everything below it. */
 .now-playing-mobile .now-playing-label {
+  font-size: 14px;
   bottom: 100%;
   padding-bottom: 5px;
   opacity: 1;

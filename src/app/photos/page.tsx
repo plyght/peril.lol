@@ -51,8 +51,8 @@ export default async function Photos() {
         className="relative px-[6vw] md:px-[8vw]"
         style={{ zIndex: 1, marginTop: "-100dvh" }}
       >
-        <div className="pt-[10vh] md:pt-[14vh]">
-          <div className="reveal reveal-d1 flex items-center gap-5 text-[clamp(16px,3vw,20px)] mb-[6vh]">
+        <div className="pt-[8vh] md:pt-[14vh]">
+          <div className="reveal reveal-d1 flex items-center gap-5 text-[clamp(20px,3vw,22px)] mb-[3vh] md:mb-[6vh]">
             <Link href="/" className="underline-link serif pointer-events-auto">Home</Link>
             <span className="serif" style={{ color: "var(--color-dim)" }}>Photos</span>
           </div>
