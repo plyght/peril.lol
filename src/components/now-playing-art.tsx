@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { createPortal } from "react-dom";
 import { useEffect, useRef, useState, type RefObject } from "react";
+import { startMusicDebug, traceMusic } from "@/lib/music-debug";
 import { requestImage } from "@/lib/image-loader";
 import { analyzeImage, paletteFrom, type CoverAnalysis, type Palette } from "@/lib/palette";
 
@@ -29,14 +30,16 @@ function isDark(): boolean {
   return window.matchMedia("(prefers-color-scheme: dark)").matches;
 }
 
-function wearPalette(palette: Palette): void {
+function wearPalette(palette: Palette, reason: string): void {
+  traceMusic("palette-apply", { reason, palette }, true);
   const root = document.documentElement;
   root.style.setProperty("--cover-bg", palette.bg);
   for (const [key, prop] of THEME_VARS) root.style.setProperty(prop, palette[key]);
   root.classList.add("themed-by-cover");
 }
 
-function shedPalette(): void {
+function shedPalette(reason: string): void {
+  traceMusic("palette-clear", { reason }, true);
   const root = document.documentElement;
   for (const [, prop] of THEME_VARS) root.style.removeProperty(prop);
   root.classList.remove("themed-by-cover");
@@ -106,6 +109,8 @@ export function NowPlayingArt({
   hidden: boolean;
   overflowing: boolean;
 }) {
+  useEffect(startMusicDebug, []);
+
   const containerRef = useRef<HTMLSpanElement>(null);
   const [progress, setProgress] = useState(0);
   const [resolved, setResolved] = useState<string | null>(null);
@@ -189,18 +194,20 @@ export function NowPlayingArt({
     };
 
     const show = () => {
+      traceMusic("hover-enter", { hasAnalysis: !!analysisRef.current, pinned: pinnedRef.current });
       hoveringRef.current = true;
       setOpen(true);
-      if (analysisRef.current) wearPalette(paletteFrom(analysisRef.current, isDark()));
+      if (analysisRef.current) wearPalette(paletteFrom(analysisRef.current, isDark()), "hover");
     };
 
     const hide = () => {
       bridge = null;
       clearGrace();
+      traceMusic("hover-hide", { pinned: pinnedRef.current });
       if (pinnedRef.current) return;
       hoveringRef.current = false;
       setOpen(false);
-      shedPalette();
+      shedPalette("hover-hide");
     };
 
     const enter = () => {
@@ -236,11 +243,18 @@ export function NowPlayingArt({
           { x: cover.left, y: cover.bottom },
         ]);
         clearGrace();
-        graceTimer = setTimeout(hide, GRACE_MS);
+        traceMusic("grace-start", { duration: GRACE_MS });
+        graceTimer = setTimeout(() => {
+          traceMusic("grace-expired");
+          hide();
+        }, GRACE_MS);
         return;
       }
 
-      if (!insideHull(bridge, p)) hide();
+      if (!insideHull(bridge, p)) {
+        traceMusic("outside-bridge");
+        hide();
+      }
     };
 
     el.addEventListener("pointerenter", enter);
@@ -256,7 +270,7 @@ export function NowPlayingArt({
     };
   }, [anchorRef, originRef, overflowing]);
 
-  useEffect(() => () => shedPalette(), []);
+  useEffect(() => () => shedPalette("unmount"), []);
 
   /* Pinned, the scheme is held so it can be looked at properly. Escape drops it. */
   useEffect(() => {
@@ -267,7 +281,7 @@ export function NowPlayingArt({
       setPinned(false);
       setOpen(false);
       hoveringRef.current = false;
-      shedPalette();
+      shedPalette("escape");
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -287,6 +301,7 @@ export function NowPlayingArt({
         src
           ? () => {
               hoveringRef.current = true;
+              traceMusic("pin-toggle", { pinned: !pinned });
               setPinned((was) => !was);
             }
           : undefined
@@ -315,8 +330,9 @@ export function NowPlayingArt({
           onLoad={(event) => {
             setLoaded(true);
             analysisRef.current = analyzeImage(event.currentTarget);
+            traceMusic("image-load", { analysis: analysisRef.current, hovering: hoveringRef.current });
             if (hoveringRef.current && analysisRef.current) {
-              wearPalette(paletteFrom(analysisRef.current, isDark()));
+              wearPalette(paletteFrom(analysisRef.current, isDark()), "image-load");
             }
           }}
           className={`np-art-img${loaded ? " np-art-img-loaded" : ""}`}
