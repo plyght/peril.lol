@@ -31,6 +31,7 @@ function isDark(): boolean {
 
 function wearPalette(palette: Palette): void {
   const root = document.documentElement;
+  root.style.setProperty("--cover-bg", palette.bg);
   for (const [key, prop] of THEME_VARS) root.style.setProperty(prop, palette[key]);
   root.classList.add("themed-by-cover");
 }
