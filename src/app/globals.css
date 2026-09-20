@@ -91,6 +91,11 @@ body {
 }
 
 
+html.themed-by-cover,
+html.themed-by-cover body {
+  transition: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html, body {
     transition: none;
