@@ -56,17 +56,12 @@
   under the pointer for the length of the ease. It changes on the frame.
 */
 html {
-  transition: --color-bg 0.55s var(--cubic), --color-text 0.55s var(--cubic),
+  transition: background-color 0.55s var(--cubic), --color-text 0.55s var(--cubic),
     --color-secondary 0.55s var(--cubic), --color-border 0.55s var(--cubic),
     --color-surface 0.55s var(--cubic), --color-dim 0.55s var(--cubic);
 }
 
 
-@media (prefers-reduced-motion: reduce) {
-  html {
-    transition: none;
-  }
-}
 
 ::selection { background: var(--color-accent); color: white; }
 
@@ -83,6 +78,7 @@ html {
 }
 
 body {
+  transition: background-color 0.55s var(--cubic);
   font-family: -apple-system, "SF Pro Display", "SF Pro Text", system-ui, sans-serif;
   background-color: var(--color-bg);
   color: var(--color-text);
@@ -94,6 +90,12 @@ body {
   padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
 }
 
+
+@media (prefers-reduced-motion: reduce) {
+  html, body {
+    transition: none;
+  }
+}
 
 a { color: inherit; text-decoration: none; }
 
@@ -772,3 +774,132 @@ article th { font-weight: 600; background: var(--color-surface); }
   opacity: 0;
 }
 
+
+.unicorn-idle {
+  position: absolute;
+  top: -8%;
+  right: -4%;
+  width: clamp(240px, 50vw, 560px);
+  height: clamp(240px, 50vw, 560px);
+  pointer-events: auto;
+  transform-origin: center;
+  transition: transform 0.3s var(--cubic);
+}
+
+.unicorn-armed {
+  animation: unicorn-windup 0.7s var(--cubic) forwards;
+}
+
+@keyframes unicorn-windup {
+  0% { transform: scale(1) translate(0, 0); }
+  40% { transform: scale(1.03) translate(-1px, 1px); }
+  55% { transform: scale(1.04) translate(2px, -1px); }
+  70% { transform: scale(1.05) translate(-2px, 1px); }
+  85% { transform: scale(1.07) translate(2px, 1px); }
+  100% { transform: scale(1.09) translate(0, 0); }
+}
+
+.unicorn-full {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100dvh;
+  z-index: 40;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.unicorn-full-on {
+  opacity: 1;
+  transform: scale(1.35);
+  transform-origin: 62% 42%;
+  transition: opacity 0.9s var(--cubic);
+}
+
+.page-shell-gone {
+  animation: page-shell-gone 0.5s var(--cubic) 0s forwards;
+  pointer-events: none;
+}
+
+@keyframes page-shell-gone {
+  from { opacity: 1; filter: blur(0); }
+  to { opacity: 0; filter: blur(6px); }
+}
+
+.scene-flood-overlay {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100dvh;
+  z-index: 50;
+  pointer-events: none;
+  opacity: 1;
+  visibility: hidden;
+}
+
+.scene-flood-overlay-on {
+  visibility: visible;
+}
+
+.scene-flood-line {
+  position: fixed;
+  left: 8vw;
+  bottom: 9vh;
+  z-index: 60;
+  max-width: min(720px, 84vw);
+  padding: 22px 26px 20px;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--color-bg) 62%, transparent);
+  backdrop-filter: blur(22px) saturate(1.1);
+  -webkit-backdrop-filter: blur(22px) saturate(1.1);
+  color: var(--color-text);
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.7s var(--cubic) 0.45s, transform 0.9s var(--cubic) 0.45s;
+}
+
+.scene-flood-line p {
+  font-size: clamp(26px, 3.4vw, 46px);
+  font-style: italic;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.scene-flood-line p span {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(0.5em);
+  transition: opacity 0.5s var(--cubic), transform 0.7s var(--cubic);
+}
+
+.scene-flood-line-on p span {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.scene-flood-line small {
+  display: block;
+  margin-top: 14px;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-secondary);
+}
+
+.scene-flood-line small b {
+  font-weight: 400;
+  color: var(--color-text);
+}
+
+.scene-flood-line-on {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .unicorn-armed {
+    animation: none;
+  }
+}

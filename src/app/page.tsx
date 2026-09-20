@@ -33,7 +33,7 @@ function coverFrom(images: { size: string; "#text": string }[] | undefined): str
 }
 
 export default function Home() {
-  const sceneRef = useRef<{ destroy: () => void } | null>(null);
+  const sceneRef = useRef<{ destroy: () => void; paused?: boolean; renderFrame?: () => void } | null>(null);
   const [isDesktop, setIsDesktop] = useState(false);
   const [copied, setCopied] = useState(false);
   const [nowPlaying, setNowPlaying] = useState<{ track: string; artist: string; live: boolean; art: string } | null>(null);
@@ -253,6 +253,7 @@ export default function Home() {
     if (!window.UnicornStudio) return;
     if (sceneRef.current) return;
     if (!window.matchMedia("(min-width: 768px)").matches) return;
+    if (!document.getElementById("unicorn-container")) return;
     window.UnicornStudio.addScene({
       elementId: "unicorn-container",
       projectId: "IYyOoRrLn7Kydgb9Pmkw",
@@ -263,6 +264,7 @@ export default function Home() {
       production: true,
     }).then((scene) => {
       sceneRef.current = scene;
+      window.dispatchEvent(new Event("scroll"));
     });
   };
 
@@ -272,7 +274,7 @@ export default function Home() {
       
       <div
         ref={bioRef}
-        className="max-w-[700px] reveal reveal-d1 relative z-10 overflow-hidden w-full min-w-0"
+        className="max-w-[700px] reveal reveal-d1 relative z-10 overflow-hidden w-full min-w-0 page-shell"
         style={bioWidth ? ({ "--bio-w": `${bioWidth}px` } as React.CSSProperties) : undefined}
       >
         <p className="serif text-[clamp(26px,5.5vw,38px)] md:text-[clamp(22px,5vw,34px)] leading-[1.5] tracking-[-0.01em]">
@@ -362,7 +364,7 @@ export default function Home() {
       {isDesktop && (
         <div
           id="unicorn-container"
-          className="reveal reveal-d1 pointer-events-none absolute -top-[8%] -right-[4%] w-[clamp(240px,50vw,560px)] h-[clamp(240px,50vw,560px)]"
+          className="reveal reveal-d1 unicorn-idle"
         />
       )}
 
@@ -390,7 +392,7 @@ export default function Home() {
         </a>
       )}
 
-      <div className="reveal reveal-d2 select-none pointer-events-none leading-none relative z-10 mb-[1vh] md:mb-[-2vh]">
+      <div className="reveal reveal-d2 select-none pointer-events-none leading-none relative z-10 mb-[1vh] md:mb-[-2vh] page-shell">
         <span
           ref={wordmarkRef}
           className="serif font-bold tracking-[-0.05em] inline-block"

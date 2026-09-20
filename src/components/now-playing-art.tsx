@@ -26,7 +26,7 @@ const THEME_VARS: [keyof Palette, string][] = [
 ];
 
 function isDark(): boolean {
-  return document.documentElement.dataset.theme !== "light";
+  return window.matchMedia("(prefers-color-scheme: dark)").matches;
 }
 
 function wearPalette(palette: Palette): void {
@@ -252,9 +252,10 @@ export function NowPlayingArt({
       document.removeEventListener("pointerleave", hide);
       window.removeEventListener("resize", place);
       clearGrace();
-      shedPalette();
     };
   }, [anchorRef, originRef, overflowing]);
+
+  useEffect(() => () => shedPalette(), []);
 
   /* Pinned, the scheme is held so it can be looked at properly. Escape drops it. */
   useEffect(() => {
