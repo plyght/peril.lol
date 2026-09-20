@@ -2,7 +2,6 @@
 
 :root {
   --color-bg: #0f0f0f;
-  --page-bg: #0f0f0f;
   --color-text: #e8e8e8;
   --color-secondary: #888;
   --color-accent: #c4b4e0;
@@ -26,7 +25,6 @@
 @media (prefers-color-scheme: light) {
   :root {
     --color-bg: #f5f3ef;
-    --page-bg: #f5f3ef;
     --color-text: #1a1a1a;
     --color-secondary: #71717a;
     --color-accent: #9b8ab8;
@@ -58,12 +56,17 @@
   under the pointer for the length of the ease. It changes on the frame.
 */
 html {
-  transition: --color-text 0.55s var(--cubic),
+  transition: --color-bg 0.55s var(--cubic), --color-text 0.55s var(--cubic),
     --color-secondary 0.55s var(--cubic), --color-border 0.55s var(--cubic),
     --color-surface 0.55s var(--cubic), --color-dim 0.55s var(--cubic);
 }
 
 
+@media (prefers-reduced-motion: reduce) {
+  html {
+    transition: none;
+  }
+}
 
 ::selection { background: var(--color-accent); color: white; }
 
@@ -76,13 +79,12 @@ html.no-scroll, html.no-scroll body {
 }
 
 html {
-  background-color: var(--page-bg);
+  background-color: var(--color-bg);
 }
 
 body {
-  isolation: isolate;
   font-family: -apple-system, "SF Pro Display", "SF Pro Text", system-ui, sans-serif;
-  background-color: var(--page-bg);
+  background-color: var(--color-bg);
   color: var(--color-text);
   cursor: default;
   -webkit-font-smoothing: antialiased;
@@ -92,41 +94,6 @@ body {
   padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
 }
 
-
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background-color: var(--cover-bg, var(--page-bg));
-  opacity: 0;
-  transition: opacity 0.55s var(--cubic);
-}
-
-html.themed-by-cover body::before {
-  opacity: 1;
-}
-
-html.cover-dithered body::before {
-  opacity: 0;
-  transition: none;
-}
-
-.cover-background {
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html, body, body::before {
-    transition: none;
-  }
-}
 
 a { color: inherit; text-decoration: none; }
 
