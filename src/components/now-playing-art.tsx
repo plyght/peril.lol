@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { createPortal } from "react-dom";
 import { useEffect, useRef, useState, type RefObject } from "react";
+import { fadeCoverBackground } from "@/lib/cover-background";
 import { startMusicDebug, traceMusic } from "@/lib/music-debug";
 import { requestImage } from "@/lib/image-loader";
 import { analyzeImage, paletteFrom, type CoverAnalysis, type Palette } from "@/lib/palette";
@@ -35,6 +36,7 @@ function wearPalette(palette: Palette, reason: string): void {
   const root = document.documentElement;
   root.style.setProperty("--cover-bg", palette.bg);
   for (const [key, prop] of THEME_VARS) root.style.setProperty(prop, palette[key]);
+  fadeCoverBackground(palette.bg);
   root.classList.add("themed-by-cover");
 }
 
@@ -43,6 +45,7 @@ function shedPalette(reason: string): void {
   const root = document.documentElement;
   for (const [, prop] of THEME_VARS) root.style.removeProperty(prop);
   root.classList.remove("themed-by-cover");
+  fadeCoverBackground(null);
 }
 
 function blurFor(progress: number): number {

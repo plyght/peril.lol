@@ -22,6 +22,17 @@ function snapshot() {
   const art = document.querySelector<HTMLElement>(".np-art");
   const image = art?.querySelector("img");
   const artStyle = art ? getComputedStyle(art) : null;
+  const background =
+    document.querySelector<HTMLCanvasElement>(".cover-background");
+  const pixels = background?.getContext("2d")?.getImageData(0, 0, 8, 8).data;
+  const renderedMean = pixels
+    ? [0, 1, 2].map((channel) => {
+        let sum = 0;
+        for (let offset = channel; offset < pixels.length; offset += 4)
+          sum += pixels[offset];
+        return sum / 64;
+      })
+    : null;
   return {
     at: Math.round(performance.now() * 10) / 10,
     themed: root.classList.contains("themed-by-cover"),
@@ -32,6 +43,9 @@ function snapshot() {
     overlayBackground: overlay.backgroundColor,
     overlayOpacity: overlay.opacity,
     overlayTransition: overlay.transition,
+    ditherColor:
+      document.querySelector<HTMLElement>(".cover-background")?.dataset.color,
+    renderedMean,
     artClass: art?.className,
     artBackground: artStyle?.backgroundColor,
     artOpacity: artStyle?.opacity,
@@ -81,7 +95,7 @@ export function traceMusic(
 export function startMusicDebug() {
   if (!enabled()) return;
   traceMusic("debug-ready", {
-    version: "cover-crossfade-1",
+    version: "cover-dither-1",
     dark: matchMedia("(prefers-color-scheme: dark)").matches,
     reducedMotion: matchMedia("(prefers-reduced-motion: reduce)").matches,
     userAgent: navigator.userAgent,

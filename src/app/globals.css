@@ -108,6 +108,20 @@ html.themed-by-cover body::before {
   opacity: 1;
 }
 
+html.cover-dithered body::before {
+  opacity: 0;
+  transition: none;
+}
+
+.cover-background {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html, body, body::before {
     transition: none;
