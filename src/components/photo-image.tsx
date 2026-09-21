@@ -4,13 +4,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { requestImage } from "@/lib/image-loader";
 
-const MAX_BLUR = 26;
-const HOLD_BLUR = 9;
-
-function blurFor(progress: number): number {
-  const eased = Math.pow(1 - Math.min(Math.max(progress, 0), 1), 1.6);
-  return HOLD_BLUR + (MAX_BLUR - HOLD_BLUR) * eased;
-}
+import { AsciiReveal } from "./ascii-reveal";
 
 export function PhotoImage({
   src,
@@ -26,7 +20,7 @@ export function PhotoImage({
   placeholder: string;
 }) {
   const containerRef = useRef<HTMLAnchorElement>(null);
-  const [progress, setProgress] = useState(0);
+  const [revealed, setRevealed] = useState(false);
   const [resolved, setResolved] = useState<string | null>(null);
   const [loaded, setLoaded] = useState(false);
 
@@ -38,13 +32,12 @@ export function PhotoImage({
     const handle = requestImage({
       el,
       src,
-      onProgress: setProgress,
+      onProgress: () => {},
       onDone: (url) => {
         objectUrl = url;
         setResolved(url);
       },
       onError: () => {
-        setProgress(1);
         setResolved(src);
       },
     });
@@ -63,11 +56,7 @@ export function PhotoImage({
       rel="noopener noreferrer"
       className={`photo-container block${loaded ? " photo-container-loaded" : ""}`}
       style={{
-        ...(placeholder
-          ? { backgroundImage: `url(${placeholder})` }
-          : undefined),
         aspectRatio: `${width} / ${height}`,
-        ["--photo-blur" as string]: `${blurFor(progress).toFixed(2)}px`,
       }}
     >
       {resolved && (
@@ -86,10 +75,17 @@ export function PhotoImage({
             objectFit: "cover",
           }}
           onLoad={() => setLoaded(true)}
+          onError={() => setLoaded(true)}
           className={`photo-img${loaded ? " photo-loaded" : ""}`}
         />
       )}
-      <div className={`photo-reveal${loaded ? " photo-reveal-done" : ""}`} />
+      {!revealed && (
+        <AsciiReveal
+          src={placeholder || resolved || ""}
+          ready={loaded}
+          onComplete={() => setRevealed(true)}
+        />
+      )}
     </a>
   );
 }

@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "bun run scripts/convert-photos.ts && next build",
-    "format": "prettier --check package.json scripts/generate-og.tsx scripts/photo-dimensions.ts scripts/photo-dimensions.test.ts src/app/not-found.tsx src/components/now-playing.tsx src/components/photo-image.tsx src/components/theme-provider.tsx src/lib/blog.ts",
+    "format": "prettier --check package.json scripts/generate-og.tsx scripts/photo-dimensions.ts scripts/photo-dimensions.test.ts scripts/ascii-reveal.test.ts src/app/not-found.tsx src/components/now-playing.tsx src/components/photo-image.tsx src/components/theme-provider.tsx src/lib/blog.ts src/components/now-playing-art.tsx src/components/ascii-reveal.tsx src/components/ascii-text.tsx scripts/ascii-text.test.ts src/lib/photos.ts",
     "photos:convert": "bun run scripts/convert-photos.ts",
     "start": "next start",
     "lint": "eslint",

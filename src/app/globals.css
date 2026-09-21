@@ -517,6 +517,16 @@ article th { font-weight: 600; background: var(--color-surface); }
   }
 }
 
+.np-art:not(.np-art-revealed):not(.np-art-empty) {
+  background-color: transparent;
+  outline-color: transparent;
+}
+
+.np-art > canvas {
+  border-radius: inherit;
+  corner-shape: inherit;
+}
+
 /* The tile's own corner has to be repeated here: a squircle corner does not clip
    its children, so the artwork would paint square over a rounded tile. */
 .np-art-img {
@@ -526,17 +536,26 @@ article th { font-weight: 600; background: var(--color-surface); }
   object-fit: cover;
   border-radius: inherit;
   corner-shape: inherit;
-  filter: blur(var(--photo-blur, 18px));
-  transform: scale(1.06);
   opacity: 0;
-  transition: filter 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.6s ease;
+  transition: opacity 0.2s ease;
 }
 
 .np-art-img-loaded {
   filter: blur(0px);
   transform: scale(1);
   opacity: 1;
+}
+
+@supports (clip-path: border-box) {
+  .np-art {
+    overflow: visible;
+    clip-path: border-box;
+  }
+
+  .np-art > canvas,
+  .np-art-img {
+    border-radius: 0;
+  }
 }
 
 
@@ -717,23 +736,6 @@ article th { font-weight: 600; background: var(--color-surface); }
   outline-offset: -1px;
 }
 
-.photo-container::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: inherit;
-  filter: blur(var(--photo-blur, 26px));
-  transform: scale(1.1);
-  opacity: 1;
-  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), filter 0.25s linear;
-}
-
-.photo-container-loaded::before {
-  filter: blur(0px);
-  opacity: 0;
-  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), filter 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
 @media (prefers-color-scheme: light) {
   .photo-container {
     outline-color: rgba(0, 0, 0, 0.1);
@@ -746,10 +748,8 @@ article th { font-weight: 600; background: var(--color-surface); }
   display: block;
   width: 100%;
   height: auto;
-  filter: blur(var(--photo-blur, 26px));
-  transform: scale(1.04);
   opacity: 0;
-  transition: filter 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.6s ease;
+  transition: opacity 0.2s ease;
 }
 
 .photo-img.photo-loaded {
@@ -757,18 +757,3 @@ article th { font-weight: 600; background: var(--color-surface); }
   transform: scale(1);
   opacity: 1;
 }
-
-.photo-reveal {
-  position: absolute;
-  z-index: 2;
-  inset: 0;
-  background: linear-gradient(to bottom, transparent 0%, var(--color-surface) 30%);
-  opacity: 0.45;
-  transition: opacity 1s cubic-bezier(0.22, 1, 0.36, 1);
-  pointer-events: none;
-}
-
-.photo-reveal-done {
-  opacity: 0;
-}
-

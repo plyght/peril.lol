@@ -4,10 +4,14 @@ import Image from "next/image";
 import { createPortal } from "react-dom";
 import { useEffect, useRef, useState, type RefObject } from "react";
 import { requestImage } from "@/lib/image-loader";
-import { analyzeImage, paletteFrom, type CoverAnalysis, type Palette } from "@/lib/palette";
+import {
+  analyzeImage,
+  paletteFrom,
+  type CoverAnalysis,
+  type Palette,
+} from "@/lib/palette";
 
-const MAX_BLUR = 18;
-const HOLD_BLUR = 6;
+import { AsciiReveal } from "./ascii-reveal";
 
 // How far outside the text and the cover still counts as "on them", and how
 // long the pointer has to cross the gap between the two.
@@ -31,7 +35,8 @@ function isDark(): boolean {
 
 function wearPalette(palette: Palette): void {
   const root = document.documentElement;
-  for (const [key, prop] of THEME_VARS) root.style.setProperty(prop, palette[key]);
+  for (const [key, prop] of THEME_VARS)
+    root.style.setProperty(prop, palette[key]);
   root.classList.add("themed-by-cover");
 }
 
@@ -39,11 +44,6 @@ function shedPalette(): void {
   const root = document.documentElement;
   for (const [, prop] of THEME_VARS) root.style.removeProperty(prop);
   root.classList.remove("themed-by-cover");
-}
-
-function blurFor(progress: number): number {
-  const eased = Math.pow(1 - Math.min(Math.max(progress, 0), 1), 1.6);
-  return HOLD_BLUR + (MAX_BLUR - HOLD_BLUR) * eased;
 }
 
 interface Point {
@@ -70,7 +70,11 @@ function hull(points: Point[]): Point[] {
   const build = (list: Point[]) => {
     const out: Point[] = [];
     for (const p of list) {
-      while (out.length >= 2 && cross(out[out.length - 2], out[out.length - 1], p) <= 0) out.pop();
+      while (
+        out.length >= 2 &&
+        cross(out[out.length - 2], out[out.length - 1], p) <= 0
+      )
+        out.pop();
       out.push(p);
     }
     out.pop();
@@ -106,13 +110,17 @@ export function NowPlayingArt({
   overflowing: boolean;
 }) {
   const containerRef = useRef<HTMLSpanElement>(null);
-  const [progress, setProgress] = useState(0);
+  const [revealed, setRevealed] = useState(false);
+  const [revealing, setRevealing] = useState(false);
   const [resolved, setResolved] = useState<string | null>(null);
   const [loaded, setLoaded] = useState(false);
   const [open, setOpen] = useState(false);
   const [pinned, setPinned] = useState(false);
-  const [origin, setOrigin] = useState<{ left: number; top: number } | null>(null);
+  const [origin, setOrigin] = useState<{ left: number; top: number } | null>(
+    null,
+  );
   const analysisRef = useRef<CoverAnalysis | null>(null);
+  const colorStartedRef = useRef(false);
   const hoveringRef = useRef(false);
   const pinnedRef = useRef(false);
 
@@ -124,13 +132,12 @@ export function NowPlayingArt({
     const handle = requestImage({
       el,
       src,
-      onProgress: setProgress,
+      onProgress: () => {},
       onDone: (url) => {
         objectUrl = url;
         setResolved(url);
       },
       onError: () => {
-        setProgress(1);
         setResolved(src);
       },
     });
@@ -190,7 +197,8 @@ export function NowPlayingArt({
     const show = () => {
       hoveringRef.current = true;
       setOpen(true);
-      if (analysisRef.current) wearPalette(paletteFrom(analysisRef.current, isDark()));
+      if (colorStartedRef.current && analysisRef.current)
+        wearPalette(paletteFrom(analysisRef.current, isDark()));
     };
 
     const hide = () => {
@@ -271,6 +279,17 @@ export function NowPlayingArt({
     return () => window.removeEventListener("keydown", onKey);
   }, [pinned]);
 
+  const beginColor = () => {
+    colorStartedRef.current = true;
+    if (
+      !hidden &&
+      (hoveringRef.current || pinnedRef.current) &&
+      analysisRef.current
+    ) {
+      wearPalette(paletteFrom(analysisRef.current, isDark()));
+    }
+  };
+
   if (!origin) {
     return <span ref={containerRef} className="np-art-probe" aria-hidden />;
   }
@@ -289,13 +308,12 @@ export function NowPlayingArt({
             }
           : undefined
       }
-      className={`np-art${showing ? " np-art-open" : ""}${pinned ? " np-art-pinned" : ""}${
+      className={`np-art${revealed ? " np-art-revealed" : ""}${showing ? " np-art-open" : ""}${pinned ? " np-art-pinned" : ""}${
         src ? "" : " np-art-empty"
       }`}
       style={{
         left: `${origin.left}px`,
         top: `${origin.top}px`,
-        ["--photo-blur" as string]: `${blurFor(progress).toFixed(2)}px`,
       }}
     >
       {/* Nothing to pull a sleeve from — a plain tile in the page's own colours,
@@ -313,14 +331,25 @@ export function NowPlayingArt({
           onLoad={(event) => {
             setLoaded(true);
             analysisRef.current = analyzeImage(event.currentTarget);
-            if (hoveringRef.current && analysisRef.current) {
-              wearPalette(paletteFrom(analysisRef.current, isDark()));
-            }
           }}
-          className={`np-art-img${loaded ? " np-art-img-loaded" : ""}`}
+          onError={() => setLoaded(true)}
+          className={`np-art-img${loaded && (revealing || revealed) ? " np-art-img-loaded" : ""}`}
+        />
+      )}
+      {src && !revealed && (
+        <AsciiReveal
+          src={resolved || ""}
+          ready={loaded}
+          active={showing}
+          onColorStart={beginColor}
+          onRevealStart={() => setRevealing(true)}
+          onComplete={() => {
+            beginColor();
+            setRevealed(true);
+          }}
         />
       )}
     </span>,
-    document.body
+    document.body,
   );
 }

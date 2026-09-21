@@ -28,7 +28,10 @@ function ensureHeicConverted(): void {
     if (fs.existsSync(outPath)) continue;
 
     try {
-      execSync(`bun run scripts/convert-photos.ts`, { cwd: process.cwd(), stdio: "pipe" });
+      execSync(`bun run scripts/convert-photos.ts`, {
+        cwd: process.cwd(),
+        stdio: "pipe",
+      });
       break;
     } catch {
       break;
@@ -42,7 +45,9 @@ function getDimensions(): Record<string, { w: number; h: number }> {
       cwd: process.cwd(),
       stdio: ["pipe", "pipe", "pipe"],
       timeout: 30000,
-    }).toString().trim();
+    })
+      .toString()
+      .trim();
     return JSON.parse(result);
   } catch {
     return {};
@@ -53,9 +58,8 @@ async function getPlaceholder(filePath: string): Promise<string> {
   try {
     const buffer = await sharp(filePath)
       .rotate()
-      .resize({ width: 24, height: 24, fit: "inside" })
-      .blur(2)
-      .webp({ quality: 35 })
+      .resize({ width: 160, height: 160, fit: "inside" })
+      .webp({ quality: 65 })
       .toBuffer();
     return `data:image/webp;base64,${buffer.toString("base64")}`;
   } catch {
@@ -93,5 +97,11 @@ export async function getAllPhotos(): Promise<Photo[]> {
 
   return photos
     .sort((a, b) => b.mtime - a.mtime)
-    .map(({ src, filename, width, height, placeholder }) => ({ src, filename, width, height, placeholder }));
+    .map(({ src, filename, width, height, placeholder }) => ({
+      src,
+      filename,
+      width,
+      height,
+      placeholder,
+    }));
 }

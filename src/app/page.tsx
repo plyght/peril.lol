@@ -5,6 +5,7 @@ import Script from "next/script";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { NowPlayingArt } from "@/components/now-playing-art";
+import { AsciiText } from "@/components/ascii-text";
 
 // Webring arrows are hidden for now. Markup below is kept intact — flip this to
 // true to bring them back.
@@ -36,6 +37,12 @@ export default function Home() {
   const sceneRef = useRef<{ destroy: () => void } | null>(null);
   const [isDesktop, setIsDesktop] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [hasCopied, setHasCopied] = useState(false);
+  const copyTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => () => {
+    if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
+  }, []);
   const [nowPlaying, setNowPlaying] = useState<{ track: string; artist: string; live: boolean; art: string } | null>(null);
   const [displayedTrack, setDisplayedTrack] = useState<{ track: string; artist: string; live: boolean; art: string } | null>(null);
   const [isFading, setIsFading] = useState(false);
@@ -272,7 +279,7 @@ export default function Home() {
       
       <div
         ref={bioRef}
-        className="max-w-[700px] reveal reveal-d1 relative z-10 overflow-hidden w-full min-w-0"
+        className="max-w-[700px] relative z-10 overflow-hidden w-full min-w-0"
         style={bioWidth ? ({ "--bio-w": `${bioWidth}px` } as React.CSSProperties) : undefined}
       >
         <p className="serif text-[clamp(26px,5.5vw,38px)] md:text-[clamp(22px,5vw,34px)] leading-[1.5] tracking-[-0.01em]">
@@ -299,15 +306,23 @@ export default function Home() {
           <a href="https://x.com/pliiight" target="_blank" rel="noopener noreferrer" className="underline-link serif">X</a>
           <button
             type="button"
-            onClick={() => {
-              navigator.clipboard.writeText("plyght@peril.lol");
+            onClick={async () => {
+              try {
+                await navigator.clipboard.writeText("plyght@peril.lol");
+              } catch {
+                return;
+              }
+              if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
+              setHasCopied(true);
               setCopied(true);
-              setTimeout(() => setCopied(false), 2000);
+              copyTimerRef.current = setTimeout(() => setCopied(false), 2000);
             }}
             className={`${copied ? "" : "underline-link"} serif contact-copy`}
           >
-            <span className={copied ? "copy-text copy-text-out" : "copy-text copy-text-in"}>Contact</span>
-            <span className={copied ? "copy-text copy-text-in" : "copy-text copy-text-out"}>Copied</span>
+            <span aria-hidden="true" style={{ gridArea: "stack", visibility: "hidden" }}>Contact</span>
+            <span aria-live="polite" style={{ gridArea: "stack" }}>
+              <AsciiText text={copied ? "Copied" : "Contact"} active={hasCopied} duration={1100} className={copied ? undefined : "underline-link"} />
+            </span>
           </button>
           {isDesktop && (
             <a
@@ -337,7 +352,7 @@ export default function Home() {
                 >
                   <span className={`now-playing-inner${needsMarquee ? " marquee" : ""}`} ref={textRef}>
                     {displayedTrack.track} · {displayedTrack.artist}{needsMarquee && <>&nbsp;&nbsp;&nbsp;&nbsp;</>}
-                    {needsMarquee && <>{displayedTrack.track} · {displayedTrack.artist}&nbsp;&nbsp;&nbsp;&nbsp;</>}
+                    {needsMarquee && <><span aria-hidden="true">{displayedTrack.track} · {displayedTrack.artist}</span>&nbsp;&nbsp;&nbsp;&nbsp;</>}
                   </span>
                 </span>
               )}
@@ -390,7 +405,7 @@ export default function Home() {
         </a>
       )}
 
-      <div className="reveal reveal-d2 select-none pointer-events-none leading-none relative z-10 mb-[1vh] md:mb-[-2vh]">
+      <div className="select-none pointer-events-none leading-none relative z-10 mb-[1vh] md:mb-[-2vh]">
         <span
           ref={wordmarkRef}
           className="serif font-bold tracking-[-0.05em] inline-block"
