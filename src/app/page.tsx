@@ -5,7 +5,6 @@ import Script from "next/script";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { NowPlayingArt } from "@/components/now-playing-art";
-import { revealUnicorn } from "@/lib/unicorn-reveal";
 
 // Webring arrows are hidden for now. Markup below is kept intact — flip this to
 // true to bring them back.
@@ -35,7 +34,6 @@ function coverFrom(images: { size: string; "#text": string }[] | undefined): str
 
 export default function Home() {
   const sceneRef = useRef<{ destroy: () => void; paused?: boolean; renderFrame?: () => void } | null>(null);
-  const sceneRevealCleanupRef = useRef<(() => void) | null>(null);
   const sceneLoadingRef = useRef(false);
   const [isDesktop, setIsDesktop] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -246,8 +244,6 @@ export default function Home() {
     return () => {
       document.documentElement.classList.remove("no-scroll");
       mq.removeEventListener("change", handler);
-      sceneRevealCleanupRef.current?.();
-      sceneRevealCleanupRef.current = null;
       sceneRef.current?.destroy();
       sceneRef.current = null;
     };
@@ -255,8 +251,6 @@ export default function Home() {
 
   useEffect(() => {
     if (!isDesktop) {
-      sceneRevealCleanupRef.current?.();
-      sceneRevealCleanupRef.current = null;
       sceneRef.current?.destroy();
       sceneRef.current = null;
     } else if (window.UnicornStudio && !sceneRef.current) {
@@ -285,7 +279,6 @@ export default function Home() {
         return;
       }
       sceneRef.current = scene;
-      sceneRevealCleanupRef.current = revealUnicorn(scene, container);
       window.dispatchEvent(new Event("scroll"));
     }).catch(() => {}).finally(() => {
       sceneLoadingRef.current = false;
