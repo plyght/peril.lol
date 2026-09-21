@@ -17,14 +17,23 @@ export function BlogNav({ totalPages }: { totalPages: number }) {
 
   return (
     <div className="reveal reveal-d1 relative z-10 flex items-center gap-5 min-h-10 text-[clamp(20px,3vw,22px)] md:text-[clamp(16px,3vw,20px)]">
-      <Link href="/" className="underline-link serif pointer-events-auto">Home</Link>
+      <Link href="/" className="underline-link serif pointer-events-auto">
+        Home
+      </Link>
       {onPost ? (
-        <Link href="/blog" className="underline-link serif pointer-events-auto">Writing</Link>
+        <Link href="/blog" className="underline-link serif pointer-events-auto">
+          Writing
+        </Link>
       ) : (
-        <span className="serif" style={{ color: "var(--color-dim)" }}>Writing</span>
+        <span className="serif" style={{ color: "var(--color-dim)" }}>
+          Writing
+        </span>
       )}
       {!onPost && totalPages > 1 && (
-        <span className="blog-pager serif pointer-events-auto" aria-label="pagination">
+        <span
+          className="blog-pager serif pointer-events-auto"
+          aria-label="pagination"
+        >
           {hasPrev ? (
             <Link
               href={pageHref(page - 1)}

@@ -5,7 +5,7 @@ import Script from "next/script";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { NowPlayingArt } from "@/components/now-playing-art";
-import { AsciiText } from "@/components/ascii-text";
+import { revealUnicorn } from "@/lib/unicorn-reveal";
 
 // Webring arrows are hidden for now. Markup below is kept intact — flip this to
 // true to bring them back.
@@ -16,7 +16,7 @@ declare global {
     UnicornStudio?: {
       isInitialized?: boolean;
       init: () => void;
-      addScene: (opts: Record<string, unknown>) => Promise<{ destroy: () => void }>;
+      addScene: (opts: Record<string, unknown>) => Promise<{ destroy: () => void; paused?: boolean; renderFrame?: () => void }>;
     };
   }
 }
@@ -34,10 +34,11 @@ function coverFrom(images: { size: string; "#text": string }[] | undefined): str
 }
 
 export default function Home() {
-  const sceneRef = useRef<{ destroy: () => void } | null>(null);
+  const sceneRef = useRef<{ destroy: () => void; paused?: boolean; renderFrame?: () => void } | null>(null);
+  const sceneRevealCleanupRef = useRef<(() => void) | null>(null);
+  const sceneLoadingRef = useRef(false);
   const [isDesktop, setIsDesktop] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [hasCopied, setHasCopied] = useState(false);
   const copyTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => () => {
@@ -245,21 +246,31 @@ export default function Home() {
     return () => {
       document.documentElement.classList.remove("no-scroll");
       mq.removeEventListener("change", handler);
+      sceneRevealCleanupRef.current?.();
+      sceneRevealCleanupRef.current = null;
       sceneRef.current?.destroy();
       sceneRef.current = null;
     };
   }, []);
 
   useEffect(() => {
-    if (isDesktop && window.UnicornStudio && !sceneRef.current) {
+    if (!isDesktop) {
+      sceneRevealCleanupRef.current?.();
+      sceneRevealCleanupRef.current = null;
+      sceneRef.current?.destroy();
+      sceneRef.current = null;
+    } else if (window.UnicornStudio && !sceneRef.current) {
       initScene();
     }
   }, [isDesktop]);
 
   const initScene = () => {
     if (!window.UnicornStudio) return;
-    if (sceneRef.current) return;
+    if (sceneRef.current || sceneLoadingRef.current) return;
     if (!window.matchMedia("(min-width: 768px)").matches) return;
+    const container = document.getElementById("unicorn-container");
+    if (!container) return;
+    sceneLoadingRef.current = true;
     window.UnicornStudio.addScene({
       elementId: "unicorn-container",
       projectId: "IYyOoRrLn7Kydgb9Pmkw",
@@ -269,7 +280,15 @@ export default function Home() {
       lazyLoad: true,
       production: true,
     }).then((scene) => {
+      if (!container.isConnected) {
+        scene.destroy();
+        return;
+      }
       sceneRef.current = scene;
+      sceneRevealCleanupRef.current = revealUnicorn(scene, container);
+      window.dispatchEvent(new Event("scroll"));
+    }).catch(() => {}).finally(() => {
+      sceneLoadingRef.current = false;
     });
   };
 
@@ -279,7 +298,7 @@ export default function Home() {
       
       <div
         ref={bioRef}
-        className="max-w-[700px] relative z-10 overflow-hidden w-full min-w-0"
+        className="max-w-[700px] reveal reveal-d1 relative z-10 overflow-hidden w-full min-w-0 page-shell"
         style={bioWidth ? ({ "--bio-w": `${bioWidth}px` } as React.CSSProperties) : undefined}
       >
         <p className="serif text-[clamp(26px,5.5vw,38px)] md:text-[clamp(22px,5vw,34px)] leading-[1.5] tracking-[-0.01em]">
@@ -313,16 +332,13 @@ export default function Home() {
                 return;
               }
               if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
-              setHasCopied(true);
               setCopied(true);
               copyTimerRef.current = setTimeout(() => setCopied(false), 2000);
             }}
             className={`${copied ? "" : "underline-link"} serif contact-copy`}
           >
-            <span aria-hidden="true" style={{ gridArea: "stack", visibility: "hidden" }}>Contact</span>
-            <span aria-live="polite" style={{ gridArea: "stack" }}>
-              <AsciiText text={copied ? "Copied" : "Contact"} active={hasCopied} duration={1100} className={copied ? undefined : "underline-link"} />
-            </span>
+            <span aria-hidden={copied} className={copied ? "copy-text copy-text-out" : "copy-text copy-text-in underline-link"}>Contact</span>
+            <span aria-hidden={!copied} className={copied ? "copy-text copy-text-in" : "copy-text copy-text-out"}>Copied</span>
           </button>
           {isDesktop && (
             <a
@@ -377,7 +393,7 @@ export default function Home() {
       {isDesktop && (
         <div
           id="unicorn-container"
-          className="reveal reveal-d1 pointer-events-none absolute -top-[8%] -right-[4%] w-[clamp(240px,50vw,560px)] h-[clamp(240px,50vw,560px)]"
+          className="unicorn-idle"
         />
       )}
 
@@ -405,7 +421,7 @@ export default function Home() {
         </a>
       )}
 
-      <div className="select-none pointer-events-none leading-none relative z-10 mb-[1vh] md:mb-[-2vh]">
+      <div className="reveal reveal-d2 select-none pointer-events-none leading-none relative z-10 mb-[1vh] md:mb-[-2vh] page-shell">
         <span
           ref={wordmarkRef}
           className="serif font-bold tracking-[-0.05em] inline-block"

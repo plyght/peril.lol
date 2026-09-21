@@ -1,4 +1,4 @@
-const MAX_CONCURRENT = 3;
+const MAX_CONCURRENT = 1;
 const ROW_TOLERANCE = 96;
 const VIEWPORT_MARGIN = 0.15;
 
@@ -10,9 +10,10 @@ interface Entry {
   el: HTMLElement;
   src: string;
   onProgress: (progress: number) => void;
-  onDone: (objectUrl: string) => void;
+  onDone: (objectUrl: string) => void | Promise<void>;
   onError: () => void;
   cancelled: boolean;
+  controller: AbortController;
 }
 
 const pending = new Set<Entry>();
@@ -32,7 +33,10 @@ function rank(entry: Entry): [number, number, number] {
   return [2, -row, left];
 }
 
-function compare(a: [number, number, number], b: [number, number, number]): number {
+function compare(
+  a: [number, number, number],
+  b: [number, number, number],
+): number {
   return a[0] - b[0] || a[1] - b[1] || a[2] - b[2];
 }
 
@@ -49,7 +53,7 @@ function pump(): void {
       }
     }
 
-    if (!best) return;
+    if (!best || bestRank?.[0] !== 0) return;
     pending.delete(best);
     active += 1;
     void run(best);
@@ -66,9 +70,14 @@ function schedulePump(): void {
 }
 
 async function run(entry: Entry): Promise<void> {
+  let objectUrl: string | undefined;
   try {
-    const response = await fetch(entry.src, { cache: "force-cache" });
-    if (!response.ok || !response.body) throw new Error(String(response.status));
+    const response = await fetch(entry.src, {
+      cache: "force-cache",
+      signal: entry.controller.signal,
+    });
+    if (!response.ok || !response.body)
+      throw new Error(String(response.status));
 
     const total = Number(response.headers.get("content-length")) || 0;
     const reader = response.body.getReader();
@@ -82,7 +91,9 @@ async function run(entry: Entry): Promise<void> {
         chunks.push(value);
         received += value.byteLength;
         if (!entry.cancelled) {
-          entry.onProgress(total > 0 ? Math.min(received / total, 1) : approximate(received));
+          entry.onProgress(
+            total > 0 ? Math.min(received / total, 1) : approximate(received),
+          );
         }
       }
     }
@@ -91,11 +102,14 @@ async function run(entry: Entry): Promise<void> {
     entry.onProgress(1);
 
     const type = response.headers.get("content-type") || "image/webp";
-    const url = URL.createObjectURL(new Blob(chunks as BlobPart[], { type }));
-    entry.onDone(url);
+    objectUrl = URL.createObjectURL(new Blob(chunks as BlobPart[], { type }));
+    const done = entry.onDone(objectUrl);
+    objectUrl = undefined;
+    await done;
   } catch {
     if (!entry.cancelled) entry.onError();
   } finally {
+    if (objectUrl) URL.revokeObjectURL(objectUrl);
     active -= 1;
     schedulePump();
   }
@@ -109,16 +123,21 @@ export function requestImage(options: {
   el: HTMLElement;
   src: string;
   onProgress: (progress: number) => void;
-  onDone: (objectUrl: string) => void;
+  onDone: (objectUrl: string) => void | Promise<void>;
   onError: () => void;
 }): LoadHandle {
-  const entry: Entry = { ...options, cancelled: false };
+  const entry: Entry = {
+    ...options,
+    cancelled: false,
+    controller: new AbortController(),
+  };
   pending.add(entry);
   schedulePump();
 
   return {
     cancel() {
       entry.cancelled = true;
+      entry.controller.abort();
       pending.delete(entry);
     },
   };

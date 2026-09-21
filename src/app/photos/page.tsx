@@ -27,7 +27,6 @@ export default async function Photos() {
 
   return (
     <div className="relative min-h-[100dvh]">
-
       <div
         className="sticky top-0 h-[100dvh] flex flex-col justify-between overflow-hidden pointer-events-none select-none px-[6vw] md:px-[8vw] pb-[2vh]"
         style={{ zIndex: 0 }}
@@ -53,8 +52,12 @@ export default async function Photos() {
       >
         <div className="pt-[8vh] md:pt-[14vh]">
           <div className="reveal reveal-d1 flex items-center gap-5 text-[clamp(20px,3vw,22px)] md:text-[clamp(16px,3vw,20px)] mb-[3vh] md:mb-[6vh]">
-            <Link href="/" className="underline-link serif pointer-events-auto">Home</Link>
-            <span className="serif" style={{ color: "var(--color-dim)" }}>Photos</span>
+            <Link href="/" className="underline-link serif pointer-events-auto">
+              Home
+            </Link>
+            <span className="serif" style={{ color: "var(--color-dim)" }}>
+              Photos
+            </span>
           </div>
 
           {photos.length === 0 ? (
@@ -70,7 +73,13 @@ export default async function Photos() {
             <div className="reveal reveal-d2 columns-1 sm:columns-2 lg:columns-3 gap-4 pb-[30vh]">
               {photos.map((photo) => (
                 <div key={photo.filename} className="mb-4 break-inside-avoid">
-                  <PhotoImage src={photo.src} alt="" width={photo.width} height={photo.height} placeholder={photo.placeholder} />
+                  <PhotoImage
+                    src={photo.src}
+                    alt=""
+                    width={photo.width}
+                    height={photo.height}
+                    placeholder={photo.placeholder}
+                  />
                 </div>
               ))}
             </div>

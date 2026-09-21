@@ -20,6 +20,7 @@ export function PhotoImage({
   placeholder: string;
 }) {
   const containerRef = useRef<HTMLAnchorElement>(null);
+  const loadComplete = useRef<(() => void) | null>(null);
   const [revealed, setRevealed] = useState(false);
   const [resolved, setResolved] = useState<string | null>(null);
   const [loaded, setLoaded] = useState(false);
@@ -33,10 +34,12 @@ export function PhotoImage({
       el,
       src,
       onProgress: () => {},
-      onDone: (url) => {
-        objectUrl = url;
-        setResolved(url);
-      },
+      onDone: (url) =>
+        new Promise<void>((resolve) => {
+          loadComplete.current = resolve;
+          objectUrl = url;
+          setResolved(url);
+        }),
       onError: () => {
         setResolved(src);
       },
@@ -44,6 +47,8 @@ export function PhotoImage({
 
     return () => {
       handle.cancel();
+      loadComplete.current?.();
+      loadComplete.current = null;
       if (objectUrl) URL.revokeObjectURL(objectUrl);
     };
   }, [src]);
@@ -74,8 +79,16 @@ export function PhotoImage({
             height: "100%",
             objectFit: "cover",
           }}
-          onLoad={() => setLoaded(true)}
-          onError={() => setLoaded(true)}
+          onLoad={() => {
+            setLoaded(true);
+            loadComplete.current?.();
+            loadComplete.current = null;
+          }}
+          onError={() => {
+            setLoaded(true);
+            loadComplete.current?.();
+            loadComplete.current = null;
+          }}
           className={`photo-img${loaded ? " photo-loaded" : ""}`}
         />
       )}

@@ -6,6 +6,8 @@ const REVEAL_DURATION = 850;
 
 const FINISH_DURATION = 1000;
 
+export const ASCII_ATLAS_GLYPHS = ".:+x0369#X=";
+
 export function asciiFinish(progress: number) {
   const ease = (value: number) => {
     const t = Math.max(0, Math.min(1, value));
@@ -129,14 +131,17 @@ export function AsciiReveal({
     const context = canvas.getContext("2d");
     const sample = document.createElement("canvas");
     const sampler = sample.getContext("2d", { willReadFrequently: true });
+    const atlas = document.createElement("canvas");
+    const atlasContext = atlas.getContext("2d");
+    let atlasWidth = 0;
+    let atlasHeight = 0;
     const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const revealDuration = REVEAL_DURATION + 50 + Math.random() * 150;
     const image = new window.Image();
     let pixels: Uint8ClampedArray | null = null;
     let details: ReturnType<typeof asciiDetail> = [];
     let lastDraw = -1;
-    let inkColor = "";
-    let inkRgb = new Uint8ClampedArray([255, 255, 255, 255]);
+
     let width = 0;
     let height = 0;
     let rows = 0;
@@ -149,7 +154,7 @@ export function AsciiReveal({
     let completed = false;
     let revealStarted = false;
     let colorStarted = false;
-    let failed = !context || !sampler;
+    let failed = !context || !sampler || !atlasContext;
     let columns = 60;
     canvas.style.opacity = "1";
     canvas.style.background = "var(--color-bg)";
@@ -175,24 +180,7 @@ export function AsciiReveal({
         revealStarted = true;
         controls.current.onRevealStart?.();
       }
-      const ink = getComputedStyle(canvas).color;
-      if (ink !== inkColor && sampler) {
-        sampler.clearRect(0, 0, 1, 1);
-        sampler.fillStyle = ink;
-        sampler.fillRect(0, 0, 1, 1);
-        inkRgb = new Uint8ClampedArray(sampler.getImageData(0, 0, 1, 1).data);
-        inkColor = ink;
-      }
-      context.globalAlpha = finish.background;
-      context.fillStyle =
-        getComputedStyle(document.documentElement)
-          .getPropertyValue("--color-bg")
-          .trim() || "#0f0f0f";
-      context.fillRect(0, 0, width, height);
       canvas.style.background = "transparent";
-      context.font = `${(height / rows) * 0.95}px monospace`;
-      context.textAlign = "center";
-      context.textBaseline = "middle";
       const progress = Math.min(elapsed / revealDuration, 1);
       const phase = Math.floor(elapsed / 90);
       for (let index = 0; index < details.length; index++) {
@@ -216,17 +204,36 @@ export function AsciiReveal({
         const x = ((index % columns) + 0.5) * (width / columns);
         const y = (Math.floor(index / columns) + 0.5) * (height / rows);
         const opacity = (0.07 + prominence * 0.9) * age * age * (3 - 2 * age);
-        const offset = index * 4;
-        const red = inkRgb[0] + (pixels[offset] - inkRgb[0]) * finish.color;
-        const green =
-          inkRgb[1] + (pixels[offset + 1] - inkRgb[1]) * finish.color;
-        const blue =
-          inkRgb[2] + (pixels[offset + 2] - inkRgb[2]) * finish.color;
-        context.fillStyle = `rgb(${red} ${green} ${blue})`;
         context.globalAlpha =
           (opacity + (0.95 - opacity) * finish.color) * finish.glyphs;
-        context.fillText(glyph, x, y);
+        context.drawImage(
+          atlas,
+          ASCII_ATLAS_GLYPHS.indexOf(glyph) * atlasWidth,
+          0,
+          atlasWidth,
+          atlasHeight,
+          x - width / columns / 2,
+          y - height / rows / 2,
+          width / columns,
+          height / rows,
+        );
       }
+      context.globalAlpha = 1;
+      context.globalCompositeOperation = "source-in";
+      context.fillStyle = getComputedStyle(canvas).color;
+      context.fillRect(0, 0, width, height);
+      context.globalCompositeOperation = "source-atop";
+      context.globalAlpha = finish.color;
+      context.imageSmoothingEnabled = false;
+      context.drawImage(sample, 0, 0, width, height);
+      context.globalCompositeOperation = "destination-over";
+      context.globalAlpha = finish.background;
+      context.fillStyle =
+        getComputedStyle(document.documentElement)
+          .getPropertyValue("--color-bg")
+          .trim() || "#0f0f0f";
+      context.fillRect(0, 0, width, height);
+      context.globalCompositeOperation = "source-over";
       context.globalAlpha = 1;
     };
 
@@ -277,8 +284,7 @@ export function AsciiReveal({
     };
 
     const wake = () => {
-      if (disposed || completed) return;
-      cancelAnimationFrame(frame);
+      if (disposed || completed || frame) return;
       previous = null;
       frame = requestAnimationFrame(tick);
     };
@@ -300,6 +306,21 @@ export function AsciiReveal({
         1,
         Math.min(180, Math.round((height / width) * columns * 0.6)),
       );
+      atlasWidth = Math.ceil((width / columns) * ratio);
+      atlasHeight = Math.ceil((height / rows) * ratio);
+      atlas.width = atlasWidth * ASCII_ATLAS_GLYPHS.length;
+      atlas.height = atlasHeight;
+      atlasContext!.font = `${(height / rows) * 0.95 * ratio}px monospace`;
+      atlasContext!.textAlign = "center";
+      atlasContext!.textBaseline = "middle";
+      atlasContext!.fillStyle = "#fff";
+      for (let index = 0; index < ASCII_ATLAS_GLYPHS.length; index++) {
+        atlasContext!.fillText(
+          ASCII_ATLAS_GLYPHS[index],
+          (index + 0.5) * atlasWidth,
+          atlasHeight / 2,
+        );
+      }
       sample.width = columns;
       sample.height = rows;
       const scale = Math.max(
@@ -374,6 +395,10 @@ export function AsciiReveal({
       document.removeEventListener("visibilitychange", wake);
       image.onload = null;
       image.onerror = null;
+      atlas.width = 0;
+      atlas.height = 0;
+      sample.width = 0;
+      sample.height = 0;
     };
   }, [src]);
 
