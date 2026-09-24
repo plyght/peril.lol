@@ -22,6 +22,7 @@ export function PhotoImage({
   const containerRef = useRef<HTMLAnchorElement>(null);
   const loadComplete = useRef<(() => void) | null>(null);
   const [revealed, setRevealed] = useState(false);
+  const [revealing, setRevealing] = useState(false);
   const [resolved, setResolved] = useState<string | null>(null);
   const [loaded, setLoaded] = useState(false);
 
@@ -89,13 +90,14 @@ export function PhotoImage({
             loadComplete.current?.();
             loadComplete.current = null;
           }}
-          className={`photo-img${loaded ? " photo-loaded" : ""}`}
+          className={`photo-img${loaded && (revealing || revealed) ? " photo-loaded" : ""}`}
         />
       )}
       {!revealed && (
         <AsciiReveal
           src={placeholder || resolved || ""}
           ready={loaded}
+          onRevealStart={() => setRevealing(true)}
           onComplete={() => setRevealed(true)}
         />
       )}

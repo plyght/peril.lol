@@ -297,9 +297,17 @@ export function AsciiReveal({
       height = bounds.height;
       if (!width || !height) return;
       const ratio = Math.min(window.devicePixelRatio || 1, 2);
-      canvas.width = Math.round(width * ratio);
-      canvas.height = Math.round(height * ratio);
-      context!.setTransform(ratio, 0, 0, ratio, 0, 0);
+      canvas.width = Math.ceil(width * ratio);
+      canvas.height = Math.ceil(height * ratio);
+      // Scale to the rounded backing store so every edge pixel is painted.
+      context!.setTransform(
+        canvas.width / width,
+        0,
+        0,
+        canvas.height / height,
+        0,
+        0,
+      );
       if (!image.naturalWidth || !image.naturalHeight) return;
       columns = Math.max(32, Math.min(100, Math.round(width / 6)));
       rows = Math.max(
