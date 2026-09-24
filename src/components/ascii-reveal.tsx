@@ -20,6 +20,22 @@ export function asciiFinish(progress: number) {
   };
 }
 
+// Each cell drops its backing on its own schedule, so the photo dissolves in
+// through the grid instead of surfacing as one veiled box.
+export function asciiCellBackground(progress: number, scatter: number) {
+  const t = Math.max(0, Math.min(1, (progress - 0.16 - scatter * 0.4) / 0.34));
+  return 1 - t * t * (3 - 2 * t);
+}
+
+// A well-mixed per-cell hash in [0, 1): neighbouring cells get unrelated
+// values, so the dissolve reads as noise rather than stripes.
+export function asciiScatter(index: number) {
+  let h = Math.imul(index + 1, 0x9e3779b1);
+  h = Math.imul(h ^ (h >>> 16), 0x85ebca6b);
+  h = Math.imul(h ^ (h >>> 13), 0xc2b2ae35);
+  return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
+}
+
 export function asciiGlyph(density: number) {
   const glyphs = ".:+x0369#";
   return glyphs[
@@ -133,6 +149,8 @@ export function AsciiReveal({
     const sampler = sample.getContext("2d", { willReadFrequently: true });
     const atlas = document.createElement("canvas");
     const atlasContext = atlas.getContext("2d");
+    const mask = document.createElement("canvas");
+    const maskContext = mask.getContext("2d");
     let atlasWidth = 0;
     let atlasHeight = 0;
     const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -154,7 +172,7 @@ export function AsciiReveal({
     let completed = false;
     let revealStarted = false;
     let colorStarted = false;
-    let failed = !context || !sampler || !atlasContext;
+    let failed = !context || !sampler || !atlasContext || !maskContext;
     let columns = 60;
     canvas.style.opacity = "1";
     canvas.style.background = "var(--color-bg)";
@@ -171,7 +189,8 @@ export function AsciiReveal({
     const draw = () => {
       if (!context || !pixels) return;
       context.clearRect(0, 0, width, height);
-      const finish = asciiFinish(fadeElapsed / FINISH_DURATION);
+      const fade = fadeElapsed / FINISH_DURATION;
+      const finish = asciiFinish(fade);
       if (finish.color > 0 && !colorStarted) {
         colorStarted = true;
         controls.current.onColorStart?.();
@@ -226,13 +245,27 @@ export function AsciiReveal({
       context.globalAlpha = finish.color;
       context.imageSmoothingEnabled = false;
       context.drawImage(sample, 0, 0, width, height);
-      context.globalCompositeOperation = "destination-over";
-      context.globalAlpha = finish.background;
-      context.fillStyle =
+      maskContext!.clearRect(0, 0, columns, rows);
+      maskContext!.fillStyle =
         getComputedStyle(document.documentElement)
           .getPropertyValue("--color-bg")
           .trim() || "#0f0f0f";
-      context.fillRect(0, 0, width, height);
+      for (let index = 0; index < columns * rows; index++) {
+        maskContext!.globalAlpha = asciiCellBackground(
+          fade,
+          asciiScatter(index),
+        );
+        maskContext!.fillRect(
+          index % columns,
+          Math.floor(index / columns),
+          1,
+          1,
+        );
+      }
+      context.globalCompositeOperation = "destination-over";
+      context.globalAlpha = 1;
+      context.imageSmoothingEnabled = true;
+      context.drawImage(mask, 0, 0, width, height);
       context.globalCompositeOperation = "source-over";
       context.globalAlpha = 1;
     };
@@ -331,6 +364,8 @@ export function AsciiReveal({
       }
       sample.width = columns;
       sample.height = rows;
+      mask.width = columns;
+      mask.height = rows;
       const scale = Math.max(
         width / image.naturalWidth,
         height / image.naturalHeight,
@@ -407,6 +442,8 @@ export function AsciiReveal({
       atlas.height = 0;
       sample.width = 0;
       sample.height = 0;
+      mask.width = 0;
+      mask.height = 0;
     };
   }, [src]);
 

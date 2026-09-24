@@ -1,5 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import {
+  asciiCellBackground,
   asciiDetail,
   asciiFinish,
   asciiGlyph,
@@ -62,5 +63,17 @@ describe("asciiFinish", () => {
     expect(asciiFinish(1)).toEqual({ color: 1, background: 0, glyphs: 0 });
     expect(asciiFinish(2)).toEqual(asciiFinish(1));
     expect(asciiFinish(-1)).toEqual(asciiFinish(0));
+  });
+});
+
+describe("asciiCellBackground", () => {
+  test("holds, staggers, then clears every cell by the end", () => {
+    expect(asciiCellBackground(0, 0)).toBe(1);
+    expect(asciiCellBackground(0, 0.99)).toBe(1);
+    expect(asciiCellBackground(0.4, 0)).toBeLessThan(
+      asciiCellBackground(0.4, 0.9),
+    );
+    expect(asciiCellBackground(0.9, 0.999)).toBeLessThan(0.01);
+    expect(asciiCellBackground(1, 1)).toBe(0);
   });
 });
