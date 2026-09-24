@@ -60,7 +60,7 @@ export function PhotoImage({
       href={src}
       target="_blank"
       rel="noopener noreferrer"
-      className={`photo-container block${loaded ? " photo-container-loaded" : ""}`}
+      className={`photo-container block${revealed ? " photo-container-revealed" : ""}`}
       style={{
         aspectRatio: `${width} / ${height}`,
       }}
@@ -80,10 +80,17 @@ export function PhotoImage({
             height: "100%",
             objectFit: "cover",
           }}
-          onLoad={() => {
-            setLoaded(true);
-            loadComplete.current?.();
-            loadComplete.current = null;
+          onLoad={(event) => {
+            // Decode before the reveal so the photo is painted when the
+            // ASCII background fades, not a frame or two after.
+            event.currentTarget
+              .decode()
+              .catch(() => {})
+              .finally(() => {
+                setLoaded(true);
+                loadComplete.current?.();
+                loadComplete.current = null;
+              });
           }}
           onError={() => {
             setLoaded(true);
