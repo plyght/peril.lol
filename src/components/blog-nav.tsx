@@ -10,8 +10,8 @@ function pageHref(page: number) {
 
 export function BlogNav({ totalPages }: { totalPages: number }) {
   const params = useParams<{ page?: string; slug?: string }>();
-  const onPost = typeof params.slug === "string";
-  const page = Number(params.page ?? 1) || 1;
+  const onPost = typeof params?.slug === "string";
+  const page = Number(params?.page ?? 1) || 1;
   const hasPrev = page > 1;
   const hasNext = page < totalPages;
 

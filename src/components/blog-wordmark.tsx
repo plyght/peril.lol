@@ -9,7 +9,7 @@ export function BlogWordmark() {
   return (
     <div
       className="fixed inset-0 flex flex-col justify-between overflow-hidden pointer-events-none select-none px-[6vw] md:px-[8vw] pb-[2vh]"
-      style={{ zIndex: 0, display: params.slug ? "none" : undefined }}
+      style={{ zIndex: 0, display: params?.slug ? "none" : undefined }}
     >
       <div />
       <div className="reveal reveal-d2 select-none leading-none mb-[1vh] md:mb-[-2vh]">

@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "bun run scripts/convert-photos.ts && next build",
-    "format": "prettier --check package.json scripts/generate-og.tsx scripts/photo-dimensions.ts scripts/photo-dimensions.test.ts scripts/ascii-reveal.test.ts src/app/not-found.tsx src/components/now-playing.tsx src/components/photo-image.tsx src/components/theme-provider.tsx src/lib/blog.ts src/components/now-playing-art.tsx src/components/ascii-reveal.tsx src/lib/photos.ts src/lib/image-loader.ts 'src/app/blog/[slug]/page.tsx' src/app/photos/page.tsx src/components/blog-entry.tsx src/components/blog-nav.tsx src/components/blog-index.tsx src/components/blog-wordmark.tsx",
+    "format": "prettier --check package.json scripts/generate-og.tsx scripts/photo-dimensions.ts scripts/photo-dimensions.test.ts scripts/ascii-reveal.test.ts src/app/not-found.tsx src/components/now-playing.tsx src/components/photo-image.tsx src/components/theme-provider.tsx src/lib/blog.ts src/components/now-playing-art.tsx src/components/ascii-reveal.tsx src/lib/photos.ts src/lib/image-loader.ts 'src/app/blog/[slug]/page.tsx' src/app/photos/page.tsx src/components/blog-entry.tsx src/components/blog-nav.tsx src/components/blog-index.tsx src/components/blog-wordmark.tsx src/components/dev-post-editor.tsx src/lib/editable-markdown.ts src/lib/dev-post-store.ts src/pages/api/dev-post.ts scripts/editable-markdown.test.ts scripts/dev-post-store.test.ts",
     "photos:convert": "bun run scripts/convert-photos.ts",
     "start": "next start",
     "lint": "eslint",
@@ -16,6 +16,7 @@
     "@radix-ui/react-hover-card": "^1.1.19",
     "framer-motion": "^12.42.2",
     "gray-matter": "^4.0.3",
+    "loading-dev": "^0.3.4",
     "lucide-react": "^1.24.0",
     "next": "16.2.2",
     "qss": "^3.0.0",

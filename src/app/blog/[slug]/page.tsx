@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { getAllPosts, getPost } from "@/lib/blog";
 import { notFound } from "next/navigation";
 import { CitationHandler } from "@/components/citation-handler";
+import { DevPostEditor } from "@/components/dev-post-editor";
+import { getDevPostRevision } from "@/lib/dev-post-store";
 
 export async function generateStaticParams() {
   const posts = getAllPosts();
@@ -83,6 +85,13 @@ export default async function BlogPost({
         dangerouslySetInnerHTML={{ __html: post.content }}
       />
       <CitationHandler />
+      {process.env.NODE_ENV === "development" && (
+        <DevPostEditor
+          key={slug}
+          slug={slug}
+          revision={getDevPostRevision(slug)}
+        />
+      )}
     </div>
   );
 }
