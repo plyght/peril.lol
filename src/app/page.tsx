@@ -304,7 +304,7 @@ export default function Home() {
           {" "}doing low level infra.
           {" "}I made{" "}
           <a href="https://github.com/plyght/spine" target="_blank" rel="noopener noreferrer" className="underline-link">Spine</a>,{" "}
-          <a href="https://github.com/plyght/hops" target="_blank" rel="noopener noreferrer" className="underline-link">Hops</a>,{" "}
+          <a href="https://ditchcensorship.com" target="_blank" rel="noopener noreferrer" className="underline-link">Ditch</a>,{" "}
           <a href="https://github.com/plyght/wax" target="_blank" rel="noopener noreferrer" className="underline-link">Wax</a>, and{" "}
           <a href="https://superdetermine.com" target="_blank" rel="noopener noreferrer" className="underline-link">Superdetermine</a>.
         </p>
