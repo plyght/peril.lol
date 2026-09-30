@@ -96,19 +96,54 @@ function insideHull(poly: Point[], p: Point): boolean {
   return true;
 }
 
+export function artPosition(
+  rect: Pick<DOMRect, "right" | "top" | "bottom" | "height">,
+  width: number,
+  height: number,
+  viewportWidth: number,
+  viewportHeight: number,
+  overflowing: boolean,
+  belowLeft?: number,
+) {
+  const margin = viewportWidth * 0.04;
+  const beside = rect.right + rect.height * 0.618;
+  const fits = !overflowing && beside + width <= viewportWidth - margin;
+  const left = belowLeft ?? (fits ? beside : rect.right - width);
+  const top =
+    belowLeft !== undefined
+      ? rect.bottom + 8
+      : fits
+        ? rect.top
+        : rect.bottom + rect.height * 0.382;
+
+  return {
+    left: Math.round(
+      Math.max(margin, Math.min(left, viewportWidth - width - margin)),
+    ),
+    top: Math.round(
+      Math.max(margin, Math.min(top, viewportHeight - height - margin)),
+    ),
+  };
+}
+
 export function NowPlayingArt({
   src,
   anchorRef,
   originRef,
   hidden,
   overflowing,
+  variant = "cover",
+  placementRef,
 }: {
   src: string;
   anchorRef: RefObject<HTMLAnchorElement | null>;
   originRef: RefObject<HTMLSpanElement | null>;
   hidden: boolean;
   overflowing: boolean;
+  variant?: "cover" | "business-card";
+  placementRef?: RefObject<HTMLElement | null>;
 }) {
+  const businessCard = variant === "business-card";
   const containerRef = useRef<HTMLSpanElement>(null);
   const [revealed, setRevealed] = useState(false);
   const [revealing, setRevealing] = useState(false);
@@ -162,20 +197,20 @@ export function NowPlayingArt({
     if (!el) return;
 
     const place = () => {
-      const line = originRef.current ?? el;
+      const placement = placementRef?.current;
+      const line = placement ?? originRef.current ?? el;
       const rect = line.getBoundingClientRect();
-      const size = containerRef.current?.offsetWidth ?? 0;
-      const margin = window.innerWidth * 0.04;
-      const beside = rect.right + rect.height * 0.618;
-      const fits = !overflowing && beside + size <= window.innerWidth - margin;
-
-      const left = fits ? beside : Math.max(margin, rect.right - size);
-      const top = fits ? rect.top : rect.bottom + rect.height * 0.382;
-
-      setOrigin({
-        left: Math.round(left),
-        top: Math.round(Math.min(top, window.innerHeight - size - margin)),
-      });
+      setOrigin(
+        artPosition(
+          rect,
+          containerRef.current?.offsetWidth ?? 0,
+          containerRef.current?.offsetHeight ?? 0,
+          window.innerWidth,
+          window.innerHeight,
+          overflowing,
+          placement ? rect.left : undefined,
+        ),
+      );
     };
 
     place();
@@ -186,6 +221,7 @@ export function NowPlayingArt({
       of where it left and the cover's own corners — a generous safe area, on a
       grace timer, so a slow or slightly wandering approach still arrives.
     */
+    let focused = false;
     let bridge: Point[] | null = null;
     let graceTimer: ReturnType<typeof setTimeout> | null = null;
 
@@ -197,17 +233,17 @@ export function NowPlayingArt({
     const show = () => {
       hoveringRef.current = true;
       setOpen(true);
-      if (colorStartedRef.current && analysisRef.current)
+      if (!businessCard && colorStartedRef.current && analysisRef.current)
         wearPalette(paletteFrom(analysisRef.current, isDark()));
     };
 
     const hide = () => {
       bridge = null;
       clearGrace();
-      if (pinnedRef.current) return;
+      if (pinnedRef.current || focused) return;
       hoveringRef.current = false;
       setOpen(false);
-      shedPalette();
+      if (!businessCard) shedPalette();
     };
 
     const enter = () => {
@@ -218,7 +254,7 @@ export function NowPlayingArt({
     };
 
     const move = (event: PointerEvent) => {
-      if (!hoveringRef.current) return;
+      if (!hoveringRef.current || focused) return;
       const p = { x: event.clientX, y: event.clientY };
       const line = (originRef.current ?? el).getBoundingClientRect();
       const cover = containerRef.current?.getBoundingClientRect();
@@ -250,38 +286,58 @@ export function NowPlayingArt({
       if (!insideHull(bridge, p)) hide();
     };
 
-    el.addEventListener("pointerenter", enter);
+    const focus = () => {
+      focused = true;
+      enter();
+    };
+    const blur = () => {
+      focused = false;
+      hide();
+    };
+    const pointerEnter = (event: PointerEvent) => {
+      if (event.pointerType !== "touch") enter();
+    };
+
+    el.addEventListener("pointerenter", pointerEnter);
+    el.addEventListener("focus", focus);
+    el.addEventListener("blur", blur);
     document.addEventListener("pointermove", move);
     document.addEventListener("pointerleave", hide);
     window.addEventListener("resize", place);
+    if (placementRef)
+      window.addEventListener("scroll", place, { passive: true });
     return () => {
-      el.removeEventListener("pointerenter", enter);
+      el.removeEventListener("pointerenter", pointerEnter);
+      el.removeEventListener("focus", focus);
+      el.removeEventListener("blur", blur);
       document.removeEventListener("pointermove", move);
       document.removeEventListener("pointerleave", hide);
       window.removeEventListener("resize", place);
+      if (placementRef) window.removeEventListener("scroll", place);
       clearGrace();
-      shedPalette();
+      if (!businessCard) shedPalette();
     };
-  }, [anchorRef, originRef, overflowing]);
+  }, [anchorRef, originRef, overflowing, businessCard, placementRef]);
 
   /* Pinned, the scheme is held so it can be looked at properly. Escape drops it. */
   useEffect(() => {
     pinnedRef.current = pinned;
-    if (!pinned) return;
+    if (!pinned && !open) return;
     const onKey = (event: KeyboardEvent) => {
       if (event.key !== "Escape") return;
       setPinned(false);
       setOpen(false);
       hoveringRef.current = false;
-      shedPalette();
+      if (!businessCard) shedPalette();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [pinned]);
+  }, [pinned, open, businessCard]);
 
   const beginColor = () => {
     colorStartedRef.current = true;
     if (
+      !businessCard &&
       !hidden &&
       (hoveringRef.current || pinnedRef.current) &&
       analysisRef.current
@@ -301,7 +357,7 @@ export function NowPlayingArt({
       ref={containerRef}
       aria-hidden
       onClick={
-        src
+        src && !businessCard
           ? () => {
               hoveringRef.current = true;
               setPinned((was) => !was);
@@ -314,6 +370,15 @@ export function NowPlayingArt({
       style={{
         left: `${origin.left}px`,
         top: `${origin.top}px`,
+        ...(businessCard
+          ? {
+              width: "min(360px, 92vw, calc((100dvh - 8vw) * 7 / 4))",
+              height: "auto",
+              aspectRatio: "7 / 4",
+              borderRadius: 0,
+              cursor: "default",
+            }
+          : {}),
       }}
     >
       {/* Nothing to pull a sleeve from — a plain tile in the page's own colours,
@@ -323,14 +388,15 @@ export function NowPlayingArt({
         <Image
           src={resolved}
           alt=""
-          width={300}
-          height={300}
+          width={businessCard ? 1050 : 300}
+          height={businessCard ? 600 : 300}
           loading="eager"
           decoding="async"
           unoptimized
           onLoad={(event) => {
             setLoaded(true);
-            analysisRef.current = analyzeImage(event.currentTarget);
+            if (!businessCard)
+              analysisRef.current = analyzeImage(event.currentTarget);
           }}
           onError={() => setLoaded(true)}
           className={`np-art-img${loaded && (revealing || revealed) ? " np-art-img-loaded" : ""}`}

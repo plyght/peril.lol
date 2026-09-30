@@ -3,8 +3,15 @@
 import Link from "next/link";
 import Script from "next/script";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { NowPlayingArt } from "@/components/now-playing-art";
+import { SemicentricCard } from "@/components/semicentric-card";
 
 // Webring arrows are hidden for now. Markup below is kept intact — flip this to
 // true to bring them back.
@@ -15,7 +22,11 @@ declare global {
     UnicornStudio?: {
       isInitialized?: boolean;
       init: () => void;
-      addScene: (opts: Record<string, unknown>) => Promise<{ destroy: () => void; paused?: boolean; renderFrame?: () => void }>;
+      addScene: (opts: Record<string, unknown>) => Promise<{
+        destroy: () => void;
+        paused?: boolean;
+        renderFrame?: () => void;
+      }>;
     };
   }
 }
@@ -23,7 +34,9 @@ declare global {
 // last.fm hands back its own grey star for tracks with no cover — treat that as no art.
 const LASTFM_PLACEHOLDER = "2a96cbd8b46e442fc41c2b86b821562f";
 
-function coverFrom(images: { size: string; "#text": string }[] | undefined): string {
+function coverFrom(
+  images: { size: string; "#text": string }[] | undefined,
+): string {
   if (!images) return "";
   const url =
     images.find((i) => i.size === "extralarge")?.["#text"] ||
@@ -33,17 +46,34 @@ function coverFrom(images: { size: string; "#text": string }[] | undefined): str
 }
 
 export default function Home() {
-  const sceneRef = useRef<{ destroy: () => void; paused?: boolean; renderFrame?: () => void } | null>(null);
+  const sceneRef = useRef<{
+    destroy: () => void;
+    paused?: boolean;
+    renderFrame?: () => void;
+  } | null>(null);
   const sceneLoadingRef = useRef(false);
   const [isDesktop, setIsDesktop] = useState(false);
   const [copied, setCopied] = useState(false);
   const copyTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  useEffect(() => () => {
-    if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
-  }, []);
-  const [nowPlaying, setNowPlaying] = useState<{ track: string; artist: string; live: boolean; art: string } | null>(null);
-  const [displayedTrack, setDisplayedTrack] = useState<{ track: string; artist: string; live: boolean; art: string } | null>(null);
+  useEffect(
+    () => () => {
+      if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
+    },
+    [],
+  );
+  const [nowPlaying, setNowPlaying] = useState<{
+    track: string;
+    artist: string;
+    live: boolean;
+    art: string;
+  } | null>(null);
+  const [displayedTrack, setDisplayedTrack] = useState<{
+    track: string;
+    artist: string;
+    live: boolean;
+    art: string;
+  } | null>(null);
   const [isFading, setIsFading] = useState(false);
   const [npFetched, setNpFetched] = useState(false);
   const textRef = useRef<HTMLSpanElement>(null);
@@ -57,7 +87,9 @@ export default function Home() {
   const nowPlayingDesktopRef = useRef<HTMLAnchorElement>(null);
   const webringRef = useRef<HTMLSpanElement>(null);
   const [bioWidth, setBioWidth] = useState(0);
-  const [desktopTrackMaxPx, setDesktopTrackMaxPx] = useState<number | null>(null);
+  const [desktopTrackMaxPx, setDesktopTrackMaxPx] = useState<number | null>(
+    null,
+  );
 
   const fetchNowPlaying = useCallback(async (skipCache = false) => {
     try {
@@ -72,7 +104,7 @@ export default function Home() {
         }
       }
       const res = await fetch(
-        `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=plyght_&api_key=cd6b695e7b06661c8e90bdf322d8b7e2&format=json&limit=1`
+        `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=plyght_&api_key=cd6b695e7b06661c8e90bdf322d8b7e2&format=json&limit=1`,
       );
       const data = await res.json();
       const track = data?.recenttracks?.track?.[0];
@@ -131,7 +163,10 @@ export default function Home() {
       displayedTrack.track === nowPlaying.track &&
       displayedTrack.artist === nowPlaying.artist;
     if (same) {
-      if (displayedTrack.live !== nowPlaying.live || displayedTrack.art !== nowPlaying.art) {
+      if (
+        displayedTrack.live !== nowPlaying.live ||
+        displayedTrack.art !== nowPlaying.art
+      ) {
         setDisplayedTrack(nowPlaying);
       }
       return;
@@ -168,7 +203,13 @@ export default function Home() {
   }, [displayedTrack, bioWidth, desktopTrackMaxPx, needsMarquee, isDesktop]);
 
   useEffect(() => {
-    if (!isDesktop || !displayedTrack || !textRef.current || !containerRef.current) return;
+    if (
+      !isDesktop ||
+      !displayedTrack ||
+      !textRef.current ||
+      !containerRef.current
+    )
+      return;
     const timer = setTimeout(() => {
       if (textRef.current && containerRef.current) {
         const raw = textRef.current.scrollWidth;
@@ -178,7 +219,6 @@ export default function Home() {
     }, 600);
     return () => clearTimeout(timer);
   }, [isDesktop, bioWidth, displayedTrack, desktopTrackMaxPx, needsMarquee]);
-
 
   useEffect(() => {
     if (!wordmarkRef.current) return;
@@ -209,7 +249,9 @@ export default function Home() {
     const rightEdge = webringRef.current
       ? webringRef.current.getBoundingClientRect().left
       : bio.right;
-    setDesktopTrackMaxPx(Math.max(0, Math.floor(rightEdge - origin.left - gapPx)));
+    setDesktopTrackMaxPx(
+      Math.max(0, Math.floor(rightEdge - origin.left - gapPx)),
+    );
   }, []);
 
   useLayoutEffect(() => {
@@ -222,9 +264,12 @@ export default function Home() {
 
   useEffect(() => {
     if (!isDesktop) return;
-    const obs = [bioRef.current, navRowRef.current, nowPlayingDesktopRef.current, webringRef.current].filter(
-      (n) => n != null
-    );
+    const obs = [
+      bioRef.current,
+      navRowRef.current,
+      nowPlayingDesktopRef.current,
+      webringRef.current,
+    ].filter((n) => n != null);
     const ro = new ResizeObserver(() => measureDesktopTrackWidth());
     obs.forEach((el) => ro.observe(el));
     window.addEventListener("resize", measureDesktopTrackWidth);
@@ -233,7 +278,6 @@ export default function Home() {
       window.removeEventListener("resize", measureDesktopTrackWidth);
     };
   }, [isDesktop, measureDesktopTrackWidth, nowPlaying]);
-
 
   useEffect(() => {
     document.documentElement.classList.add("no-scroll");
@@ -273,49 +317,102 @@ export default function Home() {
       fps: 60,
       lazyLoad: true,
       production: true,
-    }).then((scene) => {
-      if (!container.isConnected) {
-        scene.destroy();
-        return;
-      }
-      sceneRef.current = scene;
-      window.dispatchEvent(new Event("scroll"));
-    }).catch(() => {}).finally(() => {
-      sceneLoadingRef.current = false;
-    });
+    })
+      .then((scene) => {
+        if (!container.isConnected) {
+          scene.destroy();
+          return;
+        }
+        sceneRef.current = scene;
+        window.dispatchEvent(new Event("scroll"));
+      })
+      .catch(() => {})
+      .finally(() => {
+        sceneLoadingRef.current = false;
+      });
   };
 
   return (
     <div className="h-[100dvh] flex flex-col justify-between px-[6vw] md:px-[8vw] pt-[8vh] md:pt-[14vh] pb-[2vh] overflow-hidden relative">
-
-      
       <div
         ref={bioRef}
         className="max-w-[700px] reveal reveal-d1 relative z-10 overflow-hidden w-full min-w-0 page-shell"
-        style={bioWidth ? ({ "--bio-w": `${bioWidth}px` } as React.CSSProperties) : undefined}
+        style={
+          bioWidth
+            ? ({ "--bio-w": `${bioWidth}px` } as React.CSSProperties)
+            : undefined
+        }
       >
         <p className="serif text-[clamp(26px,5.5vw,38px)] md:text-[clamp(22px,5vw,34px)] leading-[1.5] tracking-[-0.01em]">
           High school senior out of D.C.{" "}
           <em className="font-semibold">Developer</em>,{" "}
           <em className="font-semibold">wrestler</em>,{" "}
-          <em className="font-semibold">photographer</em>.
-          {" "}Currently at{" "}
-          <a href="https://semicentric.co" target="_blank" rel="noopener noreferrer" className="underline-link">Semicentric</a>
-          {" "}doing low level infra.
-          {" "}I made{" "}
-          <a href="https://github.com/plyght/spine" target="_blank" rel="noopener noreferrer" className="underline-link">Spine</a>,{" "}
-          <a href="https://ditchcensorship.com" target="_blank" rel="noopener noreferrer" className="underline-link">Ditch</a>,{" "}
-          <a href="https://github.com/plyght/wax" target="_blank" rel="noopener noreferrer" className="underline-link">Wax</a>, and{" "}
-          <a href="https://superdetermine.com" target="_blank" rel="noopener noreferrer" className="underline-link">Superdetermine</a>.
+          <em className="font-semibold">photographer</em>. Founder of{" "}
+          <SemicentricCard placementRef={navRowRef} />, doing low level infra. I
+          made{" "}
+          <a
+            href="https://github.com/plyght/spine"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline-link"
+          >
+            Spine
+          </a>
+          ,{" "}
+          <a
+            href="https://ditchcensorship.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline-link"
+          >
+            Ditch
+          </a>
+          ,{" "}
+          <a
+            href="https://github.com/plyght/wax"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline-link"
+          >
+            Wax
+          </a>
+          , and{" "}
+          <a
+            href="https://superdetermine.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline-link"
+          >
+            Superdetermine
+          </a>
+          .
         </p>
         <div
           ref={navRowRef}
           className="flex flex-wrap items-center gap-5 mt-6 pb-4 text-[clamp(20px,3vw,22px)] md:text-[clamp(16px,3vw,20px)]"
         >
-          <Link href="/blog" className="underline-link serif">Writing</Link>
-          <Link href="/photos" className="underline-link serif">Photos</Link>
-          <a href="https://github.com/plyght" target="_blank" rel="noopener noreferrer" className="underline-link serif">GitHub</a>
-          <a href="https://x.com/pliiight" target="_blank" rel="noopener noreferrer" className="underline-link serif">X</a>
+          <Link href="/blog" className="underline-link serif">
+            Writing
+          </Link>
+          <Link href="/photos" className="underline-link serif">
+            Photos
+          </Link>
+          <a
+            href="https://github.com/plyght"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline-link serif"
+          >
+            GitHub
+          </a>
+          <a
+            href="https://x.com/pliiight"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline-link serif"
+          >
+            X
+          </a>
           <button
             type="button"
             onClick={async () => {
@@ -330,8 +427,24 @@ export default function Home() {
             }}
             className={`${copied ? "" : "underline-link"} serif contact-copy`}
           >
-            <span aria-hidden={copied} className={copied ? "copy-text copy-text-out" : "copy-text copy-text-in underline-link"}>Contact</span>
-            <span aria-hidden={!copied} className={copied ? "copy-text copy-text-in" : "copy-text copy-text-out"}>Copied</span>
+            <span
+              aria-hidden={copied}
+              className={
+                copied
+                  ? "copy-text copy-text-out"
+                  : "copy-text copy-text-in underline-link"
+              }
+            >
+              Contact
+            </span>
+            <span
+              aria-hidden={!copied}
+              className={
+                copied ? "copy-text copy-text-in" : "copy-text copy-text-out"
+              }
+            >
+              Copied
+            </span>
           </button>
           {isDesktop && (
             <a
@@ -341,7 +454,9 @@ export default function Home() {
               rel="noopener noreferrer"
               className={`now-playing now-playing-desktop serif${npReady ? " now-playing-ready" : ""}${displayedTrack?.live && !isFading ? " now-playing-live" : ""}${!overflowMeasured || needsMarquee ? " now-playing-overflow" : ""}${needsMarquee ? " now-playing-marquee" : ""}${isFading ? " now-playing-fading" : ""}`}
               style={
-                { "--np-track-max": `${desktopTrackMaxPx ?? 0}px` } as React.CSSProperties
+                {
+                  "--np-track-max": `${desktopTrackMaxPx ?? 0}px`,
+                } as React.CSSProperties
               }
             >
               {displayedTrack && (
@@ -359,9 +474,20 @@ export default function Home() {
                   className={`now-playing-text${!displayedTrack.live ? " now-playing-dim" : ""}`}
                   ref={containerRef}
                 >
-                  <span className={`now-playing-inner${needsMarquee ? " marquee" : ""}`} ref={textRef}>
-                    {displayedTrack.track} · {displayedTrack.artist}{needsMarquee && <>&nbsp;&nbsp;&nbsp;&nbsp;</>}
-                    {needsMarquee && <><span aria-hidden="true">{displayedTrack.track} · {displayedTrack.artist}</span>&nbsp;&nbsp;&nbsp;&nbsp;</>}
+                  <span
+                    className={`now-playing-inner${needsMarquee ? " marquee" : ""}`}
+                    ref={textRef}
+                  >
+                    {displayedTrack.track} · {displayedTrack.artist}
+                    {needsMarquee && <>&nbsp;&nbsp;&nbsp;&nbsp;</>}
+                    {needsMarquee && (
+                      <>
+                        <span aria-hidden="true">
+                          {displayedTrack.track} · {displayedTrack.artist}
+                        </span>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                      </>
+                    )}
                   </span>
                 </span>
               )}
@@ -371,11 +497,27 @@ export default function Home() {
             </a>
           )}
           {SHOW_WEBRING && (
-            <span ref={webringRef} className="webring serif" aria-label="webring">
-              <a href="https://ring.liampas.ca/left" target="_blank" className="underline-link" title="webring · previous" aria-label="previous site in webring">
+            <span
+              ref={webringRef}
+              className="webring serif"
+              aria-label="webring"
+            >
+              <a
+                href="https://ring.liampas.ca/left"
+                target="_blank"
+                className="underline-link"
+                title="webring · previous"
+                aria-label="previous site in webring"
+              >
                 <ArrowLeft size={17} strokeWidth={1.75} />
               </a>
-              <a href="https://ring.liampas.ca/right" target="_blank" className="underline-link" title="webring · next" aria-label="next site in webring">
+              <a
+                href="https://ring.liampas.ca/right"
+                target="_blank"
+                className="underline-link"
+                title="webring · next"
+                aria-label="next site in webring"
+              >
                 <ArrowRight size={17} strokeWidth={1.75} />
               </a>
             </span>
@@ -383,12 +525,7 @@ export default function Home() {
         </div>
       </div>
 
-      {isDesktop && (
-        <div
-          id="unicorn-container"
-          className="unicorn-idle"
-        />
-      )}
+      {isDesktop && <div id="unicorn-container" className="unicorn-idle" />}
 
       {!isDesktop && (
         <a
@@ -396,7 +533,13 @@ export default function Home() {
           target="_blank"
           rel="noopener noreferrer"
           className={`now-playing now-playing-mobile serif${npReady ? " now-playing-ready" : ""}${needsMarquee ? " now-playing-overflow" : ""}${isFading ? " now-playing-fading" : ""}`}
-          style={wordmarkWidth ? { "--wordmark-w": `${wordmarkWidth}px` } as React.CSSProperties : undefined}
+          style={
+            wordmarkWidth
+              ? ({
+                  "--wordmark-w": `${wordmarkWidth}px`,
+                } as React.CSSProperties)
+              : undefined
+          }
         >
           {displayedTrack && (
             <span
