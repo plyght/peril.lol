@@ -728,7 +728,6 @@ article th { font-weight: 600; background: var(--color-surface); }
 .photo-container {
   position: relative;
   overflow: hidden;
-  border-radius: 8px;
   background-color: var(--color-surface);
   background-position: center;
   background-size: cover;
