@@ -90,6 +90,7 @@ type AsciiRevealProps = {
   src: string;
   ready: boolean;
   active?: boolean;
+  overscan?: number;
   onComplete: () => void;
   onRevealStart?: () => void;
   onColorStart?: () => void;
@@ -99,6 +100,7 @@ export function AsciiReveal({
   src,
   ready,
   active = true,
+  overscan = 0,
   onComplete,
   onRevealStart,
   onColorStart,
@@ -454,9 +456,9 @@ export function AsciiReveal({
       style={{
         position: "absolute",
         zIndex: 2,
-        inset: 0,
-        width: "100%",
-        height: "100%",
+        inset: -overscan,
+        width: overscan ? `calc(100% + ${overscan * 2}px)` : "100%",
+        height: overscan ? `calc(100% + ${overscan * 2}px)` : "100%",
         pointerEvents: "none",
         background: "var(--color-bg)",
         color: "var(--color-text)",

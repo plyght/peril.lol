@@ -41,7 +41,7 @@ export function MobileAlbumCover({ src }: { src: string }) {
     <span
       ref={containerRef}
       aria-hidden="true"
-      className="relative block aspect-square min-w-[44px] max-w-[64px] flex-[1_0_44px] overflow-hidden rounded-[calc(100%/6.854)] [corner-shape:squircle] supports-[clip-path:border-box]:overflow-visible supports-[clip-path:border-box]:[clip-path:border-box] outline outline-1 -outline-offset-1 outline-white/10"
+      className={`relative block aspect-square min-w-[44px] max-w-[64px] flex-[1_0_44px] overflow-hidden rounded-[calc(100%/6.854)] [corner-shape:squircle] [&>canvas]:rounded-none [&>img]:rounded-[inherit] [&>img]:[corner-shape:inherit] supports-[clip-path:border-box]:overflow-visible supports-[clip-path:border-box]:[clip-path:border-box] outline outline-1 -outline-offset-1 ${revealed && !failed ? "outline-white/10" : "outline-transparent"}`}
     >
       {!failed && resolved && (
         <Image
@@ -51,7 +51,12 @@ export function MobileAlbumCover({ src }: { src: string }) {
           height={64}
           loading="eager"
           unoptimized
-          onLoad={() => setLoaded(true)}
+          onLoad={(event) => {
+            event.currentTarget
+              .decode()
+              .catch(() => {})
+              .finally(() => setLoaded(true));
+          }}
           onError={() => setFailed(true)}
           className={`block size-full object-cover ${loaded && (revealing || revealed) ? "opacity-100" : "opacity-0"}`}
         />
@@ -60,6 +65,7 @@ export function MobileAlbumCover({ src }: { src: string }) {
         <AsciiReveal
           src={resolved || ""}
           ready={loaded}
+          overscan={1}
           onRevealStart={() => setRevealing(true)}
           onComplete={() => setRevealed(true)}
         />
