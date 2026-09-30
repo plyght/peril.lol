@@ -12,6 +12,18 @@ describe("Semicentric card", () => {
     expect(markup).toContain("Semicentric</span>");
     expect(markup).toContain("aria-describedby=");
     expect(markup).toContain("Semicentric business card:");
+    expect(markup).not.toContain('class="np-art-probe"');
+    expect(markup).not.toContain("<img");
+  });
+
+  test("mounts the preview on desktop with the external link and accessible description", () => {
+    const markup = renderToStaticMarkup(<SemicentricCard desktop />);
+    expect(markup).toContain('href="https://semicentric.co"');
+    expect(markup).toContain('target="_blank"');
+    expect(markup).toContain('rel="noopener noreferrer"');
+    expect(markup).toContain("Semicentric</span>");
+    expect(markup).toContain("aria-describedby=");
+    expect(markup).toContain("Semicentric business card:");
     expect(markup).toContain('class="np-art-probe"');
     expect(markup).not.toContain("<img");
   });

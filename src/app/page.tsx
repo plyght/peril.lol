@@ -12,6 +12,7 @@ import {
 } from "react";
 import { NowPlayingArt } from "@/components/now-playing-art";
 import { SemicentricCard } from "@/components/semicentric-card";
+import { MobileAlbumCover } from "@/components/mobile-album-cover";
 
 // Webring arrows are hidden for now. Markup below is kept intact — flip this to
 // true to bring them back.
@@ -280,10 +281,13 @@ export default function Home() {
   }, [isDesktop, measureDesktopTrackWidth, nowPlaying]);
 
   useEffect(() => {
-    document.documentElement.classList.add("no-scroll");
     const mq = window.matchMedia("(min-width: 768px)");
+    document.documentElement.classList.toggle("no-scroll", mq.matches);
     setIsDesktop(mq.matches);
-    const handler = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
+    const handler = (e: MediaQueryListEvent) => {
+      document.documentElement.classList.toggle("no-scroll", e.matches);
+      setIsDesktop(e.matches);
+    };
     mq.addEventListener("change", handler);
     return () => {
       document.documentElement.classList.remove("no-scroll");
@@ -333,7 +337,7 @@ export default function Home() {
   };
 
   return (
-    <div className="h-[100dvh] flex flex-col justify-between px-[6vw] md:px-[8vw] pt-[8vh] md:pt-[14vh] pb-[2vh] overflow-hidden relative">
+    <div className="min-h-[100dvh] md:h-[100dvh] flex flex-col justify-between px-[6vw] md:px-[8vw] pt-[8vh] md:pt-[14vh] pb-[2vh] overflow-x-clip md:overflow-hidden relative">
       <div
         ref={bioRef}
         className="max-w-[700px] reveal reveal-d1 relative z-10 overflow-hidden w-full min-w-0 page-shell"
@@ -348,8 +352,8 @@ export default function Home() {
           <em className="font-semibold">Developer</em>,{" "}
           <em className="font-semibold">wrestler</em>,{" "}
           <em className="font-semibold">photographer</em>. Founder of{" "}
-          <SemicentricCard placementRef={navRowRef} />, doing low level infra. I
-          made{" "}
+          <SemicentricCard placementRef={navRowRef} desktop={isDesktop} />,
+          doing low level infra. I made{" "}
           <a
             href="https://github.com/plyght/spine"
             target="_blank"
@@ -527,37 +531,40 @@ export default function Home() {
 
       {isDesktop && <div id="unicorn-container" className="unicorn-idle" />}
 
-      {!isDesktop && (
+      {!isDesktop && displayedTrack && (
         <a
           href="https://www.last.fm/user/plyght_"
           target="_blank"
           rel="noopener noreferrer"
-          className={`now-playing now-playing-mobile serif${npReady ? " now-playing-ready" : ""}${needsMarquee ? " now-playing-overflow" : ""}${isFading ? " now-playing-fading" : ""}`}
-          style={
-            wordmarkWidth
-              ? ({
-                  "--wordmark-w": `${wordmarkWidth}px`,
-                } as React.CSSProperties)
-              : undefined
-          }
+          className="now-playing serif mt-auto min-h-11 shrink-0 gap-3 pt-8 pb-3 text-[18px] leading-[1.4]"
+          style={{
+            width: wordmarkWidth ? `${wordmarkWidth}px` : "100%",
+            maxWidth: "100%",
+            opacity: npReady && !isFading ? 1 : 0,
+            filter: isFading ? "blur(6px)" : "none",
+            transitionProperty: "opacity, filter",
+          }}
         >
-          {displayedTrack && (
+          <MobileAlbumCover key={displayedTrack.art} src={displayedTrack.art} />
+          <span className="block min-w-0 flex-initial">
+            {!displayedTrack.live && (
+              <span className="block text-[14px] leading-none mb-1">
+                last played
+              </span>
+            )}
             <span
-              className={`now-playing-text${!displayedTrack.live ? " now-playing-dim" : ""}`}
+              className={`block truncate${!displayedTrack.live ? " now-playing-dim" : ""}`}
               ref={containerRef}
             >
-              <span className="now-playing-inner" ref={textRef}>
+              <span className="whitespace-nowrap" ref={textRef}>
                 {displayedTrack.track} · {displayedTrack.artist}
               </span>
             </span>
-          )}
-          {displayedTrack && !displayedTrack.live && (
-            <span className="now-playing-label serif">last played</span>
-          )}
+          </span>
         </a>
       )}
 
-      <div className="reveal reveal-d2 select-none pointer-events-none leading-none relative z-10 mb-[1vh] md:mb-[-2vh] page-shell">
+      <div className="reveal reveal-d2 shrink-0 select-none pointer-events-none leading-none relative z-10 mb-[1vh] md:mb-[-2vh] page-shell">
         <span
           ref={wordmarkRef}
           className="serif font-bold tracking-[-0.05em] inline-block"

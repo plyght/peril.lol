@@ -5,7 +5,9 @@ import { NowPlayingArt } from "./now-playing-art";
 
 export function SemicentricCard({
   placementRef,
+  desktop = false,
 }: {
+  desktop?: boolean;
   placementRef?: RefObject<HTMLElement | null>;
 }) {
   const anchorRef = useRef<HTMLAnchorElement>(null);
@@ -23,15 +25,17 @@ export function SemicentricCard({
         aria-describedby={descriptionId}
       >
         <span ref={originRef}>Semicentric</span>
-        <NowPlayingArt
-          src="/semicentric-business-card.svg?v=44e859641322"
-          anchorRef={anchorRef}
-          originRef={originRef}
-          hidden={false}
-          overflowing={false}
-          variant="business-card"
-          placementRef={placementRef}
-        />
+        {desktop && (
+          <NowPlayingArt
+            src="/semicentric-business-card.svg?v=44e859641322"
+            anchorRef={anchorRef}
+            originRef={originRef}
+            hidden={false}
+            overflowing={false}
+            variant="business-card"
+            placementRef={placementRef}
+          />
+        )}
       </a>
       <span id={descriptionId} className="sr-only">
         Semicentric business card: I’m CEO, B*tch. plyght. Corporate
