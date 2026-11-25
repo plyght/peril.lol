@@ -222,12 +222,19 @@ export default function Home() {
   }, [isDesktop, bioWidth, displayedTrack, desktopTrackMaxPx, needsMarquee]);
 
   useEffect(() => {
-    if (!wordmarkRef.current) return;
+    const wordmark = wordmarkRef.current;
+    if (!wordmark) return;
+    let active = true;
     const ro = new ResizeObserver(([entry]) => {
       setWordmarkWidth(entry.contentRect.width);
     });
-    ro.observe(wordmarkRef.current);
-    return () => ro.disconnect();
+    void document.fonts.ready.then(() => {
+      if (active) ro.observe(wordmark);
+    });
+    return () => {
+      active = false;
+      ro.disconnect();
+    };
   }, []);
 
   useEffect(() => {
@@ -347,13 +354,14 @@ export default function Home() {
             : undefined
         }
       >
-        <p className="serif text-[clamp(26px,5.5vw,38px)] md:text-[clamp(22px,5vw,32px)] leading-[1.5] tracking-[-0.01em] text-pretty">
-          High school senior out of D.C.{" "}
+        <p className="serif text-[clamp(24px,5.25vw,34px)] md:text-[clamp(22px,5vw,32px)] leading-[1.5] tracking-[-0.01em] text-pretty">
+          High school senior out of D.C. <br className="md:hidden" />
           <em className="font-semibold">Developer</em>,{" "}
           <em className="font-semibold">wrestler</em>,{" "}
-          <em className="font-semibold">photographer</em>. Founder of{" "}
-          <SemicentricCard />.{" "}
-          <span className="md:whitespace-nowrap">
+          <em className="font-semibold">photographer</em>.{" "}
+          <br className="md:hidden" />
+          Founder of <SemicentricCard />. <br className="md:hidden" />
+          <span className="whitespace-nowrap">
             SWE intern @&nbsp;
             <a
               href="https://ghost.ai"
@@ -377,6 +385,7 @@ export default function Home() {
             </a>
             .
           </span>{" "}
+          <br className="md:hidden" />
           I&apos;ve made{" "}
           <a
             href="https://github.com/plyght/spine"
@@ -567,7 +576,8 @@ export default function Home() {
           style={{
             width: wordmarkWidth ? `${wordmarkWidth}px` : "100%",
             maxWidth: "100%",
-            opacity: npReady && !isFading ? 1 : 0,
+            opacity: npReady && wordmarkWidth > 0 && !isFading ? 1 : 0,
+            visibility: wordmarkWidth > 0 ? undefined : "hidden",
             filter: isFading ? "blur(6px)" : "none",
             transitionProperty: "opacity, filter",
           }}
