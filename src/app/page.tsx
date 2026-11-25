@@ -81,6 +81,7 @@ export default function Home() {
   const containerRef = useRef<HTMLSpanElement>(null);
   const [needsMarquee, setNeedsMarquee] = useState(false);
   const [overflowMeasured, setOverflowMeasured] = useState(false);
+  const [mobileTrackOverflows, setMobileTrackOverflows] = useState(false);
   const wordmarkRef = useRef<HTMLSpanElement>(null);
   const [wordmarkWidth, setWordmarkWidth] = useState(0);
   const bioRef = useRef<HTMLDivElement>(null);
@@ -181,6 +182,7 @@ export default function Home() {
   }, [nowPlaying, displayedTrack]);
 
   useEffect(() => {
+    if (!isDesktop) return;
     if (!displayedTrack || !textRef.current || !containerRef.current) {
       setNeedsMarquee(false);
       setOverflowMeasured(false);
@@ -189,7 +191,7 @@ export default function Home() {
     const check = () => {
       if (textRef.current && containerRef.current) {
         const raw = textRef.current.scrollWidth;
-        const single = isDesktop && needsMarquee ? raw / 2 : raw;
+        const single = needsMarquee ? raw / 2 : raw;
         const next = single > containerRef.current.clientWidth + 10;
         setNeedsMarquee((prev) => (prev === next ? prev : next));
         setOverflowMeasured(true);
@@ -202,6 +204,21 @@ export default function Home() {
       clearTimeout(timer);
     };
   }, [displayedTrack, bioWidth, desktopTrackMaxPx, needsMarquee, isDesktop]);
+
+  useLayoutEffect(() => {
+    const container = containerRef.current;
+    const text = textRef.current;
+    if (isDesktop || !displayedTrack || !container || !text) return;
+
+    const measure = () => {
+      setMobileTrackOverflows(container.scrollWidth > container.clientWidth);
+    };
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(container);
+    observer.observe(text);
+    return () => observer.disconnect();
+  }, [displayedTrack, isDesktop]);
 
   useEffect(() => {
     if (
@@ -354,15 +371,14 @@ export default function Home() {
             : undefined
         }
       >
-        <p className="serif text-[clamp(24px,5.25vw,34px)] md:text-[clamp(22px,5vw,32px)] leading-[1.5] tracking-[-0.01em] text-pretty">
-          High school senior out of D.C. <br className="md:hidden" />
+        <p className="serif text-[clamp(1.375rem,5.9vw,2.125rem)] md:text-[clamp(22px,5vw,32px)] leading-[1.5] tracking-[-0.01em] text-pretty">
+          High school senior out of D.C.{" "}
           <em className="font-semibold">Developer</em>,{" "}
           <em className="font-semibold">wrestler</em>,{" "}
-          <em className="font-semibold">photographer</em>.{" "}
-          <br className="md:hidden" />
-          Founder of <SemicentricCard />. <br className="md:hidden" />
-          <span className="whitespace-nowrap">
-            SWE intern @&nbsp;
+          <em className="font-semibold">photographer</em>. Founder of{" "}
+          <SemicentricCard />.{" "}
+          <span className="md:whitespace-nowrap">
+            SWE&nbsp;intern @&nbsp;
             <a
               href="https://ghost.ai"
               target="_blank"
@@ -385,7 +401,6 @@ export default function Home() {
             </a>
             .
           </span>{" "}
-          <br className="md:hidden" />
           I&apos;ve made{" "}
           <a
             href="https://github.com/plyght/spine"
@@ -590,10 +605,10 @@ export default function Home() {
               </span>
             )}
             <span
-              className={`block truncate${!displayedTrack.live ? " now-playing-dim" : ""}`}
+              className={`block overflow-hidden whitespace-nowrap${mobileTrackOverflows ? " now-playing-track-overflow" : ""}${!displayedTrack.live ? " now-playing-dim" : ""}`}
               ref={containerRef}
             >
-              <span className="whitespace-nowrap" ref={textRef}>
+              <span className="inline-block" ref={textRef}>
                 {displayedTrack.track} · {displayedTrack.artist}
               </span>
             </span>
