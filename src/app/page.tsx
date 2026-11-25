@@ -364,7 +364,7 @@ export default function Home() {
     <div className="min-h-[100dvh] md:h-[100dvh] flex flex-col justify-between px-[6vw] md:px-[8vw] pt-[8vh] md:pt-[14vh] pb-[2vh] overflow-x-clip md:overflow-hidden relative">
       <div
         ref={bioRef}
-        className="max-w-[740px] reveal reveal-d1 relative z-10 overflow-hidden w-full min-w-0 page-shell"
+        className="max-w-[740px] lg:max-w-[840px] reveal reveal-d1 relative z-10 overflow-hidden w-full min-w-0 page-shell"
         style={
           bioWidth
             ? ({ "--bio-w": `${bioWidth}px` } as React.CSSProperties)
@@ -377,69 +377,73 @@ export default function Home() {
           <em className="font-semibold">wrestler</em>,{" "}
           <em className="font-semibold">photographer</em>. Founder of{" "}
           <SemicentricCard />.{" "}
-          <span className="md:whitespace-nowrap">
-            SWE&nbsp;intern @&nbsp;
-            <a
-              href="https://ghost.ai"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline-link"
-            >
-              Ghost
-            </a>
-            ,
+          <span className="max-md:contents md:whitespace-nowrap">
+            <span>
+              SWE&nbsp;intern @&nbsp;
+              <a
+                href="https://ghost.ai"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline-link"
+              >
+                Ghost
+              </a>
+              ,
+            </span>{" "}
+            <span className="whitespace-nowrap">
+              prev.{" "}
+              <a
+                href="https://char.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline-link"
+              >
+                Char
+              </a>
+              .
+            </span>
           </span>{" "}
-          <span className="whitespace-nowrap">
-            prev.{" "}
+          <span className="max-md:contents md:whitespace-nowrap">
+            I&apos;ve made{" "}
             <a
-              href="https://char.com"
+              href="https://github.com/plyght/spine"
               target="_blank"
               rel="noopener noreferrer"
               className="underline-link"
             >
-              Char
+              Spine
             </a>
-            .
-          </span>{" "}
-          I&apos;ve made{" "}
-          <a
-            href="https://github.com/plyght/spine"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline-link"
-          >
-            Spine
-          </a>
-          ,{" "}
-          <a
-            href="https://ditchcensorship.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline-link"
-          >
-            Ditch
-          </a>
-          ,{" "}
-          <a
-            href="https://github.com/plyght/wax"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline-link"
-          >
-            Wax
-          </a>
-          ,{" "}
-          <span className="whitespace-nowrap">
-            and{" "}
+            ,{" "}
             <a
-              href="https://superdetermine.com"
+              href="https://ditchcensorship.com"
               target="_blank"
               rel="noopener noreferrer"
               className="underline-link"
             >
-              Superdetermine
+              Ditch
             </a>
-            .
+            ,{" "}
+            <a
+              href="https://github.com/plyght/wax"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline-link"
+            >
+              Wax
+            </a>
+            ,{" "}
+            <span className="whitespace-nowrap">
+              and{" "}
+              <a
+                href="https://superdetermine.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline-link"
+              >
+                Superdetermine
+              </a>
+              .
+            </span>
           </span>
         </p>
         <div
