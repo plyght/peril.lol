@@ -365,7 +365,7 @@ export default function Home() {
             </a>
             .
           </span>{" "}
-          I made{" "}
+          I&apos;ve made{" "}
           <a
             href="https://github.com/plyght/spine"
             target="_blank"
