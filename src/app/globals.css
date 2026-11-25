@@ -765,8 +765,8 @@ article th { font-weight: 600; background: var(--color-surface); }
 
 .unicorn-idle {
   position: absolute;
-  top: -8%;
-  right: -4%;
+  top: max(-8%, clamp(-72px, calc(8dvh - 144px), -32px));
+  right: max(-56px, -4%);
   width: clamp(240px, 50vw, 560px);
   height: clamp(240px, 50vw, 560px);
   pointer-events: auto;
