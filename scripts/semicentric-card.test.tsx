@@ -4,28 +4,11 @@ import { SemicentricCard } from "../src/components/semicentric-card";
 import { artPosition } from "../src/components/now-playing-art";
 
 describe("Semicentric card", () => {
-  test("keeps the founder phrase as an ordinary external link with an accessible card description", () => {
+  test("renders only an external link without a hover preview", () => {
     const markup = renderToStaticMarkup(<SemicentricCard />);
-    expect(markup).toContain('href="https://semicentric.co"');
-    expect(markup).toContain('target="_blank"');
-    expect(markup).toContain('rel="noopener noreferrer"');
-    expect(markup).toContain("Semicentric</span>");
-    expect(markup).toContain("aria-describedby=");
-    expect(markup).toContain("Semicentric business card:");
-    expect(markup).not.toContain('class="np-art-probe"');
-    expect(markup).not.toContain("<img");
-  });
-
-  test("mounts the preview on desktop with the external link and accessible description", () => {
-    const markup = renderToStaticMarkup(<SemicentricCard desktop />);
-    expect(markup).toContain('href="https://semicentric.co"');
-    expect(markup).toContain('target="_blank"');
-    expect(markup).toContain('rel="noopener noreferrer"');
-    expect(markup).toContain("Semicentric</span>");
-    expect(markup).toContain("aria-describedby=");
-    expect(markup).toContain("Semicentric business card:");
-    expect(markup).toContain('class="np-art-probe"');
-    expect(markup).not.toContain("<img");
+    expect(markup).toBe(
+      '<a href="https://semicentric.co" target="_blank" rel="noopener noreferrer" class="underline-link">Semicentric</a>',
+    );
   });
 });
 

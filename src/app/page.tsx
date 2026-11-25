@@ -340,20 +340,32 @@ export default function Home() {
     <div className="min-h-[100dvh] md:h-[100dvh] flex flex-col justify-between px-[6vw] md:px-[8vw] pt-[8vh] md:pt-[14vh] pb-[2vh] overflow-x-clip md:overflow-hidden relative">
       <div
         ref={bioRef}
-        className="max-w-[700px] reveal reveal-d1 relative z-10 overflow-hidden w-full min-w-0 page-shell"
+        className="max-w-[740px] reveal reveal-d1 relative z-10 overflow-hidden w-full min-w-0 page-shell"
         style={
           bioWidth
             ? ({ "--bio-w": `${bioWidth}px` } as React.CSSProperties)
             : undefined
         }
       >
-        <p className="serif text-[clamp(26px,5.5vw,38px)] md:text-[clamp(22px,5vw,34px)] leading-[1.5] tracking-[-0.01em]">
+        <p className="serif text-[clamp(26px,5.5vw,38px)] md:text-[clamp(22px,5vw,32px)] leading-[1.5] tracking-[-0.01em] text-pretty">
           High school senior out of D.C.{" "}
           <em className="font-semibold">Developer</em>,{" "}
           <em className="font-semibold">wrestler</em>,{" "}
           <em className="font-semibold">photographer</em>. Founder of{" "}
-          <SemicentricCard placementRef={navRowRef} desktop={isDesktop} />,
-          doing low level infra. I made{" "}
+          <SemicentricCard />.{" "}
+          <span className="md:whitespace-nowrap">
+            SWE intern @&nbsp;
+            <a
+              href="https://ghost.ai"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline-link"
+            >
+              Ghost
+            </a>
+            .
+          </span>{" "}
+          I made{" "}
           <a
             href="https://github.com/plyght/spine"
             target="_blank"
@@ -380,16 +392,19 @@ export default function Home() {
           >
             Wax
           </a>
-          , and{" "}
-          <a
-            href="https://superdetermine.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline-link"
-          >
-            Superdetermine
-          </a>
-          .
+          ,{" "}
+          <span className="whitespace-nowrap">
+            and{" "}
+            <a
+              href="https://superdetermine.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline-link"
+            >
+              Superdetermine
+            </a>
+            .
+          </span>
         </p>
         <div
           ref={navRowRef}
