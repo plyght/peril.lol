@@ -363,6 +363,18 @@ export default function Home() {
             >
               Ghost
             </a>
+            ,
+          </span>{" "}
+          <span className="whitespace-nowrap">
+            prev.{" "}
+            <a
+              href="https://char.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline-link"
+            >
+              Char
+            </a>
             .
           </span>{" "}
           I&apos;ve made{" "}
